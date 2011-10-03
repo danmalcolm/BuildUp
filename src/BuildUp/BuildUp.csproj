@@ -43,6 +43,7 @@
     <Compile Include="BuildContext.cs" />
     <Compile Include="CompositeSource.cs" />
     <Compile Include="CompositeSourceExtensions.cs" />
+    <Compile Include="CompositeSourceSyntax.cs" />
     <Compile Include="ICompositeSource.cs" />
     <Compile Include="CtorArgSourceMap.cs" />
     <Compile Include="IInstantiatingSource.cs" />

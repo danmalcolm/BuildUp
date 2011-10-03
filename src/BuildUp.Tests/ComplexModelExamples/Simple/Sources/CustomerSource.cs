@@ -14,5 +14,15 @@ namespace BuildUp.Tests.ComplexModelExamples.Simple.Sources
                 );
 			}
 		}
+
+        public static ICompositeSource<Customer> Default2
+        {
+            get
+            {
+                var codes = StringSources.FormatWithItemNumber("customer-{0}");
+                var names = StringSources.FormatWithItemNumber("customer-{0}");
+                return CompositeSource.Create(() => new Customer(Use.Source(codes), Use.Source(names)));
+            }
+        }
 	}
 }

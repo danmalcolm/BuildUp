@@ -1,4 +1,5 @@
 using System;
+using System.Linq.Expressions;
 
 namespace BuildUp
 {
@@ -30,6 +31,17 @@ namespace BuildUp
                                   var value2 = s.Create<T2>(1, c);
                                   return create(c, value1, value2);
                               }, sources);
+        }
+
+        /// <summary>
+        /// Experimenting with new syntax for specifying sources for create function
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="create"></param>
+        /// <returns></returns>
+        public static CompositeSource<T> Create<T>(Expression<Func<T>> create)
+        {
+            return null;
         }
     }
 

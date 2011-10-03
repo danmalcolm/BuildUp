@@ -6,5 +6,10 @@
 		 {
 		 	return customers.ChangeSource(0, source);
 		 }
+
+         public static ICompositeSource<Customer> WithCode2(this ICompositeSource<Customer> customers, ISource<string> source)
+         {
+             return customers.ChangeSource(() => new Customer(Use.Existing<string>(), Use.Source(source)));
+         }
 	}
 }
