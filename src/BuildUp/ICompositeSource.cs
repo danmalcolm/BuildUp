@@ -10,8 +10,8 @@ namespace BuildUp
 	/// <typeparam name="T"></typeparam>
 	public interface ICompositeSource<T> : ISource<T>
 	{
-		SourceMap Sources { get; }
+		CtorArgSourceMap Sources { get; }
 
-		Func<BuildContext, SourceMap, T> Create { get; }
+		Func<BuildContext, CtorArgSourceMap, T> Create { get; }
 	}
 }

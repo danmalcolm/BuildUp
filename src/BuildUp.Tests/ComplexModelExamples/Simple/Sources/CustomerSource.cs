@@ -1,17 +1,17 @@
-namespace BuildUp.Tests.ComplexModelExamples.Simple
+namespace BuildUp.Tests.ComplexModelExamples.Simple.Sources
 {
 	public static class CustomerSource 
 	{
-		private static readonly SourceMap Defaults = new SourceMap()
-					.Add("code", StringSources.FormatWithItemNumber("customer-{0}"))
-					.Add("name", StringSources.FormatWithItemNumber("Customer Number {0}"));
-			
-
 		public static ICompositeSource<Customer> Default
 		{
 			get
 			{
-				return CompositeSource.Create((context, sources) => new Customer(sources.Create<string>("code", context), sources.Create<string>("name", context)), Defaults);
+				return CompositeSource.Create
+                (
+                    (context, code, name) => new Customer(code, name),
+                    StringSources.FormatWithItemNumber("customer-{0}"),
+                    StringSources.FormatWithItemNumber("Customer Number {0}")
+                );
 			}
 		}
 	}

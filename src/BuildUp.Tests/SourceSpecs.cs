@@ -11,7 +11,7 @@ namespace BuildUp.Tests
 		[Test]
 		public void simple_source()
 		{
-			var source = new Source<int>(context => context.Index);
+			var source = Source.Create(context => context.Index);
 			source.Take(5).ShouldMatchSequence(0,1,2,3,4);
 		}
 
