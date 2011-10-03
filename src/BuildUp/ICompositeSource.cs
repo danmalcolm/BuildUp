@@ -12,6 +12,6 @@ namespace BuildUp
 	{
 		CtorArgSourceMap Sources { get; }
 
-		Func<BuildContext, CtorArgSourceMap, T> Create { get; }
+		Func<BuildContext, CtorArgSourceMap, T> CreateFunc { get; }
 	}
 }

@@ -4,7 +4,7 @@
 	{
 		 public static ICompositeSource<Customer> WithCode(this ICompositeSource<Customer> customers, ISource<string> source)
 		 {
-		 	return customers.ChangeSource(0, source);
+		 	return null;
 		 }
 
          public static ICompositeSource<Customer> WithCode2(this ICompositeSource<Customer> customers, ISource<string> source)

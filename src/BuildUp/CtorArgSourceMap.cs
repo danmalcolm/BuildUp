@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using BuildUp.Utility;
 
 namespace BuildUp
 {
 	/// <summary>
-	/// Contains a collection of ISource instances used to instantiate an object, keyed by index of their position in constructor
+	/// Contains a collection of sources used by a composite source to create objects, indexed by position in the
+	/// create function.
 	/// </summary>
 	public class CtorArgSourceMap
 	{
@@ -14,6 +16,11 @@ namespace BuildUp
 			: this(new Dictionary<string, object>())
 		{
 			
+		}
+
+		internal CtorArgSourceMap(params object[] argSources)
+		{
+			argSources.EachWithIndex((source, index) => this.sources[index.ToString()] = source);
 		}
 
 		private CtorArgSourceMap(Dictionary<string, object> sources)

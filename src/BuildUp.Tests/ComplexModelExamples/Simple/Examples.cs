@@ -11,7 +11,7 @@ namespace BuildUp.Tests.ComplexModelExamples.Simple
 		[Test]
 		public void default_ctor_arg_sources_used_by_composite_source()
 		{
-			var customers = CustomerSource.Default.Take(3);
+			var customers = TestObjects.Customers.Take(3);
 			var expected = new[]
 			{
 				new {Code = "customer-1", Name = "Customer Number 1"},
@@ -24,7 +24,7 @@ namespace BuildUp.Tests.ComplexModelExamples.Simple
 		[Test]
 		public void changing_ctor_arg_sources_used_by_composite_source()
 		{
-			var source = CustomerSource.Default.WithCode(StringSources.FormatWithItemNumber("super-customer-{0}"));
+			var source = TestObjects.Customers.WithCode(StringSources.FormatWithItemNumber("super-customer-{0}"));
 			var customers = source.Take(3);
 			var expected = new[]
 			{

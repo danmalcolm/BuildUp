@@ -1,8 +1,8 @@
 namespace BuildUp.Tests.ComplexModelExamples.Simple.Sources
 {
-	public static class CustomerSource 
+	public static class TestObjects 
 	{
-		public static ICompositeSource<Customer> Default
+		public static ICompositeSource<Customer> Customers
 		{
 			get
 			{
@@ -15,12 +15,12 @@ namespace BuildUp.Tests.ComplexModelExamples.Simple.Sources
 			}
 		}
 
-        public static ICompositeSource<Customer> Default2
+        public static ICompositeSource<Customer> Customers2
         {
             get
             {
                 var codes = StringSources.FormatWithItemNumber("customer-{0}");
-                var names = StringSources.FormatWithItemNumber("customer-{0}");
+				var names = StringSources.FormatWithItemNumber("Customer Number {0}");
                 return CompositeSource.Create(() => new Customer(Use.Source(codes), Use.Source(names)));
             }
         }
