@@ -20,6 +20,7 @@ namespace BuildUp
 
 		internal CtorArgSourceMap(params object[] argSources)
 		{
+		    this.sources = new Dictionary<string, object>();
 			argSources.EachWithIndex((source, index) => this.sources[index.ToString()] = source);
 		}
 

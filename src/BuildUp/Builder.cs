@@ -12,27 +12,37 @@ namespace BuildUp
 	// OO outer shell
 
 	/// <summary>
-	/// Mainly intended as a "home" for methods that builders typically implement and 
-	/// provide support for chaining together modifying methods
+	/// Mainly intended as a "home" for methods that are used to vary constructor parameters and 
+	/// provides support for chaining together modifying methods
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
 	public abstract class Builder<T,TBuilder> : ICompositeSource<T> 
 		where TBuilder : Builder<T,TBuilder>, new()
 	{
-		protected ICompositeSource<T> Source { get; set; }
+	    private ICompositeSource<T> source;
 
-		protected Builder(ICompositeSource<T> source)
-		{
-			this.Source = source;
-		}
-		
+	    protected abstract ICompositeSource<T> GetDefaultSource();
 
-		protected TBuilder Copy(ICompositeSource<T> source)
+        protected void UseCustomSource(ICompositeSource<T> customSource)
+        {
+            this.source = customSource;
+        }
+
+	    protected ICompositeSource<T> Source
+	    {
+	        get { return source ?? (source = GetDefaultSource()); }
+	    }
+
+        /// <summary>
+        /// Creates a new instance of TBuilder with a new source
+        /// </summary>
+        /// <param name="newSource"></param>
+        /// <returns></returns>
+		protected TBuilder ChangeSource(ICompositeSource<T> newSource)
 		{
-			return new TBuilder
-			{
-				Source = source
-			};
+		    var builder = new TBuilder();
+            builder.UseCustomSource(newSource);
+		    return builder;
 		}
 
 		#region ICompositeSource<T> Members

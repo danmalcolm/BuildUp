@@ -2,9 +2,9 @@
 {
 	public static class IntSources
 	{
-		public static Source<int> Incrementing
+		public static Source<int> Incrementing(int start, int increment=1)
 		{
-			get { return Source.Create(c => c.Index); }
+			return Source.Create(c => start + c.Index * increment); 
 		}
 
 		public static Source<int> Constant(int value)

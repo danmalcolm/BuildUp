@@ -24,7 +24,7 @@ namespace BuildUp.Tests.ComplexModelExamples.Simple
 		[Test]
 		public void changing_ctor_arg_sources_used_by_composite_source()
 		{
-			var source = TestObjects.Customers.WithCode(StringSources.FormatWithItemNumber("super-customer-{0}"));
+			var source = TestObjects.Customers.WithCode(StringSources.Numbered("super-customer-{0}"));
 			var customers = source.Take(3);
 			var expected = new[]
 			{

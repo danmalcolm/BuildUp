@@ -7,7 +7,7 @@
 			return Source.Create(c => string.Format(format, c.Index));
 		}
 
-		public static Source<string> FormatWithItemNumber(string format)
+		public static Source<string> Numbered(string format)
 		{
 			return Source.Create(c => string.Format(format, c.Index + 1));
 		}
