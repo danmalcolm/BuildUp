@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace BuildUp.Utility
 {
-	public static class IEnumerableExtensions
+	internal static class IEnumerableExtensions
 	{
 		 public static void Each<T>(this IEnumerable<T> sequence, Action<T> action)
 		 {

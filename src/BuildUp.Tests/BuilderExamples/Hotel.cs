@@ -1,4 +1,4 @@
-namespace BuildUp.Tests.ComplexModelExamples.Simple
+namespace BuildUp.Tests.BuilderExamples
 {
 	public class Hotel
 	{
@@ -11,5 +11,10 @@ namespace BuildUp.Tests.ComplexModelExamples.Simple
 		public string Code { get; private set; }
 
 		public string Name { get; private set; }
+
+		public override string ToString()
+		{
+			return string.Format("Code: {0}, Name: {1}", Code, Name);
+		}
 	}
 }

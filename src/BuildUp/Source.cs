@@ -14,42 +14,32 @@ namespace BuildUp
 			return new Source<T>(build);
 		}
 
-        // TODO - all ISource and ICompositeSource creation lives here?
-
-		public static ISource<T> Composite<T, T1, T2>(ISource<T1> source1, ISource<T2> source2, Func<T1, T2, T> build)
-		{
-			return new Source<T>(context =>
-			{
-				T1 value1 = source1.Create(context);
-				T2 value2 = source2.Create(context);
-				return build(value1, value2);
-			});
-		}
+        
 	}
 
 	public class Source<T> : ISource<T>
 	{
-		private readonly Func<BuildContext, T> build;
+		private readonly Func<BuildContext, T> create;
 
-		public Source(Func<BuildContext, T> build)
+		public Source(Func<BuildContext, T> create)
 		{
-			this.build = build;
+			this.create = create;
 		}
 
 		#region ISource<T> Members
 
 		public T Create(BuildContext context)
 		{
-			return build(context);
+			return create(context);
 		}
 
 		public IEnumerator<T> GetEnumerator()
 		{
-            // TODO - throw with an informative "are you sure?" exception if we exceed 1m or similar or let them run with the scissors?
+            // TODO - throw with an informative "are you sure?" exception if we exceed 1m or similar or just let people run with the scissors?
 			var context = new BuildContext(0);
 			while (true)
 			{
-				yield return build(context);
+				yield return create(context);
 				context = context.Next();
 			}
 			// ReSharper disable FunctionNeverReturns

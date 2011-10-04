@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using BuildUp.ValueSources;
 using NUnit.Framework;
 using BuildUp.Tests.Common;
 
@@ -66,14 +67,12 @@ namespace BuildUp.Tests
 
 			public LittleManBuilder WithName(ISource<string> name)
 			{
-				var newSource = CompositeSource.BasedOn(Source, 0, name);
-				return ChangeSource(newSource);
+				return ChangeChildSource(0, name);
 			}
 
             public LittleManBuilder WithAge(ISource<int> age)
             {
-                var newSource = CompositeSource.BasedOn(Source, 1, age);
-                return ChangeSource(newSource);
+				return ChangeChildSource(1, age);
             }
             
 		} 

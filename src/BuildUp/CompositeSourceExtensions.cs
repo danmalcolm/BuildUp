@@ -6,15 +6,12 @@ namespace BuildUp
 	public static class CompositeSourceExtensions
 	{
 		/// <summary>
-        /// Experimental syntax for specifying changes to one or more sources used by the creation function
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="compositeSource"></param>
-        /// <param name="create"></param>
-        /// <returns></returns>
-        public static ICompositeSource<T> ChangeSource<T>(this ICompositeSource<T> compositeSource, Expression<Func<T>> create)
+		/// Creates a new instance of a composite source that uses a different child source
+		/// </summary>
+		public static ICompositeSource<T> ReplaceChildSource<T,C>(this ICompositeSource<T> source, int index, ISource<C> child)
         {
-            return null;
-        }	
+			var newChildSources = source.ChildSources.Replace(index, child);
+			return new CompositeSource<T>(source.CreateFunc, newChildSources);
+        }
 	}
 }

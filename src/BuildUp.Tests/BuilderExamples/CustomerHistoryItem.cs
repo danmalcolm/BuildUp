@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BuildUp.Tests.ComplexModelExamples.Simple
+namespace BuildUp.Tests.BuilderExamples
 {
 	public class CustomerHistoryItem
 	{

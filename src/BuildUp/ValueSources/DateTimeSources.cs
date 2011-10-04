@@ -1,6 +1,6 @@
 using System;
 
-namespace BuildUp
+namespace BuildUp.ValueSources
 {
 	public static class DateTimeSources
 	{

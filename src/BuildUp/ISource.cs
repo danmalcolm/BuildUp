@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace BuildUp
 {
     /// <summary>
-    /// Represents a source of object instances
+    /// Creates sequences of objects
     /// </summary>
     /// <typeparam name="T"></typeparam>
 	public interface ISource<T> : IEnumerable<T>

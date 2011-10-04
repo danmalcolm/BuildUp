@@ -3,15 +3,16 @@ using System;
 namespace BuildUp
 {
 	/// <summary>
-	/// A type of source that uses other child sources when generating objects, such as values
-	/// for constructor arguments. The Sources and Create members are exposed to allow 
-	/// creation of new instances.
+	/// Uses one or more child sources to provide values used to create objects
 	/// </summary>
+	/// <remarks>
+	/// The ChildSources and CreateFunc members are exposed to simplify creation of new instances.
+	/// </remarks>
 	/// <typeparam name="T"></typeparam>
 	public interface ICompositeSource<T> : ISource<T>
 	{
-		CtorArgSourceMap Sources { get; }
+		ChildSourceMap ChildSources { get; }
 
-		Func<BuildContext, CtorArgSourceMap, T> CreateFunc { get; }
+		Func<BuildContext, ChildSourceMap, T> CreateFunc { get; }
 	}
 }

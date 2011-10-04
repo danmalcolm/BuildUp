@@ -1,13 +1,14 @@
 using System;
 using System.Collections.Generic;
+using BuildUp.Tests.ComplexModelExamples.Simple;
 
-namespace BuildUp.Tests.ComplexModelExamples.Simple
+namespace BuildUp.Tests.BuilderExamples
 {
 	public class Customer
 	{
 		private readonly List<CustomerHistoryItem> history = new List<CustomerHistoryItem>();
 
-		public Customer(string code, string name)
+		public Customer(string code, Name name)
 		{
 			Code = code;
 			Name = name;
@@ -15,7 +16,7 @@ namespace BuildUp.Tests.ComplexModelExamples.Simple
 
 		public string Code { get; private set; }
 
-		public string Name { get; private set; }
+		public Name Name { get; private set; }
 
 		public IList<CustomerHistoryItem> History
 		{
@@ -25,6 +26,11 @@ namespace BuildUp.Tests.ComplexModelExamples.Simple
 		public void RecordHistory(DateTime date, string details)
 		{
 			history.Add(new CustomerHistoryItem(date, details));
+		}
+
+		public override string ToString()
+		{
+			return string.Format("Code: {0}, Name: {1}", Code, Name);
 		}
 	}
 }

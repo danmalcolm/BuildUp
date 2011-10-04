@@ -12,10 +12,14 @@ namespace BuildUp
 	// OO outer shell
 
 	/// <summary>
-	/// Mainly intended as a "home" for methods that are used to vary constructor parameters and 
-	/// provides support for chaining together modifying methods
+	/// Base class for typical *Builder classes (CustomerBuilder, OrderBuilder) that allow test code to vary values used
+	/// to create the objects via chainable methods, e.g. new OrderBuilder().WithCustomer( ...). In some projects, builder 
+	/// classes will be the most suitable place to locate methods that are used to vary parameters used to construct the objects.
+	/// This base class provides some convenience methods to make these chainable methods simple to write.
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
+	/// <typeparam name="TBuilder">The concrete type of the builder class. This self-referencing generic type parameter
+	/// is required to support chainable methods, where an instance of the concrete builder type is returned.</typeparam>
 	public abstract class Builder<T,TBuilder> : ICompositeSource<T> 
 		where TBuilder : Builder<T,TBuilder>, new()
 	{
@@ -33,8 +37,17 @@ namespace BuildUp
 	        get { return source ?? (source = GetDefaultSource()); }
 	    }
 
+		/// <summary>
+		/// Creates a new instance of the current builder class using a different child source
+		/// </summary>
+		protected TBuilder ChangeChildSource<TSource>(int index, ISource<TSource> childSource)
+		{
+			var newSource = Source.ReplaceChildSource(index, childSource);
+			return ChangeSource(newSource);
+		}
+		
         /// <summary>
-        /// Creates a new instance of TBuilder with a new source
+        /// Creates a new instance of the builder using a different source
         /// </summary>
         /// <param name="newSource"></param>
         /// <returns></returns>
@@ -57,12 +70,12 @@ namespace BuildUp
 			return Source.GetEnumerator();
 		}
 
-		public CtorArgSourceMap Sources
+		public ChildSourceMap ChildSources
 		{
-			get { return Source.Sources; }
+			get { return Source.ChildSources; }
 		}
 
-		public Func<BuildContext, CtorArgSourceMap, T> CreateFunc
+		public Func<BuildContext, ChildSourceMap, T> CreateFunc
 		{
 			get { return Source.CreateFunc; }
 		}

@@ -5,47 +5,51 @@ using BuildUp.Utility;
 namespace BuildUp
 {
 	/// <summary>
-	/// Contains a collection of sources used by a composite source to create objects, indexed by position in the
-	/// create function.
+	/// Contains the collection of child sources used by a composite source, which are stored / retrieved either
+	/// by name or position in the create function
 	/// </summary>
-	public class CtorArgSourceMap
+	public class ChildSourceMap
 	{
 		private readonly Dictionary<string,object> sources;
 
-		public CtorArgSourceMap()
+		public ChildSourceMap()
 			: this(new Dictionary<string, object>())
 		{
 			
 		}
 
-		internal CtorArgSourceMap(params object[] argSources)
+		internal ChildSourceMap(params object[] argSources)
 		{
 		    this.sources = new Dictionary<string, object>();
 			argSources.EachWithIndex((source, index) => this.sources[index.ToString()] = source);
 		}
 
-		private CtorArgSourceMap(Dictionary<string, object> sources)
+		private ChildSourceMap(Dictionary<string, object> sources)
 		{
 			this.sources = sources;
 		}
 
 		/// <summary>
-		/// Creates a copy of the map adding or replacing an item at the specified position
+		/// Creates a copy of this ChildSourceMap replacing an item at the specified position
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <param name="index"></param>
 		/// <param name="source"></param>
 		/// <returns></returns>
-		public CtorArgSourceMap Change<T>(int index, ISource<T> source)
+		public ChildSourceMap Replace<T>(int index, ISource<T> source)
 		{
+			if(!sources.ContainsKey(index.ToString()))
+			{
+				throw new IndexOutOfRangeException("A child source does not exist at the specified index");
+			}
 			return Clone(x => x[index.ToString()] = source);
 		}
 
-		private CtorArgSourceMap Clone(Action<Dictionary<string, object>> mutate)
+		private ChildSourceMap Clone(Action<Dictionary<string, object>> mutate)
 		{
 			var newSources = new Dictionary<string, object>(this.sources);
 			mutate(newSources);
-			return new CtorArgSourceMap(newSources);
+			return new ChildSourceMap(newSources);
 		}
 
 		public T Create<T>(int index, BuildContext context)

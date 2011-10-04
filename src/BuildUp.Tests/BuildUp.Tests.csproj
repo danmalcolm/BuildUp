@@ -43,21 +43,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BuilderExamples\Builders\BookingBuilder.cs" />
+    <Compile Include="BuilderExamples\Builders\CustomerBuilder.cs" />
+    <Compile Include="BuilderExamples\Builders\HotelBuilder.cs" />
+    <Compile Include="BuilderExamples\Builders\Names.cs" />
+    <Compile Include="BuilderExamples\Name.cs" />
     <Compile Include="Common\AssertionExtensions.cs" />
     <Compile Include="Common\CollectionAssertionExtensions.cs" />
     <Compile Include="Common\ContextSpecification.cs" />
-    <Compile Include="ComplexModelExamples\Simple\Booking.cs" />
-    <Compile Include="ComplexModelExamples\Simple\Sources\BookingSource.cs" />
-    <Compile Include="ComplexModelExamples\Simple\Sources\TestObjects.cs" />
-    <Compile Include="ComplexModelExamples\Simple\Sources\CustomerSourceExtensions.cs" />
-    <Compile Include="ComplexModelExamples\Simple\Examples.cs" />
-    <Compile Include="ComplexModelExamples\Simple\Customer.cs" />
-    <Compile Include="ComplexModelExamples\Simple\CustomerHistoryItem.cs" />
-    <Compile Include="ComplexModelExamples\Simple\Hotel.cs" />
+    <Compile Include="BuilderExamples\Booking.cs" />
+    <Compile Include="BuilderExamples\Simple\Sources\BookingSource.cs" />
+    <Compile Include="BuilderExamples\Simple\Sources\CustomerSourceExtensions.cs" />
+    <Compile Include="BuilderExamples\Examples.cs" />
+    <Compile Include="BuilderExamples\Customer.cs" />
+    <Compile Include="BuilderExamples\CustomerHistoryItem.cs" />
+    <Compile Include="BuilderExamples\Hotel.cs" />
     <Compile Include="BuilderSpecs.cs" />
+    <Compile Include="CompositeSourceExtensionsSpecs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Common\Specification.cs" />
-    <Compile Include="SourceCombinatorExtensionsSpecs.cs" />
+    <Compile Include="SourceExtensionsSpecs.cs" />
     <Compile Include="SourceSpecs.cs" />
   </ItemGroup>
   <ItemGroup>
