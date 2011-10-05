@@ -40,15 +40,15 @@ namespace BuildUp
 		{
 			if(!sources.ContainsKey(index.ToString()))
 			{
-				throw new IndexOutOfRangeException("A child source does not exist at the specified index");
+				throw new IndexOutOfRangeException("A child source does not exist at the specified index and cannot be replaced");
 			}
-			return Clone(x => x[index.ToString()] = source);
+			return CreateCopyWithChanges(x => x[index.ToString()] = source);
 		}
 
-		private ChildSourceMap Clone(Action<Dictionary<string, object>> mutate)
+		private ChildSourceMap CreateCopyWithChanges(Action<Dictionary<string, object>> changeValues)
 		{
 			var newSources = new Dictionary<string, object>(this.sources);
-			mutate(newSources);
+			changeValues(newSources);
 			return new ChildSourceMap(newSources);
 		}
 
@@ -58,9 +58,9 @@ namespace BuildUp
 
 			if (!typeof (ISource<T>).IsAssignableFrom(source.GetType()))
 			{
-				throw new ArgumentException(string.Format("Source at index {0} is of the expected type {1}. Actual type {2}", index, typeof(T), source.GetType()));
+				throw new ArgumentException(string.Format("Child source at index {0} is not of the expected type {1}. Actual type {2}", index, typeof(T), source.GetType()));
 			}
-			return ((ISource<T>)source).Create(context);
+			return ((ISource<T>)source).CreateFunc(context);
 		}
 	}
 

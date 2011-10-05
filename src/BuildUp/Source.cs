@@ -9,9 +9,9 @@ namespace BuildUp
     /// </summary>
 	public class Source
 	{
-		public static Source<T> Create<T>(Func<BuildContext, T> build)
+		public static Source<T> Create<T>(Func<BuildContext, T> create)
 		{
-			return new Source<T>(build);
+			return new Source<T>(create);
 		}
 
         
@@ -19,19 +19,14 @@ namespace BuildUp
 
 	public class Source<T> : ISource<T>
 	{
-		private readonly Func<BuildContext, T> create;
-
 		public Source(Func<BuildContext, T> create)
 		{
-			this.create = create;
+            this.CreateFunc = create;
 		}
 
 		#region ISource<T> Members
 
-		public T Create(BuildContext context)
-		{
-			return create(context);
-		}
+	    public Func<BuildContext, T> CreateFunc { get; private set; }
 
 		public IEnumerator<T> GetEnumerator()
 		{
@@ -39,7 +34,7 @@ namespace BuildUp
 			var context = new BuildContext(0);
 			while (true)
 			{
-				yield return create(context);
+                yield return CreateFunc(context);
 				context = context.Next();
 			}
 			// ReSharper disable FunctionNeverReturns

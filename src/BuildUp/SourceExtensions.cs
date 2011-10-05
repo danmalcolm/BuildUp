@@ -7,7 +7,7 @@ namespace BuildUp
 	{
 		public static ISource<R> Select<T,R>(this ISource<T> source, Func<T,R> create)
 		{
-			return Source.Create(context => create(source.Create(context)));
+			return Source.Create(context => create(source.CreateFunc(context)));
 		}
 
 		/// <summary>
@@ -33,9 +33,9 @@ namespace BuildUp
 			return Source.Create(context =>
 			{
 				var index = context.Index / times;
-				//TODO - maybe we need IEnumerables instead of ISources?... Is this suitable for child sources
+				//TODO - this is wrong right now, because it's creating maybe we need IEnumerables instead of ISources?... Is this suitable for child sources
 				// used by composite sources?
-				return source.Create(new BuildContext(index));
+				return source.CreateFunc(new BuildContext(index));
 			});
 		}
 	}

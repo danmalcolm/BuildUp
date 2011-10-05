@@ -13,6 +13,6 @@ namespace BuildUp
 	{
 		ChildSourceMap ChildSources { get; }
 
-		Func<BuildContext, ChildSourceMap, T> CreateFunc { get; }
+		Func<BuildContext, ChildSourceMap, T> CompCreateFunc { get; }
 	}
 }

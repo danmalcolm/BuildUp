@@ -11,7 +11,7 @@ namespace BuildUp
 		public static ICompositeSource<T> ReplaceChildSource<T,C>(this ICompositeSource<T> source, int index, ISource<C> child)
         {
 			var newChildSources = source.ChildSources.Replace(index, child);
-			return new CompositeSource<T>(source.CreateFunc, newChildSources);
+			return new CompositeSource<T>(source.CompCreateFunc, newChildSources);
         }
 	}
 }

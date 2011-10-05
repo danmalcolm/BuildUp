@@ -9,6 +9,6 @@ namespace BuildUp
     /// <typeparam name="T"></typeparam>
 	public interface ISource<T> : IEnumerable<T>
 	{
-		T Create(BuildContext context);
+        Func<BuildContext, T> CreateFunc { get; }
 	}
 }

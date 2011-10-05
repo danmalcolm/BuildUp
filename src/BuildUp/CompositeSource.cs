@@ -86,13 +86,13 @@ namespace BuildUp
 	/// <typeparam name="T"></typeparam>
 	public class CompositeSource<T> : Source<T>, ICompositeSource<T>
 	{
-		private readonly Func<BuildContext, ChildSourceMap, T> createFunc;
+		private readonly Func<BuildContext, ChildSourceMap, T> compCreateFunc;
 		private readonly ChildSourceMap childSources;
 
-		public CompositeSource(Func<BuildContext, ChildSourceMap, T> createFunc, ChildSourceMap childSources)
-			: base(c => createFunc(c, childSources)) // partially applying the source param gives us function signature used by ISource
+		public CompositeSource(Func<BuildContext, ChildSourceMap, T> compCreateFunc, ChildSourceMap childSources)
+			: base(c => compCreateFunc(c, childSources)) // partially applying the source param gives us function signature used by ISource
 		{
-			this.createFunc = createFunc;
+			this.compCreateFunc = compCreateFunc;
 			this.childSources = childSources;
 		}
 
@@ -103,9 +103,9 @@ namespace BuildUp
 			get { return childSources; }
 		}
 
-		Func<BuildContext, ChildSourceMap, T> ICompositeSource<T>.CreateFunc
+		Func<BuildContext, ChildSourceMap, T> ICompositeSource<T>.CompCreateFunc
 		{
-			get { return createFunc; }
+			get { return compCreateFunc; }
 		}
 
 		#endregion

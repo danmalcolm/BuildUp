@@ -60,9 +60,9 @@ namespace BuildUp
 
 		#region ICompositeSource<T> Members
 
-		T ISource<T>.Create(BuildContext context)
+		Func<BuildContext,T> ISource<T>.CreateFunc
 		{
-			return Source.Create(context);
+            get { return Source.CreateFunc; }
 		}
 
 		public IEnumerator<T> GetEnumerator()
@@ -75,9 +75,9 @@ namespace BuildUp
 			get { return Source.ChildSources; }
 		}
 
-		public Func<BuildContext, ChildSourceMap, T> CreateFunc
+		public Func<BuildContext, ChildSourceMap, T> CompCreateFunc
 		{
-			get { return Source.CreateFunc; }
+			get { return Source.CompCreateFunc; }
 		}
 
 		IEnumerator IEnumerable.GetEnumerator()
