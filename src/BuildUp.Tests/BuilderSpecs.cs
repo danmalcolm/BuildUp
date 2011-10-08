@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using BuildUp.ValueSources;
 using NUnit.Framework;
 using BuildUp.Tests.Common;
@@ -49,7 +50,7 @@ namespace BuildUp.Tests
 
 		public class LittleManBuilder : Builder<LittleMan,LittleManBuilder>
 		{
-            protected override ICompositeSource<LittleMan> GetDefaultSource()
+            protected override CompositeSource<LittleMan> GetDefaultSource()
             {
                 return CompositeSource.Create
                 (
@@ -65,12 +66,12 @@ namespace BuildUp.Tests
             // not change this logic. Possibly need to use expressions and some funky
             // syntax to make this more refactoring friendly, e.g. 
 
-			public LittleManBuilder WithName(ISource<string> name)
+			public LittleManBuilder WithName(IEnumerable<string> name)
 			{
 				return ChangeChildSource(0, name);
 			}
 
-            public LittleManBuilder WithAge(ISource<int> age)
+			public LittleManBuilder WithAge(IEnumerable<int> age)
             {
 				return ChangeChildSource(1, age);
             }

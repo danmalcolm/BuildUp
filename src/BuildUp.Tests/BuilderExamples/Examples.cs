@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Linq;
 using BuildUp.Tests.BuilderExamples.Builders;
-using BuildUp.Tests.ComplexModelExamples.Simple.Sources;
 using BuildUp.ValueSources;
 using NUnit.Framework;
 using BuildUp.Tests.Common;
-using BuildUp;
 
 namespace BuildUp.Tests.BuilderExamples
 {
@@ -32,6 +30,13 @@ namespace BuildUp.Tests.BuilderExamples
 			var dates = DateTimeSources.IncrementingDays(DateTime.Now.Date).RepeatEach(25); // 5 bookings at each hotel per day
 			var bookings = new BookingBuilder().AtHotel(hotels).StartingOn(dates).Take(50).ToArray();
 			
+		}
+
+		[Test]
+		public void modifying_instances_after_creation()
+		{
+			var notes = StringSources.Numbered("Stuff {0}");
+			var customers = new CustomerBuilder().Take(20).Modify(notes, (c, s) => c.RecordHistory(DateTime.Now, s));
 		}
 
 		

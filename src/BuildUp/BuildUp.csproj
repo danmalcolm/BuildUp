@@ -40,20 +40,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BuildContext.cs" />
+    <Compile Include="CreateContext.cs" />
     <Compile Include="Builder.cs" />
     <Compile Include="CompositeSource.cs" />
-    <Compile Include="CompositeSourceExtensions.cs" />
-    <Compile Include="ICompositeSource.cs" />
     <Compile Include="ChildSourceMap.cs" />
+    <Compile Include="Utility\EnumerableUtility.cs" />
     <Compile Include="ValueSources\DateTimeSources.cs" />
-    <Compile Include="SourceExtensions.cs" />
+    <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="ValueSources\StringSources.cs" />
     <Compile Include="ValueSources\IntSources.cs" />
     <Compile Include="Source.cs" />
-    <Compile Include="ISource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Utility\IEnumerableExtensions.cs" />
+    <Compile Include="Utility\EnumerableExtensions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

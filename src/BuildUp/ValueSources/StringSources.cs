@@ -1,4 +1,6 @@
-﻿namespace BuildUp.ValueSources
+﻿using System.Collections.Generic;
+
+namespace BuildUp.ValueSources
 {
 	public static class StringSources
 	{
@@ -8,7 +10,7 @@
 		/// </summary>
 		/// <param name="format"></param>
 		/// <returns></returns>
-		public static Source<string> Indexed(string format)
+		public static IEnumerable<string> Indexed(string format)
 		{
 			return Source.Create(c => string.Format(format, c.Index));
 		}
@@ -19,17 +21,17 @@
 		/// </summary>
 		/// <param name="format"></param>
 		/// <returns></returns>
-		public static Source<string> Numbered(string format)
+		public static IEnumerable<string> Numbered(string format)
 		{
 			return Source.Create(c => string.Format(format, c.Index + 1));
 		}
 
 		/// <summary>
-		/// Creates a sequence of the same value
+		/// Creates a sequence repeating the same constant value
 		/// </summary>
 		/// <param name="value"></param>
 		/// <returns></returns>
-		public static Source<string> Constant(string value)
+		public static IEnumerable<string> Constant(string value)
 		{
 			return Source.Create(c => value);
 		}

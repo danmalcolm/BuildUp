@@ -1,16 +1,18 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using BuildUp.Utility;
 
 namespace BuildUp
 {
 	/// <summary>
-	/// Contains the collection of child sources used by a composite source, which are stored / retrieved either
-	/// by name or position in the create function
+	/// Contains the collection of child sources used by CompositeSource, which are stored / retrieved either
+	/// by position in the create function
 	/// </summary>
-	public class ChildSourceMap
+	internal class ChildSourceMap
 	{
-		private readonly Dictionary<string,object> sources;
+		private readonly IEnumerable[] sources;
 
 		public ChildSourceMap()
 			: this(new Dictionary<string, object>())
@@ -18,13 +20,7 @@ namespace BuildUp
 			
 		}
 
-		internal ChildSourceMap(params object[] argSources)
-		{
-		    this.sources = new Dictionary<string, object>();
-			argSources.EachWithIndex((source, index) => this.sources[index.ToString()] = source);
-		}
-
-		private ChildSourceMap(Dictionary<string, object> sources)
+		internal ChildSourceMap(params IEnumerable[] sources)
 		{
 			this.sources = sources;
 		}
@@ -36,33 +32,25 @@ namespace BuildUp
 		/// <param name="index"></param>
 		/// <param name="source"></param>
 		/// <returns></returns>
-		public ChildSourceMap Replace<T>(int index, ISource<T> source)
+		public ChildSourceMap Replace<T>(int index, IEnumerable<T> source)
 		{
-			if(!sources.ContainsKey(index.ToString()))
+			if(index > sources.Length)
 			{
 				throw new IndexOutOfRangeException("A child source does not exist at the specified index and cannot be replaced");
 			}
-			return CreateCopyWithChanges(x => x[index.ToString()] = source);
+			return CreateCopyWithChanges(x => x[index] = source);
 		}
 
-		private ChildSourceMap CreateCopyWithChanges(Action<Dictionary<string, object>> changeValues)
+		private ChildSourceMap CreateCopyWithChanges(Action<object[]> changeValues)
 		{
-			var newSources = new Dictionary<string, object>(this.sources);
+			var newSources = this.sources.ToArray();
 			changeValues(newSources);
 			return new ChildSourceMap(newSources);
 		}
 
-		public T Create<T>(int index, BuildContext context)
+		public IEnumerable<object[]> Tuplize()
 		{
-			var source = sources[index.ToString()];
-
-			if (!typeof (ISource<T>).IsAssignableFrom(source.GetType()))
-			{
-				throw new ArgumentException(string.Format("Child source at index {0} is not of the expected type {1}. Actual type {2}", index, typeof(T), source.GetType()));
-			}
-			return ((ISource<T>)source).CreateFunc(context);
+			return EnumerableUtility.Tuplize(this.sources);
 		}
 	}
-
-
 }

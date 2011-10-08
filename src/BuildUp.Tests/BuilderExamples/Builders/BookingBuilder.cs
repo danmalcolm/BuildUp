@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using BuildUp.ValueSources;
 
 namespace BuildUp.Tests.BuilderExamples.Builders
 {
 	public class BookingBuilder : Builder<Booking, BookingBuilder>
 	{
-		protected override ICompositeSource<Booking> GetDefaultSource()
+		protected override CompositeSource<Booking> GetDefaultSource()
 		{
 			return CompositeSource.Create
 			(
@@ -16,17 +17,17 @@ namespace BuildUp.Tests.BuilderExamples.Builders
 			);
 		}
 
-		public BookingBuilder AtHotel(ISource<Hotel> hotels)
+		public BookingBuilder AtHotel(IEnumerable<Hotel> hotels)
 		{
 			return ChangeChildSource(0, hotels);
 		}
 
-		public BookingBuilder WithCustomer(ISource<Customer> customers)
+		public BookingBuilder WithCustomer(IEnumerable<Customer> customers)
 		{
 			return ChangeChildSource(1, customers);
 		}
 
-		public BookingBuilder StartingOn(ISource<DateTime> startDates)
+		public BookingBuilder StartingOn(IEnumerable<DateTime> startDates)
 		{
 			return ChangeChildSource(2, startDates);
 		}

@@ -1,10 +1,11 @@
-﻿using BuildUp.ValueSources;
+﻿using System.Collections.Generic;
+using BuildUp.ValueSources;
 
 namespace BuildUp.Tests.BuilderExamples.Builders
 {
 	public class Names
 	{
-		public static ISource<Name> Default
+		public static IEnumerable<Name> Default
 		{
 			get
 			{
