@@ -44,6 +44,7 @@
     <Compile Include="Builder.cs" />
     <Compile Include="CompositeSource.cs" />
     <Compile Include="ChildSourceMap.cs" />
+    <Compile Include="ISource.cs" />
     <Compile Include="Utility\EnumerableUtility.cs" />
     <Compile Include="ValueSources\DateTimeSources.cs" />
     <Compile Include="EnumerableExtensions.cs" />

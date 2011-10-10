@@ -17,8 +17,8 @@ namespace BuildUp
 		/// <summary>
 		/// Creates a CompositeSource using the supplied function and specified sources. The sources will
 		/// also be stored in the Sources property of the CompositeSource instance so that they are available
-		/// for use when creating a new version of the CompositeSource. A variation of this method exists for 
-		/// methods requiring zero (TODO) to 16 (TODO) parameters. 
+		/// for use when creating a new version of the CompositeSource. Variations of this method exist for 
+		/// creation functions requiring from 1 (TODO) to 16 (TODO) parameters. 
 		/// </summary>
 		/// <typeparam name="T">The type of the object that the source will create</typeparam>
 		/// <typeparam name="T1"></typeparam>
@@ -60,24 +60,41 @@ namespace BuildUp
 	/// <summary>
 	/// Creates a sequence of objects using values from one or more child sequences
 	/// </summary>
-	/// <typeparam name="T"></typeparam>
-	public class CompositeSource<T> : IEnumerable<T>
+	/// <typeparam name="TObject"></typeparam>
+	public class CompositeSource<TObject> : ISource<TObject>
 	{
-		private readonly ChildSourceMap childSources;
-		private readonly Func<CreateContext, object[], T> create;
+		private readonly Func<CreateContext, object[], TObject> create;
 
-		internal CompositeSource(Func<CreateContext, object[], T> create, ChildSourceMap childSources)
+		private readonly ChildSourceMap childSources;
+
+		internal CompositeSource(Func<CreateContext, object[], TObject> create, ChildSourceMap childSources)
 		{
 			this.create = create;
 			this.childSources = childSources;
 		}
 
-		public IEnumerator<T> GetEnumerator()
+		public ISource<TResult> Combine<TResult>(Func<TObject, TResult> select)
+		{
+			// Function porn (Shift-Alt-Enter for full-screen view): Applies the select function to our current create function - TODO good description
+			Func<CreateContext, object[], TResult> createResult = (context, items) => select(create(context, items));
+			return new CompositeSource<TResult>(createResult, childSources);
+		}
+
+		public ISource<TObject> Combine(Action<TObject> action)
+		{
+			return Combine(instance =>
+			{
+				action(instance);
+				return instance;
+			});
+		}
+
+		public IEnumerator<TObject> GetEnumerator()
 		{
 			var context = new CreateContext(0);
 			foreach (var tuple in childSources.Tuplize())
 			{
-				yield return create(context, tuple);
+				yield return this.create(context, tuple);
 				context = context.Next();
 			}
 		}
@@ -87,10 +104,10 @@ namespace BuildUp
 			return GetEnumerator();
 		}
 
-		public CompositeSource<T> ReplaceChildSource<C>(int index, IEnumerable<C> source)
+		public CompositeSource<TObject> ReplaceChildSource<TSource>(int index, IEnumerable<TSource> source)
 		{
 			ChildSourceMap newChildSources = childSources.Replace(index, source);
-			return new CompositeSource<T>(create, newChildSources);
+			return new CompositeSource<TObject>(create, newChildSources);
 		}
 	}
 }

@@ -36,7 +36,7 @@ namespace BuildUp.Tests.BuilderExamples
 		public void modifying_instances_after_creation()
 		{
 			var notes = StringSources.Numbered("Stuff {0}");
-			var customers = new CustomerBuilder().Take(20).Modify(notes, (c, s) => c.RecordHistory(DateTime.Now, s));
+			var customers = new CustomerBuilder().Combine(c => c.RecordHistory(DateTime.Now, ""));
 		}
 
 		

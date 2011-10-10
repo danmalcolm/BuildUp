@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace BuildUp
@@ -12,7 +13,7 @@ namespace BuildUp
 	/// <typeparam name="T"></typeparam>
 	/// <typeparam name="TBuilder">The concrete type of the builder class. A self-referencing generic type parameter
 	/// allows us to define behaviour in this base class that returns an instance of the concrete builder type.</typeparam>
-	public abstract class Builder<T,TBuilder> : IEnumerable<T> 
+	public abstract class Builder<T,TBuilder> : ISource<T> 
 		where TBuilder : Builder<T,TBuilder>, new()
 	{
 	    private CompositeSource<T> source;
@@ -60,6 +61,16 @@ namespace BuildUp
 		IEnumerator IEnumerable.GetEnumerator()
 		{
 			return GetEnumerator();
+		}
+
+		public ISource<TResult> Combine<TResult>(Func<T, TResult> @select)
+		{
+			return Source.Combine(@select);
+		}
+
+		public ISource<T> Combine(Action<T> action)
+		{
+			return Source.Combine(action);
 		}
 
 		#endregion

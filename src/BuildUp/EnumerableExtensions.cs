@@ -18,7 +18,7 @@ namespace BuildUp
 		/// <returns></returns>
 		public static IEnumerable<T> Freeze<T>(this IEnumerable<T> sequence)
 		{
-			var frozen = new Lazy<T>(sequence.FirstOrDefault);
+			// TODO - heed this warning
 			if(sequence.Any())
 			{
 				while(true)
@@ -40,21 +40,6 @@ namespace BuildUp
 			return from item in source
 			       from repeat in Enumerable.Range(0, count)
 			       select item;
-		}
-
-		/// <summary>
-		/// Modifies each element in a sequence, using a value from another sequence
-		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <param name="source"></param>
-		/// <returns></returns>
-		public static IEnumerable<T> Modify<T,T1>(this IEnumerable<T> source, IEnumerable<T1> first, Action<T, T1> action)
-		{
-			return source.Zip(first, (item, other) =>
-			{
-				action(item, other);
-				return item;
-			});
 		}
 	}
 }

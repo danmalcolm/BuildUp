@@ -7,9 +7,9 @@ namespace BuildUp.Tests.BuilderExamples.Builders
 	// of tests and would be located within the relevant scope
 	public static class CustomerSetupExtensions
 	{
-		public static IEnumerable<Customer> WithHistory(this IEnumerable<Customer> customers, IEnumerable<DateTime> dates, IEnumerable<string> notes)
+		public static ISource<Customer> WithHistory(this ISource<Customer> customers, DateTime date, string notes)
 		{
-			return customers.Modify(notes, (c, s) => c.RecordHistory(DateTime.Now, s));
+			return customers.Combine(customer => customer.RecordHistory(date, notes));
 		}
 	}
 }
