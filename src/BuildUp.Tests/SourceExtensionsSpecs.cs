@@ -1,46 +1,35 @@
-using System.Linq;
-using BuildUp.Tests.Common;
-using BuildUp.ValueSources;
+﻿using System.Linq;
 using NUnit.Framework;
+using BuildUp.Tests.Common;
 
-namespace BuildUp.Tests
+namespace BuildUp.Tests.SourceExtensionsSpecs
 {
 	[TestFixture]
-	public class SourceExtensionsSpecs
+	public class setting_member_of_source
 	{
+		ISource<LittleMan> source1 = Source.Create(context => new LittleMan("Man " + (context.Index + 1), 20));
+			
 		[Test]
-		public void simple_freeze()
+		public void settable_property_with_value()
 		{
-			var source1 = new Source<int>(context => context.Index);
-			var source2 = source1.Freeze();
-
-			source1.Take(5).ShouldMatchSequence(0, 1, 2, 3, 4);
-			source2.Take(5).ShouldMatchSequence(0, 0, 0, 0, 0);
+			var source = source1.Set(x => x.FavouriteColour, "Pink");
+			source.Take(3).Select(x => x.FavouriteColour).ShouldMatchSequence("Pink", "Pink", "Pink");
 		}
 
 		[Test]
-		public void repeat_each()
+		public void settable_property_with_sequence()
 		{
-			var source1 = new Source<int>(context => context.Index);
-			var source2 = source1.RepeatEach(3);
-
-			source1.Take(3).ShouldMatchSequence(0, 1, 2);
-			source2.Take(9).ShouldMatchSequence(0, 0, 0, 1, 1, 1, 2, 2, 2);
+			var sequence = new [] { "Pink", "Blue" };
+			var source = source1.Set(x => x.FavouriteColour, sequence);
+			source.Take(4).Select(x => x.FavouriteColour).ShouldMatchSequence("Pink", "Blue", "Pink", "Blue");
 		}
 
 		[Test]
-		public void repeat_each_with_composite_source_should_repeat_same_instance()
+		public void action_with_sources()
 		{
-			var source = CompositeSource.Create
-				(
-					(context, name, age) => new LittleMan(name, age),
-					StringSources.Numbered("Little Man {0}"),
-					IntSources.Constant(38)
-				).RepeatEach(2);
-			source.Take(4).Distinct().Count().ShouldEqual(2);
-
+			var names = Source.Create(x => "Name " + x.Index);
+			var source = source1.Select((man, name) => man.ChangeName(name), names);
 		}
 
-		
 	}
 }

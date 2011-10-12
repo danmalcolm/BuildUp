@@ -15,6 +15,27 @@ namespace BuildUp
 		#region Create functions
 
 		/// <summary>
+		/// Creates a CompositeSource using the supplied function and specified source. The sources will
+		/// also be stored in the Sources property of the CompositeSource instance so that they are available
+		/// for use when creating a new version of the CompositeSource. Variations of this method exist for 
+		/// creation functions requiring from 1 (TODO) to 16 (TODO) parameters. 
+		/// </summary>
+		/// <typeparam name="T">The type of the object that the source will create</typeparam>
+		/// <typeparam name="T1"></typeparam>
+		/// <param name="create">The function used to create an object using values from the specified sources</param>
+		/// <param name="source1">The child source used to provide the value used to create the object</param>
+		/// <returns></returns>
+		public static CompositeSource<T> Create<T, T1>(Func<CreateContext, T1, T> create, IEnumerable<T1> source1)
+		{
+			var sourceMap = new ChildSourceMap(source1);
+			return Create((context, values) =>
+			{
+				var value1 = (T1)values[0];
+				return create(context, value1);
+			}, sourceMap);
+		}
+
+		/// <summary>
 		/// Creates a CompositeSource using the supplied function and specified sources. The sources will
 		/// also be stored in the Sources property of the CompositeSource instance so that they are available
 		/// for use when creating a new version of the CompositeSource. Variations of this method exist for 
@@ -73,16 +94,16 @@ namespace BuildUp
 			this.childSources = childSources;
 		}
 
-		public ISource<TResult> Combine<TResult>(Func<TObject, TResult> select)
+		public ISource<TResult> Select<TResult>(Func<TObject, TResult> select)
 		{
 			// Function porn (Shift-Alt-Enter for full-screen view): Applies the select function to our current create function - TODO good description
 			Func<CreateContext, object[], TResult> createResult = (context, items) => select(create(context, items));
 			return new CompositeSource<TResult>(createResult, childSources);
 		}
 
-		public ISource<TObject> Combine(Action<TObject> action)
+		public ISource<TObject> Select(Action<TObject> action)
 		{
-			return Combine(instance =>
+			return Select(instance =>
 			{
 				action(instance);
 				return instance;

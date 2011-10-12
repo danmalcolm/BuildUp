@@ -19,8 +19,8 @@ namespace BuildUp.Utility
 		}
 
 		/// <summary>
-		/// Generates a new sequence of sets combining values from multiple sequences. The length
-		/// of the returned sequence will be the length of the shortest sequence being combined.
+		/// Generates a new sequence of lists combining values from multiple sequences. The length
+		/// of the returned sequence will be the length of the shortest of the source sequences.
 		/// </summary>
 		/// <param name="sequences"></param>
 		/// <returns></returns>
@@ -31,7 +31,7 @@ namespace BuildUp.Utility
 			{
 				yield return enumerators.Select(x => x.Current).ToArray();
 			}
-			// TODO: That's it?
+			// TODO: That's it? 
 		}
 	}
 }

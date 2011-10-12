@@ -4,7 +4,9 @@ using System.Collections.Generic;
 
 namespace BuildUp
 {
-    /// <summary>
+	#region Creation methods
+
+	/// <summary>
     /// Contains methods for creation of ISource instances
     /// </summary>
 	public class Source
@@ -15,8 +17,10 @@ namespace BuildUp
 		}
 	}
 
+	#endregion
+	
 	/// <summary>
-	/// Generates a sequence of objects suitable for unit testing, test data generation etc
+	/// 
 	/// </summary>
 	/// <typeparam name="TObject"></typeparam>
 	public class Source<TObject> : ISource<TObject>
@@ -28,14 +32,14 @@ namespace BuildUp
 			this.create = create;
 		}
 
-		public ISource<TResult> Combine<TResult>(Func<TObject, TResult> newCreate)
+		public ISource<TResult> Select<TResult>(Func<TObject, TResult> newCreate)
 		{
 			return new Source<TResult>(context => newCreate(this.create(context)));
 		}
 
-		public ISource<TObject> Combine(Action<TObject> action)
+		public ISource<TObject> Select(Action<TObject> action)
 		{
-			return Combine(instance =>
+			return Select(instance =>
 			{
 				action(instance);
 				return instance;

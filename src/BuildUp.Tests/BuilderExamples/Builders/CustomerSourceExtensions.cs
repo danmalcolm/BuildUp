@@ -9,7 +9,7 @@ namespace BuildUp.Tests.BuilderExamples.Builders
 	{
 		public static ISource<Customer> WithHistory(this ISource<Customer> customers, DateTime date, string notes)
 		{
-			return customers.Combine(customer => customer.RecordHistory(date, notes));
+			return customers.Select(customer => customer.RecordHistory(date, notes));
 		}
 	}
 }

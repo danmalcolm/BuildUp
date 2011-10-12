@@ -1,0 +1,77 @@
+Buildup.TestData - lots of sources:
+
+FirstNames
+LastNames
+People
+email addresses
+phone numbers
+mobile phone numbers
+
+Company Names
+
+Postcodes
+
+US Zipcodes
+
+1000 of each, enough? Measure size of binaries and see if holding something like 100000 names in memory is a serious problem
+
+-----------------------------------------
+
+Should ISource<T> implement IEnumerable
+
+other options:
+have a method to get the ienumberable, e.g. Get() or Items
+
+from name in names.Items
+
+
+
+for:
+Viewing data as a stream is key to library - makes for nice declarative syntax and natural fit for other IEnumerable operators
+
+
+against:
+extension method collision, e.g. meaning of Select and SelectMany will vary according to which extensions are referenced (unless we declare them on the actual classes)
+
+
+-----------------------------------------
+
+Query comprehension syntax support Select, SelectMany etc
+
+var personSource = 
+from f in People.FirstNames.Loop()
+from l in People.LastNames.Loop().Skip(3)
+from e in Source.Create(x => string.Format("{0}{1}@gmail.com", f, l)
+select new Person(f, l, e)
+
+
+-----------------------------------------
+
+Generate the versions of CompositeSource.Select<T1, T2, T3> etc use T4?
+
+
+-----------------------------------------
+
+Using named keys for child sources in addition to positional index, e.g. 
+
+
+-----------------------------------------
+
+Built-in builder functions for setters, methods, e.g.
+
+customer.Set(x => x.Nickname, names); // ienumerable
+customer.Set(x => x.Nickname, name); // constant
+customer.Set(x => x.Nickname, context => "something" + constant.Index);
+
+customer.Do(x => x.AddNotes(p1, p2), notes, dates) // ienumerables - bit like composite source - variation for 1 to * params 
+customer.Do(x => x.AddNotes(p1, p2), note, date) // constants -  bit like composite source - variation for 1 to * params 
+
+
+
+-----------------------------------------
+Enumerable Source
+
+E.g. Source.Create(sequence_
+
+
+-----------------------------------------

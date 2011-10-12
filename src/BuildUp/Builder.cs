@@ -63,14 +63,14 @@ namespace BuildUp
 			return GetEnumerator();
 		}
 
-		public ISource<TResult> Combine<TResult>(Func<T, TResult> @select)
+		public ISource<TResult> Select<TResult>(Func<T, TResult> @select)
 		{
-			return Source.Combine(@select);
+			return Source.Select(@select);
 		}
 
-		public ISource<T> Combine(Action<T> action)
+		public ISource<T> Select(Action<T> action)
 		{
-			return Source.Combine(action);
+			return Source.Select(action);
 		}
 
 		#endregion

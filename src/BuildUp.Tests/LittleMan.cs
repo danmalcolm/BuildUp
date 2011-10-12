@@ -12,6 +12,8 @@ namespace BuildUp.Tests
 
 		public int Age { get; private set; }
 
+		public string FavouriteColour { get; set; }
+
 		public void ChangeName(string name)
 		{
 			Name = name;

@@ -4,7 +4,6 @@ using System.Collections.Generic;
 namespace BuildUp.Utility
 {
 	// don't want to pollute every project using this library
-
 	internal static class EnumerableExtensions
 	{
 		 public static void Each<T>(this IEnumerable<T> sequence, Action<T> action)

@@ -7,8 +7,8 @@ using BuildUp.Utility;
 namespace BuildUp
 {
 	/// <summary>
-	/// Contains the collection of child sources used by CompositeSource, which are stored / retrieved either
-	/// by position in the create function
+	/// Contains the collection of child sources used by CompositeSource, indexed by the position in which
+	/// they were declared in the create function - see Source.Create
 	/// </summary>
 	internal class ChildSourceMap
 	{

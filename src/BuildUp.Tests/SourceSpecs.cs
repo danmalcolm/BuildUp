@@ -28,7 +28,7 @@ namespace BuildUp.Tests
 		public void combining_with_function()
 		{
 			var source1 = Source.Create(context => context.Index);
-			var source2 = source1.Combine(value => value*10);
+			var source2 = source1.Select(value => value*10);
 			
 			source1.Take(3).ShouldMatchSequence(0, 1, 2);
 			source2.Take(3).ShouldMatchSequence(0, 10, 20);
@@ -38,7 +38,7 @@ namespace BuildUp.Tests
 		public void combining_with_action()
 		{
 			var source1 = Source.Create(context => new LittleMan("Man " + (context.Index + 1), 20));
-			var source2 = source1.Combine(man => man.ChangeName("Frank"));
+			var source2 = source1.Select(man => man.ChangeName("Frank"));
 
 			source1.Take(3).Select(x => new { x.Name, x.Age }).ShouldMatchSequence(new { Name = "Man 1", Age = 20 }, new { Name = "Man 2", Age = 20 }, new { Name = "Man 3", Age = 20 });
 			source2.Take(3).Select(x => new { x.Name, x.Age }).ShouldMatchSequence(new { Name = "Frank", Age = 20 }, new { Name = "Frank", Age = 20 }, new { Name = "Frank", Age = 20 });
