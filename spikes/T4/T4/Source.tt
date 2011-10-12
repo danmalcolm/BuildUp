@@ -1,0 +1,58 @@
+﻿<#@ template language="C#v3.5" #>
+<#@ assembly name="System.Core.dll" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Collections" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.Text.RegularExpressions" #>
+<#@ template hostspecific="True" #> 
+namespace T4
+{
+	public partial class Source
+	{
+		<#=GenerateCreateMethods()#>
+	}
+
+	
+}
+
+
+<#+
+
+public static string GenerateConcatMethods()
+{
+	var methods = new StringBuilder();
+	for(int i = 1; i <= 10; i++)
+	{
+		var values = Enumerable.Range(0, i).ToArray();
+		var args = string.Join(", ", values.Select(index => string.Format("string value{0}", index + 1)));
+		var concatArgs = string.Join(", ", values.Select(index => string.Format("value{0}", index + 1)));
+		methods.AppendFormat(@"
+		/// <summary>
+		/// Creates a CompositeSource using the supplied function and specified sources. The sources will
+		/// also be stored in the Sources property of the CompositeSource instance so that they are available
+		/// for use when creating a new version of the CompositeSource. Variations of this method exist for 
+		/// creation functions requiring from 1 to 16 parameters. 
+		/// </summary>
+		/// <typeparam name="T">The type of the object that the source will create</typeparam>
+		/// <typeparam name="T1"></typeparam>
+		/// <param name="create">The function used to create an object using values from the specified sources</param>
+		/// <param name="source1">The child source used to provide the value used to create the object</param>
+		/// <returns></returns>
+		public static CompositeSource<T> Create<T, T1>(Func<CreateContext, T1, T> create, IEnumerable<T1> source1)
+		{
+			var sourceMap = new ChildSourceMap(source1);
+			return Create((context, values) =>
+			{
+				var value1 = (T1)values[0];
+				return create(context, value1);
+			}, sourceMap);
+		}", args, concatArgs);
+	}
+	return methods.ToString();
+} 
+
+#>
+
