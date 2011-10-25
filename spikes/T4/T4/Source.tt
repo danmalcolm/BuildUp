@@ -24,7 +24,7 @@ namespace T4
 public static string GenerateConcatMethods()
 {
 	var methods = new StringBuilder();
-	for(int i = 1; i <= 10; i++)
+	for(int i = 1; i <= 16; i++)
 	{
 		var values = Enumerable.Range(0, i).ToArray();
 		var args = string.Join(", ", values.Select(index => string.Format("string value{0}", index + 1)));
