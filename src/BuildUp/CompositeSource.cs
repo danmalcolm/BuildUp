@@ -79,7 +79,8 @@ namespace BuildUp
 
 
 	/// <summary>
-	/// Creates a sequence of objects using values from one or more child sequences
+	/// Creates a sequence of objects using values from one or more child sequences. Has the ability
+	/// to change one of the sources.
 	/// </summary>
 	/// <typeparam name="TObject"></typeparam>
 	public class CompositeSource<TObject> : ISource<TObject>
@@ -92,22 +93,6 @@ namespace BuildUp
 		{
 			this.create = create;
 			this.childSources = childSources;
-		}
-
-		public ISource<TResult> Select<TResult>(Func<TObject, TResult> select)
-		{
-			// Function porn (Shift-Alt-Enter for full-screen view): Applies the select function to our current create function - TODO good description
-			Func<CreateContext, object[], TResult> createResult = (context, items) => select(create(context, items));
-			return new CompositeSource<TResult>(createResult, childSources);
-		}
-
-		public ISource<TObject> Select(Action<TObject> action)
-		{
-			return Select(instance =>
-			{
-				action(instance);
-				return instance;
-			});
 		}
 
 		public IEnumerator<TObject> GetEnumerator()
@@ -130,5 +115,36 @@ namespace BuildUp
 			ChildSourceMap newChildSources = childSources.Replace(index, source);
 			return new CompositeSource<TObject>(create, newChildSources);
 		}
+
+
+		#region Select, SelectMany
+
+		public ISource<TResult> Select<TResult>(Func<TObject, TResult> selector)
+		{
+			Func<CreateContext, object[], TResult> createResult = (context, items) => selector(create(context, items));
+			return new CompositeSource<TResult>(createResult, childSources);
+		}
+
+		public ISource<TObject> Select(Action<TObject> action)
+		{
+			return Select(instance =>
+			{
+				action(instance);
+				return instance;
+			});
+		}
+
+		public ISource<TResult> SelectMany<TCollection, TResult>(Func<ISource<TObject>, IEnumerable<TCollection>> sourceSelector, Func<TObject, TCollection, TResult> resultSelector)
+		{
+			throw new NotImplementedException();
+		}
+
+		public ISource<TObject> SelectMany<TCollection>(Func<ISource<TObject>, IEnumerable<TCollection>> sourceSelector, Action<TObject, TCollection> modify)
+		{
+			throw new NotImplementedException();
+		}
+
+		#endregion
+
 	}
 }

@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using BuildUp.ValueSources;
 using NUnit.Framework;
 using BuildUp.Tests.Common;
 
@@ -19,17 +20,12 @@ namespace BuildUp.Tests.SourceExtensionsSpecs
 		[Test]
 		public void settable_property_with_sequence()
 		{
-			var sequence = new [] { "Pink", "Blue" };
-			var source = source1.Set(x => x.FavouriteColour, sequence);
-			source.Take(4).Select(x => x.FavouriteColour).ShouldMatchSequence("Pink", "Blue", "Pink", "Blue");
+			var colours = new [] { "Pink", "Blue", "Green", "Yellow" };
+			var source = source1.Set(x => x.FavouriteColour, colours);
+			
+			source.Take(4).Select(x => x.FavouriteColour).ShouldMatchSequence(colours);
 		}
 
-		[Test]
-		public void action_with_sources()
-		{
-			var names = Source.Create(x => "Name " + x.Index);
-			var source = source1.Select((man, name) => man.ChangeName(name), names);
-		}
-
+		
 	}
 }

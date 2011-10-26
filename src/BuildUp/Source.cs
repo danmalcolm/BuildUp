@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace BuildUp
 {
@@ -11,30 +12,45 @@ namespace BuildUp
     /// </summary>
 	public class Source
 	{
-		public static Source<T> Create<T>(Func<CreateContext, T> create)
+		public static ISource<T> Create<T>(Func<CreateContext, T> create)
 		{
-			return new Source<T>(create);
+			return new Source<CreateContext,T>(CreateContext.Sequence, create);
 		}
 	}
 
 	#endregion
-	
+
 	/// <summary>
 	/// 
 	/// </summary>
 	/// <typeparam name="TObject"></typeparam>
-	public class Source<TObject> : ISource<TObject>
+	/// <typeparam name="TBase"></typeparam>
+	public class Source<TBase,TObject> : ISource<TObject>
 	{
-		private readonly Func<CreateContext, TObject> create;
+		private readonly IEnumerable<TBase> baseSequence;
+		private readonly Func<TBase, TObject> create;
 
-		public Source(Func<CreateContext, TObject> create)
+		public Source(IEnumerable<TBase> baseSequence, Func<TBase,TObject> create)
 		{
+			this.baseSequence = baseSequence;
 			this.create = create;
 		}
-
-		public ISource<TResult> Select<TResult>(Func<TObject, TResult> newCreate)
+		
+		public IEnumerator<TObject> GetEnumerator()
 		{
-			return new Source<TResult>(context => newCreate(this.create(context)));
+			return baseSequence.Select(@base => create(@base)).GetEnumerator();
+		}
+
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			return GetEnumerator();
+		}
+
+		#region Select, SelectMany
+
+		public ISource<TResult> Select<TResult>(Func<TObject, TResult> selector)
+		{
+			return new Source<TBase,TResult>(baseSequence, @base => selector(this.create(@base)));
 		}
 
 		public ISource<TObject> Select(Action<TObject> action)
@@ -46,24 +62,25 @@ namespace BuildUp
 			});
 		}
 
-		public IEnumerator<TObject> GetEnumerator()
+		public ISource<TResult> SelectMany<TCollection, TResult>(Func<ISource<TObject>, IEnumerable<TCollection>> sourceSelector, Func<TObject, TCollection, TResult> resultSelector)
 		{
-            // TODO - throw with an informative "are you sure?" exception if we exceed 1m?
-			var context = new CreateContext(0);
-			while (true)
+			var sequence = sourceSelector(this);
+			// join base sequence with new sequence
+			var combined = baseSequence.Zip(sequence, Tuple.Create);
+			// Create new source with combined sequence as base sequence plus a function that invokes the resultSelector on result
+			// of this source's create function
+			return new Source<Tuple<TBase,TCollection>,TResult> (combined, tuple => resultSelector(create(tuple.Item1), tuple.Item2));
+		}
+
+		public ISource<TObject> SelectMany<TCollection>(Func<ISource<TObject>, IEnumerable<TCollection>> sourceSelector, Action<TObject, TCollection> modify)
+		{
+			return SelectMany(sourceSelector, (a, b) =>
 			{
-                yield return this.create(context);
-				context = context.Next();
-			}
-			// ReSharper disable FunctionNeverReturns
-			// Intentionally returns infinite sequence, applications are responsible for limiting results using Take, First etc
+				modify(a, b);
+				return a;
+			});
 		}
 
-		// ReSharper restore FunctionNeverReturns
-
-		IEnumerator IEnumerable.GetEnumerator()
-		{
-			return GetEnumerator();
-		}
+		#endregion
 	}
 }

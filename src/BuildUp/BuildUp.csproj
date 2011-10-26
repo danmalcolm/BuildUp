@@ -47,6 +47,8 @@
     <Compile Include="ISource.cs" />
     <Compile Include="SourceExtensions.cs" />
     <Compile Include="Utility\EnumerableUtility.cs" />
+    <Compile Include="Utility\Reflection\MemberAccessor.cs" />
+    <Compile Include="Utility\Reflection\ReflectionHelper.cs" />
     <Compile Include="ValueSources\DateTimeSources.cs" />
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="ValueSources\StringSources.cs" />
@@ -55,9 +57,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utility\EnumerableExtensions.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Utility\Reflection\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

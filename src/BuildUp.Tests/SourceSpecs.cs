@@ -1,4 +1,7 @@
-﻿using System.Linq;
+﻿//using System.Linq;
+
+using System.Linq;
+using BuildUp.ValueSources;
 using NUnit.Framework;
 using BuildUp.Tests.Common;
 
@@ -18,7 +21,7 @@ namespace BuildUp.Tests
 		[Test]
 		public void different_iterations_should_return_separate_sequences()
 		{
-			var source = new Source<int>(context => context.Index);
+			var source = Source.Create(context => context.Index);
 			var first = source.Take(5);
 			var second = source.Take(5);
 			first.ShouldMatchSequence(second);
@@ -43,6 +46,38 @@ namespace BuildUp.Tests
 			source1.Take(3).Select(x => new { x.Name, x.Age }).ShouldMatchSequence(new { Name = "Man 1", Age = 20 }, new { Name = "Man 2", Age = 20 }, new { Name = "Man 3", Age = 20 });
 			source2.Take(3).Select(x => new { x.Name, x.Age }).ShouldMatchSequence(new { Name = "Frank", Age = 20 }, new { Name = "Frank", Age = 20 }, new { Name = "Frank", Age = 20 });
 		}
-		 
+
+		[Test]
+		public void combining_2_sources_with_select_many_method_call()
+		{
+			var names = StringSources.Numbered("Man {0}");
+			var ages = IntSources.Incrementing(30);
+
+			var source = names.SelectMany(x => ages, (name, age) => new LittleMan(name, age));
+			source.Take(3).Select(x => new { x.Name, x.Age }).ShouldMatchSequence(new { Name = "Man 1", Age = 30 }, new { Name = "Man 2", Age = 31 }, new { Name = "Man 3", Age = 32 });
+
+		}
+
+		[Test]
+		public void combining_2_sources_with_select_many_query_syntax()
+		{
+			var source = from name in StringSources.Numbered("Man {0}")
+			             from age in IntSources.Incrementing(30)
+			             select new LittleMan(name, age);
+			source.Take(3).Select(x => new { x.Name, x.Age }).ShouldMatchSequence(new { Name = "Man 1", Age = 30 }, new { Name = "Man 2", Age = 31 }, new { Name = "Man 3", Age = 32 });
+
+		}
+
+		[Test]
+		public void combining_3_sources_with_select_many_query_syntax()
+		{
+			var source = from name in StringSources.Numbered("Man {0}")
+						 from age in IntSources.Incrementing(30)
+						 from colour in StringSources.Numbered("Colour {0}")
+						 select new LittleMan(name, age) { FavouriteColour = colour }; // cheers, compiler!
+			source.Take(3).Select(x => new { x.Name, x.Age, x.FavouriteColour }).ShouldMatchSequence(new { Name = "Man 1", Age = 30, FavouriteColour = "Colour 1" }, new { Name = "Man 2", Age = 31, FavouriteColour = "Colour 2" }, new { Name = "Man 3", Age = 32, FavouriteColour = "Colour 3" });
+
+		}
+
 	}
 }

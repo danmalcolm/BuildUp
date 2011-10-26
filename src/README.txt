@@ -1,6 +1,6 @@
 BUILDUP
 
-A library to ease the pain of creating test objects during automated testing, or generating test data for use in demos / test environment of an application.
+A library to ease the pain of creating test objects during automated testing, or generating test / demo data for your application.
 
 
 INTRODUCTION
@@ -14,8 +14,8 @@ Hmm, ok I need an object in my test. I'll create one.
 
 Hmm, ok so now I've got lots of new Order() statements in each of my tests
 
-
 Hmm, ok so I've just decided that I want to pass the customer to the constructor I've got loads of constructor calls to change. 
+
 Obviously I shouldn't be newing up objects repeatedly in my tests
 
 So I'll have a look around at the various patterns for doing this:
@@ -55,6 +55,7 @@ Why do you do this:
 
 Method calls allow state to be consistent
 Meaningful operations make application code simpler
+Emphasises the _behaviour_ of your model. Your doing something, not changing properties or adding things to collections.
 
 
 A model like this can't be set up using conventions as the behaviour is usually pretty specific and unique. So you need to think and write manual code to 

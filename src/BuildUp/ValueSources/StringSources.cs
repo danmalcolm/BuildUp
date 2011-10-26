@@ -10,7 +10,7 @@ namespace BuildUp.ValueSources
 		/// </summary>
 		/// <param name="format"></param>
 		/// <returns></returns>
-		public static IEnumerable<string> Indexed(string format)
+		public static ISource<string> Indexed(string format)
 		{
 			return Source.Create(c => string.Format(format, c.Index));
 		}
@@ -21,7 +21,7 @@ namespace BuildUp.ValueSources
 		/// </summary>
 		/// <param name="format"></param>
 		/// <returns></returns>
-		public static IEnumerable<string> Numbered(string format)
+		public static ISource<string> Numbered(string format)
 		{
 			return Source.Create(c => string.Format(format, c.Index + 1));
 		}
@@ -31,7 +31,7 @@ namespace BuildUp.ValueSources
 		/// </summary>
 		/// <param name="value"></param>
 		/// <returns></returns>
-		public static IEnumerable<string> Constant(string value)
+		public static ISource<string> Constant(string value)
 		{
 			return Source.Create(c => value);
 		}

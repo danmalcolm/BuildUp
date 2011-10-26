@@ -66,6 +66,8 @@
     <Compile Include="SourceExtensionsSpecs.cs" />
     <Compile Include="SourceSpecs.cs" />
     <Compile Include="Spikes\MultipleEnumerators.cs" />
+    <Compile Include="Spikes\SelectMany.cs" />
+    <Compile Include="Utility\MemberAccessorSpecs.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

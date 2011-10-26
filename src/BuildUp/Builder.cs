@@ -11,7 +11,7 @@ namespace BuildUp
 	/// This base class provides some convenience methods to make these chainable methods simple to write.
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
-	/// <typeparam name="TBuilder">The concrete type of the builder class. A self-referencing generic type parameter
+	/// <typeparam name="TBuilder">The concrete type of the builder class. This self-referencing generic type parameter
 	/// allows us to define behaviour in this base class that returns an instance of the concrete builder type.</typeparam>
 	public abstract class Builder<T,TBuilder> : ISource<T> 
 		where TBuilder : Builder<T,TBuilder>, new()
@@ -51,8 +51,6 @@ namespace BuildUp
 		    return builder;
 		}
 
-		#region ICompositeSource<T> Members
-
 		public IEnumerator<T> GetEnumerator()
 		{
 			return Source.GetEnumerator();
@@ -63,9 +61,9 @@ namespace BuildUp
 			return GetEnumerator();
 		}
 
-		public ISource<TResult> Select<TResult>(Func<T, TResult> @select)
+		public ISource<TResult> Select<TResult>(Func<T, TResult> selector)
 		{
-			return Source.Select(@select);
+			return Source.Select(selector);
 		}
 
 		public ISource<T> Select(Action<T> action)
@@ -73,6 +71,14 @@ namespace BuildUp
 			return Source.Select(action);
 		}
 
-		#endregion
+		public ISource<TResult> SelectMany<TCollection, TResult>(Func<ISource<T>, IEnumerable<TCollection>> sourceSelector, Func<T, TCollection, TResult> resultSelector)
+		{
+			return Source.SelectMany(sourceSelector, resultSelector);
+		}
+
+		public ISource<T> SelectMany<TCollection>(Func<ISource<T>, IEnumerable<TCollection>> sourceSelector, Action<T, TCollection> modify)
+		{
+			return Source.SelectMany(sourceSelector, modify);
+		}
 	}
 }
