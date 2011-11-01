@@ -8,6 +8,15 @@ namespace BuildUp
 {
 	public static class SourceExtensions
 	{
+		/// <summary>
+		/// Sets the member specified by the expression to a specific value
+		/// </summary>
+		/// <typeparam name="TObject"></typeparam>
+		/// <typeparam name="TMember"></typeparam>
+		/// <param name="source"></param>
+		/// <param name="expression"></param>
+		/// <param name="value"></param>
+		/// <returns></returns>
 		public static ISource<TObject> Set<TObject,TMember>(this ISource<TObject> source, Expression<Func<TObject,TMember>> expression, TMember value)
 		{
 			var accessor = MemberAccessor.For(expression);

@@ -18,12 +18,12 @@ namespace BuildUp
 		/// <returns></returns>
 		public static IEnumerable<T> Freeze<T>(this IEnumerable<T> sequence)
 		{
-			// TODO - heed this warning
-			if(sequence.Any())
+			var enumerator = sequence.GetEnumerator();
+			if(enumerator.MoveNext())
 			{
 				while(true)
 				{
-					yield return sequence.First();
+					yield return enumerator.Current;
 				}
 			}
 		}

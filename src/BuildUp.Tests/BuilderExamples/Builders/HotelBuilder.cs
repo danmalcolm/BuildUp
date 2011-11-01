@@ -4,9 +4,9 @@ namespace BuildUp.Tests.BuilderExamples.Builders
 {
 	public class HotelBuilder : Builder<Hotel,HotelBuilder>
 	{
-		protected override CompositeSource<Hotel> GetDefaultSource()
+		protected override Source<Hotel> GetDefaultSource()
 		{
-			return CompositeSource.Create
+			return Source.Create
 			(
 				(context, code, name) => new Hotel(code, name),
 				StringSources.Numbered("hotel-{0}"),

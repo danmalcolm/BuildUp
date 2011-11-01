@@ -20,7 +20,7 @@ namespace BuildUp.Tests
 		}
 
         [Test]
-        public void building_after_changing_a_source()
+        public void building_after_changing_a_child_source()
         {
             var source = new LittleManBuilder().WithName(StringSources.Numbered("Super Little Man {0}"));
             var expected = new[] { new { Name = "Super Little Man 1", Age = 38 }, new { Name = "Super Little Man 2", Age = 38 }, new { Name = "Super Little Man 3", Age = 38 } };
@@ -28,7 +28,7 @@ namespace BuildUp.Tests
         }
 
         [Test]
-        public void building_after_changing_both_sources()
+        public void building_after_changing_both_child_sources()
         {
             var source = new LittleManBuilder().WithName(StringSources.Numbered("Super Little Man {0}")).WithAge(IntSources.Incrementing(30, 2));
             var expected = new[] { new { Name = "Super Little Man 1", Age = 30 }, new { Name = "Super Little Man 2", Age = 32 }, new { Name = "Super Little Man 3", Age = 34 } };
@@ -50,9 +50,9 @@ namespace BuildUp.Tests
 
 		public class LittleManBuilder : Builder<LittleMan,LittleManBuilder>
 		{
-            protected override CompositeSource<LittleMan> GetDefaultSource()
+            protected override Source<LittleMan> GetDefaultSource()
             {
-                return CompositeSource.Create
+                return Source.Create
                 (
                     (context, name, age) => new LittleMan(name, age),
                     StringSources.Numbered("Little Man {0}"),

@@ -54,7 +54,7 @@ booking.ProvisionallyReserveRooms();
 Why do you do this:
 
 Method calls allow state to be consistent
-Meaningful operations make application code simpler
+Meaningful operations make application code simpler while leaving state checking to the domain
 Emphasises the _behaviour_ of your model. Your doing something, not changing properties or adding things to collections.
 
 

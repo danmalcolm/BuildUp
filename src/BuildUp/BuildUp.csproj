@@ -42,13 +42,12 @@
   <ItemGroup>
     <Compile Include="CreateContext.cs" />
     <Compile Include="Builder.cs" />
-    <Compile Include="CompositeSource.cs" />
     <Compile Include="ChildSourceMap.cs" />
+    <Compile Include="ContextSource.cs" />
     <Compile Include="ISource.cs" />
     <Compile Include="SourceExtensions.cs" />
     <Compile Include="Utility\EnumerableUtility.cs" />
     <Compile Include="Utility\Reflection\MemberAccessor.cs" />
-    <Compile Include="Utility\Reflection\ReflectionHelper.cs" />
     <Compile Include="ValueSources\DateTimeSources.cs" />
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="ValueSources\StringSources.cs" />

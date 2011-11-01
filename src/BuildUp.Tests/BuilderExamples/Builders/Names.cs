@@ -9,7 +9,7 @@ namespace BuildUp.Tests.BuilderExamples.Builders
 		{
 			get
 			{
-				return CompositeSource.Create((context, firstName, lastName) => new Name("Mr", firstName, lastName),
+				return Source.Create((context, firstName, lastName) => new Name("Mr", firstName, lastName),
 				                              StringSources.Constant("John"),
 				                              StringSources.Numbered("Last Name {0}"));
 			}

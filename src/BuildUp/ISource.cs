@@ -10,32 +10,40 @@ namespace BuildUp
 	public interface ISource<TObject> : IEnumerable<TObject>
 	{
 		/// <summary>
-		/// Creates a new source that will create objects by invoking a function against each item generated
-		/// by the current source
+		/// Creates a new source that will create a new sequence of objects by invoking a function against each object created from
+		/// the current source
 		/// </summary>
 		/// <param name="selector"></param>
 		/// <returns></returns>
 		ISource<TResult> Select<TResult>(Func<TObject,TResult> selector);
 
 		/// <summary>
-		/// Creates a new source that will mutate objects built from the current source using the specified action
+		/// Creates a new source that will perform a mutating operation on each object created by the current source
 		/// </summary>
 		/// <param name="action"></param>
 		/// <returns></returns>
 		ISource<TObject> Select(Action<TObject> action);
 				
 		/// <summary>
-		/// Creates a new source that will combine the sequence created by the current source with items from an additional sequence and 
-		/// invokes the specified function to create a new object.
+		/// Creates a new source that will combine the sequence of objects created by the current source with those from an additional sequence,
+		/// then invoke the specified function on each pair of objects.
 		/// </summary>
-		/// <typeparam name="TCollection"></typeparam>
+		/// <typeparam name="TChild"></typeparam>
 		/// <typeparam name="TResult"></typeparam>
-		/// <param name="sourceSelector"></param>
+		/// <param name="childSequenceSelector"></param>
 		/// <param name="resultSelector"></param>
 		/// <returns></returns>
-		ISource<TResult> SelectMany<TCollection, TResult>(Func<ISource<TObject>, IEnumerable<TCollection>> sourceSelector, Func<TObject, TCollection, TResult> resultSelector);
+		ISource<TResult> SelectMany<TChild, TResult>(Func<ISource<TObject>, IEnumerable<TChild>> childSequenceSelector, Func<TObject, TChild, TResult> resultSelector);
 
-		ISource<TObject> SelectMany<TCollection>(Func<ISource<TObject>, IEnumerable<TCollection>> sourceSelector, Action<TObject, TCollection> modify);
+		/// <summary>
+		/// Creates a new source that will combine the sequence of objects created by the current source with those from an additional sequence and 
+		/// invokes the specified function on each pair of objects.
+		/// </summary>
+		/// <typeparam name="TChild"></typeparam>
+		/// <param name="childSequenceSelector"></param>
+		/// <param name="modify"></param>
+		/// <returns></returns>
+		ISource<TObject> SelectMany<TChild>(Func<ISource<TObject>, IEnumerable<TChild>> childSequenceSelector, Action<TObject, TChild> modify);
 
 	}
 }

@@ -1,29 +1,22 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace BuildUp
 {
 	/// <summary>
-	/// Contains context in which objects are being created.
+	/// Contains values made available to an ISource's object creation function
 	/// </summary>
 	public class CreateContext
 	{
-
-		public static IEnumerable<CreateContext> Sequence
+		public CreateContext(int index) : this(index, null)
 		{
-			get
-			{
-				var context = new CreateContext(0);
-				while(true)
-				{
-					yield return context;
-					context = context.Next();
-				}
-			}
+			
 		}
 
-		public CreateContext(int index)
+		public CreateContext(int index, IEnumerable<object> values)
 		{
 			Index = index;
+			ChildSourceValues = values.ToArray();
 		}
 
         /// <summary>
@@ -31,11 +24,10 @@ namespace BuildUp
         /// </summary>
 		public int Index { get; private set; }
 
-		public CreateContext Next()
-		{
-			return new CreateContext(Index + 1);
-		} 
+		/// <summary>
+		/// The values from base sources that are used to create objects
+		/// </summary>
+		public object[] ChildSourceValues { get; private set; }
 	}
-
 
 }

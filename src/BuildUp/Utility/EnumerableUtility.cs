@@ -24,14 +24,14 @@ namespace BuildUp.Utility
 		/// </summary>
 		/// <param name="sequences"></param>
 		/// <returns></returns>
-		public static IEnumerable<object[]> Tuplize(IEnumerable<IEnumerable> sequences)
+		public static IEnumerable<object[]> Tuplize(IEnumerable[] sequences)
 		{
 			var enumerators = sequences.Select(x => x.GetEnumerator()).ToArray();
 			while (enumerators.All(x => x.MoveNext()))
 			{
 				yield return enumerators.Select(x => x.Current).ToArray();
 			}
-			// TODO: That's it? 
+			// TODO: That's it or do we need to dispose sequences? 
 		}
 	}
 }

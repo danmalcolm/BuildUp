@@ -4,9 +4,9 @@ namespace BuildUp.Tests.BuilderExamples.Builders
 {
 	public class CustomerBuilder : Builder<Customer,CustomerBuilder>
 	{
-		protected override CompositeSource<Customer> GetDefaultSource()
+		protected override Source<Customer> GetDefaultSource()
 		{
-			return CompositeSource.Create
+			return Source.Create
 			(
 				(context, code, name) => new Customer(code, name),
 				StringSources.Numbered("Customer-{0}"),

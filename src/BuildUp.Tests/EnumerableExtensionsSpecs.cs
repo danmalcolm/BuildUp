@@ -31,7 +31,7 @@ namespace BuildUp.Tests
 		[Test]
 		public void repeat_each_with_composite_source_should_repeat_same_instance()
 		{
-			var source = CompositeSource.Create
+			var source = Source.Create
 				(
 					(context, name, age) => new LittleMan(name, age),
 					StringSources.Numbered("Little Man {0}"),

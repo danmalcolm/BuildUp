@@ -16,16 +16,16 @@ namespace BuildUp
 	public abstract class Builder<T,TBuilder> : ISource<T> 
 		where TBuilder : Builder<T,TBuilder>, new()
 	{
-	    private CompositeSource<T> source;
+	    private Source<T> source;
 
-	    protected abstract CompositeSource<T> GetDefaultSource();
+	    protected abstract Source<T> GetDefaultSource();
 
-        protected void UseCustomSource(CompositeSource<T> customSource)
+        protected void UseCustomSource(Source<T> customSource)
         {
             this.source = customSource;
         }
 
-	    protected CompositeSource<T> Source
+		private Source<T> Source
 	    {
 	        get { return source ?? (source = GetDefaultSource()); }
 	    }
@@ -35,7 +35,7 @@ namespace BuildUp
 		/// </summary>
 		protected TBuilder ChangeChildSource<TChild>(int index, IEnumerable<TChild> childSource)
 		{
-			var newSource = Source.ReplaceChildSource(index, childSource);
+			var newSource = Source.ModifyChildSources(childSources => childSources.Replace(index, childSource));
 			return CloneUsingNewSource(newSource);
 		}
 		
@@ -44,7 +44,7 @@ namespace BuildUp
         /// </summary>
         /// <param name="newSource"></param>
         /// <returns></returns>
-		protected TBuilder CloneUsingNewSource(CompositeSource<T> newSource)
+		protected TBuilder CloneUsingNewSource(Source<T> newSource)
 		{
 		    var builder = new TBuilder();
             builder.UseCustomSource(newSource);
@@ -71,14 +71,14 @@ namespace BuildUp
 			return Source.Select(action);
 		}
 
-		public ISource<TResult> SelectMany<TCollection, TResult>(Func<ISource<T>, IEnumerable<TCollection>> sourceSelector, Func<T, TCollection, TResult> resultSelector)
+		public ISource<TResult> SelectMany<TCollection, TResult>(Func<ISource<T>, IEnumerable<TCollection>> childSequenceSelector, Func<T, TCollection, TResult> resultSelector)
 		{
-			return Source.SelectMany(sourceSelector, resultSelector);
+			return Source.SelectMany(childSequenceSelector, resultSelector);
 		}
 
-		public ISource<T> SelectMany<TCollection>(Func<ISource<T>, IEnumerable<TCollection>> sourceSelector, Action<T, TCollection> modify)
+		public ISource<T> SelectMany<TCollection>(Func<ISource<T>, IEnumerable<TCollection>> childSequenceSelector, Action<T, TCollection> modify)
 		{
-			return Source.SelectMany(sourceSelector, modify);
+			return Source.SelectMany(childSequenceSelector, modify);
 		}
 	}
 }

@@ -58,7 +58,7 @@
     <Compile Include="BuilderExamples\CustomerHistoryItem.cs" />
     <Compile Include="BuilderExamples\Hotel.cs" />
     <Compile Include="BuilderSpecs.cs" />
-    <Compile Include="CompositeSourceSpecs.cs" />
+    <Compile Include="ComplexSourceSpecs.cs" />
     <Compile Include="LittleMan.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Common\Specification.cs" />
@@ -67,6 +67,7 @@
     <Compile Include="SourceSpecs.cs" />
     <Compile Include="Spikes\MultipleEnumerators.cs" />
     <Compile Include="Spikes\SelectMany.cs" />
+    <Compile Include="Spikes\TuplesAsTypeParam.cs" />
     <Compile Include="Utility\MemberAccessorSpecs.cs" />
   </ItemGroup>
   <ItemGroup>

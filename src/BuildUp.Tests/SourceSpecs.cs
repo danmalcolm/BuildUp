@@ -75,7 +75,13 @@ namespace BuildUp.Tests
 						 from age in IntSources.Incrementing(30)
 						 from colour in StringSources.Numbered("Colour {0}")
 						 select new LittleMan(name, age) { FavouriteColour = colour }; // cheers, compiler!
-			source.Take(3).Select(x => new { x.Name, x.Age, x.FavouriteColour }).ShouldMatchSequence(new { Name = "Man 1", Age = 30, FavouriteColour = "Colour 1" }, new { Name = "Man 2", Age = 31, FavouriteColour = "Colour 2" }, new { Name = "Man 3", Age = 32, FavouriteColour = "Colour 3" });
+			var expectedValues = new[]
+			{
+				new {Name = "Man 1", Age = 30, FavouriteColour = "Colour 1"},
+				new {Name = "Man 2", Age = 31, FavouriteColour = "Colour 2"},
+				new {Name = "Man 3", Age = 32, FavouriteColour = "Colour 3"}
+			};
+			source.Take(3).Select(x => new { x.Name, x.Age, x.FavouriteColour }).ShouldMatchSequence(expectedValues);
 
 		}
 
