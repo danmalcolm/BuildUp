@@ -17,17 +17,17 @@ namespace BuildUp.Tests.BuilderExamples.Builders
 			);
 		}
 
-		public BookingBuilder AtHotel(IEnumerable<Hotel> hotels)
+		public BookingBuilder AtHotel(ISource<Hotel> hotels)
 		{
 			return ChangeChildSource(0, hotels);
 		}
 
-		public BookingBuilder WithCustomer(IEnumerable<Customer> customers)
+		public BookingBuilder WithCustomer(ISource<Customer> customers)
 		{
 			return ChangeChildSource(1, customers);
 		}
 
-		public BookingBuilder StartingOn(IEnumerable<DateTime> startDates)
+		public BookingBuilder StartingOn(ISource<DateTime> startDates)
 		{
 			return ChangeChildSource(2, startDates);
 		}

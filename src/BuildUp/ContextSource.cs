@@ -38,7 +38,7 @@ namespace BuildUp
 
 		public IEnumerator<CreateContext> GetEnumerator()
 		{
-			return ChildSources.Tuplize().Select((values, index) => new CreateContext(index, values)).GetEnumerator();
+			return ChildSources.Tuplize().Select((tuple, index) => new CreateContext(index, tuple)).GetEnumerator();
 		}
 
 		IEnumerator IEnumerable.GetEnumerator()

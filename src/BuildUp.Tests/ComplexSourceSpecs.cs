@@ -43,7 +43,7 @@ namespace BuildUp.Tests.CompositeSourceSpecs
 			var source1 = Source.Create
 				(
 					(context, name, age) => new LittleMan(name, age),
-					StringSources.Numbered("Little Man {0}"),
+					StringSources.Numbered("Little Man {1}"),
 					IntSources.Constant(31)
 				);
 			source1.Take(3).Select(x => x.Name).ShouldMatchSequence("Little Man 1", "Little Man 2", "Little Man 3");
@@ -54,12 +54,12 @@ namespace BuildUp.Tests.CompositeSourceSpecs
 		public void objects_constructed_from_simple_source_and_composite_source()
 		{
 			var cars = Source.Create((context, name, age) => new Car(name, age),
-			                                       StringSources.Numbered("Car {0}"),
+			                                       StringSources.Numbered("Car {1}"),
 			                                       IntSources.Constant(2));
 			var leopards = Source.Create
 				(
 					(context, name, age, car) => new AdvancedLeopard(name, age, car),
-					StringSources.Numbered("Leopard {0}"),
+					StringSources.Numbered("Leopard {1}"),
 					IntSources.Constant(31),
 					cars
 				);
@@ -74,10 +74,10 @@ namespace BuildUp.Tests.CompositeSourceSpecs
 			var source1 = Source.Create
 				(
 					(context, name, age) => new LittleMan(name, age),
-					StringSources.Numbered("Little Man {0}"),
+					StringSources.Numbered("Little Man {1}"),
 					IntSources.Constant(38)
 				);
-			var source2 = source1.ModifyChildSources(childSources => childSources.Replace(1, IntSources.Incrementing(44)));
+			var source2 = source1.ModifyChildSources(sequences => sequences.ReplaceAt(1, IntSources.Incrementing(44)));
 			
 			source1.Take(3).Select(x => x.Age).ShouldMatchSequence(38, 38, 38);
 			source2.Take(3).Select(x => x.Age).ShouldMatchSequence(44, 45, 46);

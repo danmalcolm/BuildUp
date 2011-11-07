@@ -26,8 +26,8 @@ namespace BuildUp.Tests.BuilderExamples
 		[Test]
 		public void lots_of_bookings()
 		{
-			var hotels = new HotelBuilder().RepeatEach(5);
-			var dates = DateTimeSources.IncrementingDays(DateTime.Now.Date).RepeatEach(25); // 5 bookings at each hotel per day
+			var hotels = new HotelBuilder().Loop(5);
+			var dates = DateTimeSources.IncrementingDays(DateTime.Now.Date).Loop(25); // 5 bookings at each hotel per day
 			var bookings = new BookingBuilder().AtHotel(hotels).StartingOn(dates).Take(50).ToArray();
 			
 		}
@@ -35,7 +35,7 @@ namespace BuildUp.Tests.BuilderExamples
 		[Test]
 		public void modifying_instances_after_creation()
 		{
-			var notes = StringSources.Numbered("Stuff {0}");
+			var notes = StringSources.Numbered("Stuff {1}");
 			var customers = new CustomerBuilder().Select(c => c.RecordHistory(DateTime.Now, ""));
 		}
 

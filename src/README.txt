@@ -22,9 +22,9 @@ So I'll have a look around at the various patterns for doing this:
 
 ObjectMother
 
-CreateOrder, CreateOrderWithSomeProducts, CreateOrderWithAnOverseasProductsAndAnOutOfStockProduct
+CreateOrder, CreateOrderWithSomeProducts, CreateOrderWithAnOverseasShippingAddressAndAnOutOfStockProduct
 
-Builder seems more suitable, you have a class per type that you need to create. Then you add various methods for varying aspects of the object.
+Builder seems more suitable, you have a class per type that you need to create. Then you add various methods to vary aspects of the object.
 
 However, even though you have a lot more flexibility, you 
 
@@ -55,7 +55,7 @@ Why do you do this:
 
 Method calls allow state to be consistent
 Meaningful operations make application code simpler while leaving state checking to the domain
-Emphasises the _behaviour_ of your model. Your doing something, not changing properties or adding things to collections.
+Emphasises the _behaviour_ of your model. You're doing something, not changing properties or adding things to collections.
 
 
 A model like this can't be set up using conventions as the behaviour is usually pretty specific and unique. So you need to think and write manual code to 

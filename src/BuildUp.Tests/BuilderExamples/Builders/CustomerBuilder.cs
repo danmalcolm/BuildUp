@@ -9,7 +9,7 @@ namespace BuildUp.Tests.BuilderExamples.Builders
 			return Source.Create
 			(
 				(context, code, name) => new Customer(code, name),
-				StringSources.Numbered("Customer-{0}"),
+				StringSources.Numbered("Customer-{1}"),
 				Names.Default
 			);
 		}

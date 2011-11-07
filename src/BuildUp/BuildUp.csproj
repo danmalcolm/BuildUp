@@ -46,6 +46,7 @@
     <Compile Include="ContextSource.cs" />
     <Compile Include="ISource.cs" />
     <Compile Include="SourceExtensions.cs" />
+    <Compile Include="SourceSequenceAccessExtensions.cs" />
     <Compile Include="Utility\EnumerableUtility.cs" />
     <Compile Include="Utility\Reflection\MemberAccessor.cs" />
     <Compile Include="ValueSources\DateTimeSources.cs" />

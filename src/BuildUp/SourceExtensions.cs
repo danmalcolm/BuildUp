@@ -9,7 +9,7 @@ namespace BuildUp
 	public static class SourceExtensions
 	{
 		/// <summary>
-		/// Sets the member specified by the expression to a specific value
+		/// Sets the member specified by the expression to a given value
 		/// </summary>
 		/// <typeparam name="TObject"></typeparam>
 		/// <typeparam name="TMember"></typeparam>
@@ -33,7 +33,7 @@ namespace BuildUp
 		/// <param name="expression"></param>
 		/// <param name="values"></param>
 		/// <returns></returns>
-		public static ISource<TObject> Set<TObject, TMember>(this ISource<TObject> source, Expression<Func<TObject, TMember>> expression, IEnumerable<TMember> values)
+		public static ISource<TObject> Set<TObject, TMember>(this ISource<TObject> source, Expression<Func<TObject, TMember>> expression, ISource<TMember> values)
 		{
 			var accessor = MemberAccessor.For(expression);
 			return source.SelectMany(s => values, (@object, value) => accessor.SetValue(@object, value));

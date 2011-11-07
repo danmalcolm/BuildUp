@@ -50,7 +50,7 @@ namespace BuildUp.Tests
 		[Test]
 		public void combining_2_sources_with_select_many_method_call()
 		{
-			var names = StringSources.Numbered("Man {0}");
+			var names = StringSources.Numbered("Man {1}");
 			var ages = IntSources.Incrementing(30);
 
 			var source = names.SelectMany(x => ages, (name, age) => new LittleMan(name, age));
@@ -61,7 +61,7 @@ namespace BuildUp.Tests
 		[Test]
 		public void combining_2_sources_with_select_many_query_syntax()
 		{
-			var source = from name in StringSources.Numbered("Man {0}")
+			var source = from name in StringSources.Numbered("Man {1}")
 			             from age in IntSources.Incrementing(30)
 			             select new LittleMan(name, age);
 			source.Take(3).Select(x => new { x.Name, x.Age }).ShouldMatchSequence(new { Name = "Man 1", Age = 30 }, new { Name = "Man 2", Age = 31 }, new { Name = "Man 3", Age = 32 });
@@ -71,9 +71,9 @@ namespace BuildUp.Tests
 		[Test]
 		public void combining_3_sources_with_select_many_query_syntax()
 		{
-			var source = from name in StringSources.Numbered("Man {0}")
+			var source = from name in StringSources.Numbered("Man {1}")
 						 from age in IntSources.Incrementing(30)
-						 from colour in StringSources.Numbered("Colour {0}")
+						 from colour in StringSources.Numbered("Colour {1}")
 						 select new LittleMan(name, age) { FavouriteColour = colour }; // cheers, compiler!
 			var expectedValues = new[]
 			{
@@ -82,7 +82,13 @@ namespace BuildUp.Tests
 				new {Name = "Man 3", Age = 32, FavouriteColour = "Colour 3"}
 			};
 			source.Take(3).Select(x => new { x.Name, x.Age, x.FavouriteColour }).ShouldMatchSequence(expectedValues);
+		}
 
+		[Test]
+		public void modifying_sequence_should_be_applied_to_generated_objects()
+		{
+			var source = StringSources.Numbered("{1}").ModifySequence(x => x.Skip(2));
+			source.Take(3).ShouldMatchSequence("3", "4", "5");
 		}
 
 	}

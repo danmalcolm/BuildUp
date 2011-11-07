@@ -9,8 +9,8 @@ namespace BuildUp.Tests.BuilderExamples.Builders
 			return Source.Create
 			(
 				(context, code, name) => new Hotel(code, name),
-				StringSources.Numbered("hotel-{0}"),
-				StringSources.Numbered("Hotel {0}")
+				StringSources.Numbered("hotel-{1}"),
+				StringSources.Numbered("Hotel {1}")
 			);
 		}
 	}

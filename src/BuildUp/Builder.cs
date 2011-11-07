@@ -33,9 +33,9 @@ namespace BuildUp
 		/// <summary>
 		/// Creates a new instance of the current builder class using a different child source
 		/// </summary>
-		protected TBuilder ChangeChildSource<TChild>(int index, IEnumerable<TChild> childSource)
+		protected TBuilder ChangeChildSource<TChild>(int index, ISource<TChild> childSource)
 		{
-			var newSource = Source.ModifyChildSources(childSources => childSources.Replace(index, childSource));
+			var newSource = Source.ModifyChildSources(childSequences => childSequences.ReplaceAt(index, childSource));
 			return CloneUsingNewSource(newSource);
 		}
 		
@@ -51,14 +51,14 @@ namespace BuildUp
 		    return builder;
 		}
 
-		public IEnumerator<T> GetEnumerator()
+		public IEnumerable<T> Build()
 		{
-			return Source.GetEnumerator();
+			return Source.Build();
 		}
 
-		IEnumerator IEnumerable.GetEnumerator()
+		IEnumerable ISource.Build()
 		{
-			return GetEnumerator();
+			return Build();
 		}
 
 		public ISource<TResult> Select<TResult>(Func<T, TResult> selector)
@@ -71,14 +71,19 @@ namespace BuildUp
 			return Source.Select(action);
 		}
 
-		public ISource<TResult> SelectMany<TCollection, TResult>(Func<ISource<T>, IEnumerable<TCollection>> childSequenceSelector, Func<T, TCollection, TResult> resultSelector)
+		public ISource<TResult> SelectMany<TCollection, TResult>(Func<ISource<T>, ISource<TCollection>> sequenceSelector, Func<T, TCollection, TResult> resultSelector)
 		{
-			return Source.SelectMany(childSequenceSelector, resultSelector);
+			return Source.SelectMany(sequenceSelector, resultSelector);
 		}
 
-		public ISource<T> SelectMany<TCollection>(Func<ISource<T>, IEnumerable<TCollection>> childSequenceSelector, Action<T, TCollection> modify)
+		public ISource<T> SelectMany<TCollection>(Func<ISource<T>, ISource<TCollection>> childSequenceSelector, Action<T, TCollection> modify)
 		{
 			return Source.SelectMany(childSequenceSelector, modify);
+		}
+
+		public ISource<T> ModifySequence(Func<IEnumerable<object>, IEnumerable<object>> modify)
+		{
+			return Source.ModifySequence(modify);
 		}
 	}
 }

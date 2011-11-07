@@ -4,7 +4,7 @@ using System.Linq;
 namespace BuildUp
 {
 	/// <summary>
-	/// Contains values made available to an ISource's object creation function
+	/// Contains values made available to the function used by a source to generate objects
 	/// </summary>
 	public class CreateContext
 	{

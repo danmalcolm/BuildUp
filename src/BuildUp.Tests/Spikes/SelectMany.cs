@@ -85,7 +85,7 @@ namespace BuildUp.Tests.Spikes
 		[Test]
 		public void SourceSelectMany()
 		{
-			var names = StringSources.Numbered("Item {0}");
+			var names = StringSources.Numbered("Item {1}");
 			var indexes = IntSources.Incrementing(0);
 
 			var result = names.SelectMany(x => indexes, (name, index) => new TestResult(name, index));
@@ -96,7 +96,7 @@ namespace BuildUp.Tests.Spikes
 		[Test]
 		public void SourceSelectManyAsQuery()
 		{
-			var names = StringSources.Numbered("Item {0}");
+			var names = StringSources.Numbered("Item {1}");
 			var indexes = IntSources.Incrementing(0);
 
 			ISource<TestResult> source = from name in names

@@ -1,5 +1,4 @@
-Buildup.TestData.Regional?
-
+-----------------------------------------
 
 Buildup.TestData - lots of sources:
 
@@ -20,20 +19,39 @@ US Zipcodes
 
 -----------------------------------------
 
-Review whether ISource<T> should implement IEnumerable
+Buildup.TestData.Regional?
+
+Have specific things like SSN and ZipCode (US), etc
+
+
+-----------------------------------------
+
+Should ISource<T> implement IEnumerable?????????????
 
 other options:
-have a method to get the ienumberable, e.g. Create() or CreateSequence(), Sequence
+have a method to get the ienumberable, e.g. Create() or CreateSequence(), Sequence, Build()
 
 from name in nameSource.Sequence
 
-for:
-Viewing source as a stream of objects is key to library - makes for nice declarative syntax and natural fit for other IEnumerable operators
+for (a source is a sequence):
+Viewing source as a sequence of objects makes api a bit more concise, names.Take(4) etc is better than names.Sequence.Take(4)
 
-names.Take(4) etc is better than names.Sequence.Take(4)
+against (a source is a source of a sequence, not the sequence itself!):
+semantic collision, e.g. subtle differences in Select and SelectMany
 
-against:
-extension method collision, e.g. meaning of Select and SelectMany will vary according to which extensions are referenced (unless we declare them on the actual classes)
+compromise:
+
+probably better for user to generate sequence explicitly
+
+have a few extension methods so can access generated sequence, transitioning from ISource to IEnumerable:
+
+Single
+Take
+Skip
+
+
+
+
 
 
 -----------------------------------------

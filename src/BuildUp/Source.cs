@@ -8,11 +8,11 @@ namespace BuildUp
 	#region Creation methods
 
 	/// <summary>
-    /// Contains factory methods for creation of ISource instances
+    /// Contains factory methods for creation of ISource&lt;TObject&gt;
     /// </summary>
 	public class Source
 	{
-		public static ISource<T> Create<T>(Func<CreateContext, T> create)
+		public static Source<T> Create<T>(Func<CreateContext, T> create)
 		{
 			return new Source<T>(ContextSource.ForSimpleSource(), create);
 		}
@@ -25,6 +25,17 @@ namespace BuildUp
 
 		#region Create functions
 
+		public static Source<T> Create<T>(IList<T> sequence)
+		{
+			return Source.Create((context) => sequence[context.Index]);
+		}
+
+		public static Source<T> Create<T>(T[] sequence)
+		{
+			return Source.Create((context) => sequence[context.Index]);
+		}
+
+
 		/// <summary>
 		/// Creates a source using the supplied function and specified source. The sources will
 		/// also be stored in the Sources property of the CompositeSource instance so that they are available
@@ -36,7 +47,7 @@ namespace BuildUp
 		/// <param name="create">The function used to create an object using values from the specified sources</param>
 		/// <param name="source1">The child source used to provide the value used to create the object</param>
 		/// <returns></returns>
-		public static Source<T> Create<T, T1>(Func<CreateContext, T1, T> create, IEnumerable<T1> source1)
+		public static Source<T> Create<T, T1>(Func<CreateContext, T1, T> create, ISource<T1> source1)
 		{
 			var sourceMap = new ChildSourceMap(source1);
 			return Create(context =>
@@ -59,8 +70,7 @@ namespace BuildUp
 		/// <param name="source1">The child source used to provide the first value used to create the object</param>
 		/// <param name="source2">The child source used to provide the second value used to create the object</param>
 		/// <returns></returns>
-		public static Source<T> Create<T, T1, T2>(Func<CreateContext, T1, T2, T> create, IEnumerable<T1> source1,
-														   IEnumerable<T2> source2)
+		public static Source<T> Create<T, T1, T2>(Func<CreateContext, T1, T2, T> create, ISource<T1> source1, ISource<T2> source2)
 		{
 			var sourceMap = new ChildSourceMap(source1, source2);
 			return Create(context =>
@@ -72,8 +82,8 @@ namespace BuildUp
 		}
 
 		public static Source<T> Create<T, T1, T2, T3>(Func<CreateContext, T1, T2, T3, T> create,
-															   IEnumerable<T1> source1,
-															   IEnumerable<T2> source2, IEnumerable<T3> source3)
+															   ISource<T1> source1,
+															   ISource<T2> source2, ISource<T3> source3)
 		{
 			var sourceMap = new ChildSourceMap(source1, source2, source3);
 			return Create(context =>
@@ -100,28 +110,30 @@ namespace BuildUp
 	{
 		private readonly ContextSource contextSource;
 		private readonly Func<CreateContext, TObject> create;
+		private readonly Func<IEnumerable<object>, IEnumerable<object>> modifySequence;
 
-		public Source(ContextSource contextSource, Func<CreateContext, TObject> create)
+		public Source(ContextSource contextSource, Func<CreateContext, TObject> create, Func<IEnumerable<object>, IEnumerable<object>> modifySequence = null)
 		{
 			this.contextSource = contextSource;
 			this.create = create;
+			this.modifySequence = modifySequence ?? (x => x);
 		}
 		
-		public IEnumerator<TObject> GetEnumerator()
+		public IEnumerable<TObject> Build()
 		{
-			return contextSource.Select(x => create(x)).GetEnumerator();
+			return modifySequence(contextSource.Select(x => create(x)).Cast<object>()).Cast<TObject>();
 		}
 
-		IEnumerator IEnumerable.GetEnumerator()
+		IEnumerable ISource.Build()
 		{
-			return GetEnumerator();
+			return Build();
 		}
 
 		#region Select, SelectMany
 
 		public ISource<TResult> Select<TResult>(Func<TObject, TResult> selector)
 		{
-			return new Source<TResult>(contextSource, @base => selector(this.create(@base)));
+			return new Source<TResult>(contextSource, @base => selector(this.create(@base)), modifySequence);
 		}
 
 		public ISource<TObject> Select(Action<TObject> action)
@@ -133,9 +145,9 @@ namespace BuildUp
 			});
 		}
 
-		public ISource<TResult> SelectMany<TChild, TResult>(Func<ISource<TObject>, IEnumerable<TChild>> childSequenceSelector, Func<TObject, TChild, TResult> resultSelector)
+		public ISource<TResult> SelectMany<TChild, TResult>(Func<ISource<TObject>, ISource<TChild>> sourceSelector, Func<TObject, TChild, TResult> resultSelector)
 		{
-			var newSequence = childSequenceSelector(this);
+			var newSequence = sourceSelector(this);
 			// add sequence to current child sources
 			var newSources = contextSource.ChildSources.Add(newSequence);
 			var newContextSource = ContextSource.WithChildSources(newSources);
@@ -143,16 +155,22 @@ namespace BuildUp
 
 			// Create new source with new child sources plus a function that first invokes this source's create function,
 			// then invokes the new create function on the result, together with the value from the child sequence
-			return new Source<TResult>(newContextSource, x => resultSelector(create(x), (TChild)x.ChildSourceValues[newSourceIndex]));
+			return new Source<TResult>(newContextSource, x => resultSelector(create(x), (TChild)x.ChildSourceValues[newSourceIndex]), modifySequence);
 		}
 
-		public ISource<TObject> SelectMany<TCollection>(Func<ISource<TObject>, IEnumerable<TCollection>> childSequenceSelector, Action<TObject, TCollection> modify)
+		public ISource<TObject> SelectMany<TCollection>(Func<ISource<TObject>, ISource<TCollection>> childSequenceSelector, Action<TObject, TCollection> modify)
 		{
 			return SelectMany(childSequenceSelector, (a, b) =>
 			{
 				modify(a, b);
 				return a;
 			});
+		}
+
+		public ISource<TObject> ModifySequence(Func<IEnumerable<object>, IEnumerable<object>> modify)
+		{
+			Func<IEnumerable<object>, IEnumerable<object>> newSequenceModifier = x => modify(modifySequence(x));
+			return new Source<TObject>(contextSource, create, newSequenceModifier);
 		}
 
 		#endregion
@@ -175,7 +193,8 @@ namespace BuildUp
 		public Source<TObject> ModifyChildSources(Func<ChildSourceMap, ChildSourceMap> modify)
 		{
 			var newChildSources = modify(contextSource.ChildSources);
-			return new Source<TObject>(ContextSource.WithChildSources(newChildSources), create);
+			return new Source<TObject>(ContextSource.WithChildSources(newChildSources), create, modifySequence);
 		}
+
 	}
 }

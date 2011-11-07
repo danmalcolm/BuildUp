@@ -7,14 +7,14 @@ using BuildUp.Utility;
 namespace BuildUp
 {
 	/// <summary>
-	/// Contains the collection of child sources used by Sources using a base sequence that  have multiple sources
+	/// Contains the collection of child sources that provide values used by a source to create objects
 	/// </summary>
 	public class ChildSourceMap
 	{
-		private readonly IEnumerable[] sources;
+		private readonly ISource[] sources;
 		public int Count{ get { return sources.Length; }}
 
-		internal ChildSourceMap(params IEnumerable[] sources)
+		internal ChildSourceMap(params ISource[] sources)
 		{
 			this.sources = sources;
 		}
@@ -26,7 +26,7 @@ namespace BuildUp
 		/// <param name="index"></param>
 		/// <param name="source"></param>
 		/// <returns></returns>
-		public ChildSourceMap Replace<T>(int index, IEnumerable<T> source)
+		public ChildSourceMap ReplaceAt<T>(int index, ISource<T> source)
 		{
 			if (index > sources.Length)
 			{
@@ -42,14 +42,14 @@ namespace BuildUp
 		/// <summary>
 		/// Creates a copy of this ChildSourceMap with an additional source at the end of the collection
 		/// </summary>
-		/// <param name="newSource"></param>
+		/// <param name="sequence"></param>
 		/// <returns></returns>
-		public ChildSourceMap Add(IEnumerable newSource)
+		public ChildSourceMap Add(ISource sequence)
 		{
-			return Clone(x => x.Concat(new [] { newSource }));
+			return Clone(x => x.Concat(new [] { sequence }));
 		}
 
-		private ChildSourceMap Clone(Func<IEnumerable[], IEnumerable<IEnumerable>> changeValues)
+		private ChildSourceMap Clone(Func<ISource[], IEnumerable<ISource>> changeValues)
 		{
 			var newSources = changeValues(sources.ToArray()).ToArray();
 			return new ChildSourceMap(newSources);
@@ -57,7 +57,11 @@ namespace BuildUp
 
 		public IEnumerable<object[]> Tuplize()
 		{
-			return EnumerableUtility.Tuplize(sources);
+			var enumerators = sources.Select(x => x.Build().GetEnumerator()).ToArray();
+			while (enumerators.All(x => x.MoveNext()))
+			{
+				yield return enumerators.Select(x => x.Current).ToArray();
+			}
 		}
 	}
 }
