@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace BuildUp
 {
-	#region Creation methods
+	#region Convenience creation methods
 
 	/// <summary>
     /// Contains factory methods for creation of ISource&lt;TObject&gt;
@@ -14,13 +14,13 @@ namespace BuildUp
 	{
 		public static Source<T> Create<T>(Func<CreateContext, T> create)
 		{
-			return new Source<T>(ContextSource.ForSimpleSource(), create);
+			return new Source<T>(ContextSource.Create(), create);
 		}
 
 		private static Source<T> Create<T>(Func<CreateContext, T> create,
 													ChildSourceMap sources)
 		{
-			return new Source<T>(ContextSource.WithChildSources(sources), create);
+			return new Source<T>(ContextSource.Create(sources), create);
 		}
 
 		#region Create functions
@@ -121,7 +121,10 @@ namespace BuildUp
 		
 		public IEnumerable<TObject> Build()
 		{
-			return modifySequence(contextSource.Select(x => create(x)).Cast<object>()).Cast<TObject>();
+			// Create the sequence
+			var sequence = contextSource.Select(x => create(x));
+			// Modify the order of the sequence
+			return modifySequence(sequence.Cast<object>()).Cast<TObject>();
 		}
 
 		IEnumerable ISource.Build()
@@ -147,15 +150,16 @@ namespace BuildUp
 
 		public ISource<TResult> SelectMany<TChild, TResult>(Func<ISource<TObject>, ISource<TChild>> sourceSelector, Func<TObject, TChild, TResult> resultSelector)
 		{
-			var newSequence = sourceSelector(this);
-			// add sequence to current child sources
-			var newSources = contextSource.ChildSources.Add(newSequence);
-			var newContextSource = ContextSource.WithChildSources(newSources);
+			var newSource = sourceSelector(this);
+			// combine other source with current child sources
+			var newSources = contextSource.ChildSources.Add(newSource);
+			var newContextSource = ContextSource.Create(newSources);
 			int newSourceIndex = newSources.Count - 1;
 
-			// Create new source with new child sources plus a function that first invokes this source's create function,
-			// then invokes the new create function on the result, together with the value from the child sequence
-			return new Source<TResult>(newContextSource, x => resultSelector(create(x), (TChild)x.ChildSourceValues[newSourceIndex]), modifySequence);
+			// Create new source with combined sources plus a function that first invokes this source's create function,
+			// then invokes the new create function on the result, together with the value from the other source
+			return new Source<TResult>(newContextSource, 
+				context => resultSelector(create(context), (TChild)context.ChildSourceValues[newSourceIndex]), modifySequence);
 		}
 
 		public ISource<TObject> SelectMany<TCollection>(Func<ISource<TObject>, ISource<TCollection>> childSequenceSelector, Action<TObject, TCollection> modify)
@@ -176,16 +180,6 @@ namespace BuildUp
 		#endregion
 
 		/// <summary>
-		/// Creates a copy of this source using this Sources
-		/// </summary>
-		/// <param name="copy"></param>
-		/// <returns></returns>
-		public Source<TObject> Clone(Func<ContextSource,Func<CreateContext,TObject>,Source<TObject>> copy)
-		{
-			return copy(contextSource, create);
-		}
-
-		/// <summary>
 		/// Creates a copy of this source using a different collection of child sources
 		/// </summary>
 		/// <param name="modify"></param>
@@ -193,7 +187,7 @@ namespace BuildUp
 		public Source<TObject> ModifyChildSources(Func<ChildSourceMap, ChildSourceMap> modify)
 		{
 			var newChildSources = modify(contextSource.ChildSources);
-			return new Source<TObject>(ContextSource.WithChildSources(newChildSources), create, modifySequence);
+			return new Source<TObject>(ContextSource.Create(newChildSources), create, modifySequence);
 		}
 
 	}

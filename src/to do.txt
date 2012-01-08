@@ -26,7 +26,7 @@ Have specific things like SSN and ZipCode (US), etc
 
 -----------------------------------------
 
-Should ISource<T> implement IEnumerable?????????????
+Should ISource<T> implement IEnumerable????????????? DONE (it doesn't)
 
 other options:
 have a method to get the ienumberable, e.g. Create() or CreateSequence(), Sequence, Build()
@@ -38,6 +38,7 @@ Viewing source as a sequence of objects makes api a bit more concise, names.Take
 
 against (a source is a source of a sequence, not the sequence itself!):
 semantic collision, e.g. subtle differences in Select and SelectMany
+loss of composability - too easy for user to slip from working with immutable ISource<T> to IEnumerable<T>
 
 compromise:
 
@@ -61,20 +62,5 @@ Generate the versions of CompositeSource.Select<T1, T2, T3> etc use T4?
 -----------------------------------------
 
 Use named keys to access child sources within ChildSourceMap in addition to positional index
-
------------------------------------------
-
-Built-in builder functions for setters, methods, e.g.
-
-customer.Set(x => x.Nickname, context => "something" + constant.Index);
-
-customer.Do(x => x.AddNotes(p1, p2), notes, dates) // ienumerables - bit like composite source - variation for 1 to * params 
-customer.Do(x => x.AddNotes(p1, p2), note, date) // constants -  bit like composite source - variation for 1 to * params 
-
------------------------------------------
-Enumerable Source
-
-E.g. Source.Create(sequence_
-
 
 -----------------------------------------

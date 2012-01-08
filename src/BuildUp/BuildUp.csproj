@@ -50,7 +50,6 @@
     <Compile Include="Utility\EnumerableUtility.cs" />
     <Compile Include="Utility\Reflection\MemberAccessor.cs" />
     <Compile Include="ValueSources\DateTimeSources.cs" />
-    <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="ValueSources\StringSources.cs" />
     <Compile Include="ValueSources\IntSources.cs" />
     <Compile Include="Source.cs" />

@@ -9,12 +9,13 @@ namespace BuildUp
 	/// </summary>
 	public class ContextSource : IEnumerable<CreateContext>
 	{
+		#region Creation methods
 
 		/// <summary>
 		/// Provides CreateContext sequence containing only Index value
 		/// </summary>
 		/// <returns></returns>
-		public static ContextSource ForSimpleSource()
+		public static ContextSource Create()
 		{
 			return new ContextSource(new ChildSourceMap());
 		}
@@ -24,10 +25,12 @@ namespace BuildUp
 		/// </summary>
 		/// <param name="childSources"></param>
 		/// <returns></returns>
-		public static ContextSource WithChildSources(ChildSourceMap childSources)
+		public static ContextSource Create(ChildSourceMap childSources)
 		{
 			return new ContextSource(childSources);
 		}
+
+		#endregion
 
 		public ChildSourceMap ChildSources { get; private set; }
 

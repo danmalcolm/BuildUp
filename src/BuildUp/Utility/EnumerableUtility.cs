@@ -13,10 +13,10 @@ namespace BuildUp.Utility
 		// I guess we could have methods like this to support different combinations
 		// of types but let's keep it simple for now - boxing / unboxing won't be a problem
 		// in most scenarios
-		private static IEnumerable<Tuple<T1,T2>> Tuplize<T1, T2>(IEnumerable<T1> first, IEnumerable<T2> second)
-		{
-			throw new NotImplementedException();
-		}
+//		private static IEnumerable<Tuple<T1,T2>> Tuplize<T1, T2>(IEnumerable<T1> first, IEnumerable<T2> second)
+//		{
+//			throw new NotImplementedException();
+//		}
 
 		/// <summary>
 		/// Generates a new sequence of lists combining values from multiple sequences. The length

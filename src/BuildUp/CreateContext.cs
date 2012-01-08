@@ -25,7 +25,7 @@ namespace BuildUp
 		public int Index { get; private set; }
 
 		/// <summary>
-		/// The values from base sources that are used to create objects
+		/// The values from child sources that provide values used to create the object
 		/// </summary>
 		public object[] ChildSourceValues { get; private set; }
 	}
