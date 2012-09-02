@@ -6,7 +6,7 @@ namespace BuildUp
 	public static class CompositeSourceExtensions
 	{
 		/// <summary>
-		/// Creates a new instance of a composite source that uses a different child source
+		/// Creates a new instance of a composite source that uses a different child source at the specified index
 		/// </summary>
 		public static ICompositeSource<T> ReplaceChildSource<T,C>(this ICompositeSource<T> source, int index, ISource<C> child)
         {

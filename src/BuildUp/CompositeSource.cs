@@ -3,6 +3,9 @@ using System.Linq.Expressions;
 
 namespace BuildUp
 {
+	/// <summary>
+	/// Contains methods for creation of ICompositeSources
+	/// </summary>
 	public class CompositeSource
 	{
 		public static CompositeSource<T> Create<T>(Func<BuildContext, ChildSourceMap, T> create,
@@ -81,7 +84,7 @@ namespace BuildUp
 	
 
 	/// <summary>
-	/// An implementation of ISource that creates objects using a number of child ISources.
+	/// <see cref="ICompositeSource&lt;T&gt;"/> implementation
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
 	public class CompositeSource<T> : Source<T>, ICompositeSource<T>

@@ -16,7 +16,7 @@ namespace BuildUp.Tests
 		}
 
 		[Test]
-		public void different_iterations_should_return_separate_sequences()
+		public void different_iterations_should_return_identical_sequences()
 		{
 			var source = new Source<int>(context => context.Index);
 			var first = source.Take(5);

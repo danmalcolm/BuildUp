@@ -33,7 +33,7 @@ namespace BuildUp
 			return Source.Create(context =>
 			{
 				var index = context.Index / times;
-				//TODO - this is wrong right now, because it's creating maybe we need IEnumerables instead of ISources?... Is this suitable for child sources
+				//TODO - this is wrong right now, because it's creating objects repeatednly - maybe we need IEnumerables instead of ISources?... Is this suitable for child sources
 				// used by composite sources?
 				return source.CreateFunc(new BuildContext(index));
 			});
