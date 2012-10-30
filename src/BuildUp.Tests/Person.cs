@@ -1,8 +1,8 @@
 namespace BuildUp.Tests
 {
-	public class LittleMan
+	public class Person
 	{
-		public LittleMan(string name, int age)
+		public Person(string name, int age)
 		{
 			Name = name;
 			Age = age;

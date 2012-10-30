@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using BuildUp.Builders;
-using BuildUp.ValueSources;
+using BuildUp.ValueGenerators;
 using NUnit.Framework;
 using BuildUp.Tests.Common;
 
@@ -12,28 +12,28 @@ namespace BuildUp.Tests
 	{
 
 		[Test]
-		public void building_with_default_sources()
+		public void building_with_default_generators()
 		{
-			var source = new LittleManBuilder();
+			var generator = new LittleManBuilder();
 			var expected = new[]
 			{new {Name = "Little Man 1", Age = 38}, new {Name = "Little Man 2", Age = 38}, new {Name = "Little Man 3", Age = 38}};
-			source.Take(3).Select(x => new {x.Name, x.Age}).ShouldMatchSequence(expected);
+			generator.Take(3).Select(x => new {x.Name, x.Age}).ShouldMatchSequence(expected);
 		}
 
         [Test]
-        public void building_after_changing_a_child_source()
+        public void building_after_changing_a_child_generator()
         {
-            var source = new LittleManBuilder().WithName(StringSources.Numbered("Super Little Man {1}"));
+            var generator = new LittleManBuilder().WithName(StringGenerators.Numbered("Super Little Man {1}"));
             var expected = new[] { new { Name = "Super Little Man 1", Age = 38 }, new { Name = "Super Little Man 2", Age = 38 }, new { Name = "Super Little Man 3", Age = 38 } };
-            source.Take(3).Select(x => new { x.Name, x.Age }).ShouldMatchSequence(expected);
+            generator.Take(3).Select(x => new { x.Name, x.Age }).ShouldMatchSequence(expected);
         }
 
         [Test]
-        public void building_after_changing_both_child_sources()
+        public void building_after_changing_both_child_generators()
         {
-            var source = new LittleManBuilder().WithName(StringSources.Numbered("Super Little Man {1}")).WithAge(IntSources.Incrementing(30, 2));
+            var generator = new LittleManBuilder().WithName(StringGenerators.Numbered("Super Little Man {1}")).WithAge(IntGenerators.Incrementing(30, 2));
             var expected = new[] { new { Name = "Super Little Man 1", Age = 30 }, new { Name = "Super Little Man 2", Age = 32 }, new { Name = "Super Little Man 3", Age = 34 } };
-            source.Take(3).Select(x => new { x.Name, x.Age }).ShouldMatchSequence(expected);
+            generator.Take(3).Select(x => new { x.Name, x.Age }).ShouldMatchSequence(expected);
         }
 
 		public class LittleMan
@@ -51,30 +51,30 @@ namespace BuildUp.Tests
 
 		public class LittleManBuilder : Builder<LittleMan,LittleManBuilder>
 		{
-            protected override Source<LittleMan> GetDefaultSource()
+            protected override Generator<LittleMan> GetDefaultGenerator()
             {
-                return Source.Create
+                return Generators.Create
                 (
                     (context, name, age) => new LittleMan(name, age),
-                    StringSources.Numbered("Little Man {1}"),
-                    IntSources.Constant(38)
+                    StringGenerators.Numbered("Little Man {1}"),
+                    IntGenerators.Constant(38)
                 );
             }
 
             // The problem with these With* modifying methods is they rely on the index of the
-            // sources used by the create function. If the position of two constructor
+            // generators used by the create function. If the position of two constructor
             // parameters of the same type were changed, then refactoring tools would
             // not change this logic. Possibly need to use expressions and some funky
             // syntax to make this more refactoring friendly, e.g. 
 
-			public LittleManBuilder WithName(ISource<string> name)
+			public LittleManBuilder WithName(IGenerator<string> name)
 			{
-				return ChangeChildSource(0, name);
+				return ChangeChildGenerator(0, name);
 			}
 
-			public LittleManBuilder WithAge(ISource<int> age)
+			public LittleManBuilder WithAge(IGenerator<int> age)
             {
-				return ChangeChildSource(1, age);
+				return ChangeChildGenerator(1, age);
             }
             
 		} 

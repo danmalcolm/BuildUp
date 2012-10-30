@@ -1,17 +1,17 @@
 ﻿using BuildUp.Builders;
-using BuildUp.ValueSources;
+using BuildUp.ValueGenerators;
 
 namespace BuildUp.Tests.BuilderExamples.Builders
 {
 	public class HotelBuilder : Builder<Hotel,HotelBuilder>
 	{
-		protected override Source<Hotel> GetDefaultSource()
+		protected override Generator<Hotel> GetDefaultGenerator()
 		{
-			return Source.Create
+			return Generators.Create
 			(
 				(context, code, name) => new Hotel(code, name),
-				StringSources.Numbered("hotel-{1}"),
-				StringSources.Numbered("Hotel {1}")
+				StringGenerators.Numbered("hotel-{1}"),
+				StringGenerators.Numbered("Hotel {1}")
 			);
 		}
 	}

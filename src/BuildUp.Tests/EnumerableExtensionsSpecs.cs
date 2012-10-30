@@ -1,6 +1,6 @@
 using System.Linq;
 using BuildUp.Tests.Common;
-using BuildUp.ValueSources;
+using BuildUp.ValueGenerators;
 using NUnit.Framework;
 
 namespace BuildUp.Tests
@@ -11,33 +11,33 @@ namespace BuildUp.Tests
 		[Test]
 		public void simple_freeze()
 		{
-			var source1 = Source.Create(context => context.Index);
-			var source2 = source1.Freeze();
+			var generator1 = Generators.Create(context => context.Index);
+			var generator2 = generator1.Freeze();
 
-			source1.Take(5).ShouldMatchSequence(0, 1, 2, 3, 4);
-			source2.Take(5).ShouldMatchSequence(0, 0, 0, 0, 0);
+			generator1.Take(5).ShouldMatchSequence(0, 1, 2, 3, 4);
+			generator2.Take(5).ShouldMatchSequence(0, 0, 0, 0, 0);
 		}
 
 		[Test]
 		public void loop()
 		{
-			var source1 = Source.Create(context => context.Index);
-			var source2 = source1.Loop(3);
+			var generator1 = Generators.Create(context => context.Index);
+			var generator2 = generator1.Loop(3);
 
-			source1.Take(9).ShouldMatchSequence(0, 1, 2, 3, 4, 5, 6, 7, 8);
-			source2.Take(9).ShouldMatchSequence(0, 1, 2, 0, 1, 2, 0, 1, 2);
+			generator1.Take(9).ShouldMatchSequence(0, 1, 2, 3, 4, 5, 6, 7, 8);
+			generator2.Take(9).ShouldMatchSequence(0, 1, 2, 0, 1, 2, 0, 1, 2);
 		}
 
 		[Test]
-		public void looping_source_of_complex_objects_should_repeat_same_instances()
+		public void looping_generator_of_complex_objects_should_repeat_same_instances()
 		{
-			var source = Source.Create
+			var generator = Generators.Create
 				(
-					(context, name, age) => new LittleMan(name, age),
-					StringSources.Numbered("Little Man {1}"),
-					IntSources.Constant(38)
+					(context, name, age) => new Person(name, age),
+					StringGenerators.Numbered("Little Man {1}"),
+					IntGenerators.Constant(38)
 				).Loop(2);
-			source.Take(4).Distinct().Count().ShouldEqual(2);
+			generator.Take(4).Distinct().Count().ShouldEqual(2);
 
 		}
 

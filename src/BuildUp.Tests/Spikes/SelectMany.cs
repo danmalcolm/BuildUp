@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using BuildUp.Tests.Common;
-using BuildUp.ValueSources;
+using BuildUp.ValueGenerators;
 using NUnit.Framework;
 
 namespace BuildUp.Tests.Spikes
@@ -83,27 +83,27 @@ namespace BuildUp.Tests.Spikes
 		}
 
 		[Test]
-		public void SourceSelectMany()
+		public void GeneratorSelectMany()
 		{
-			var names = StringSources.Numbered("Item {1}");
-			var indexes = IntSources.Incrementing(0);
+			var names = StringGenerators.Numbered("Item {1}");
+			var indexes = IntGenerators.Incrementing(0);
 
 			var result = names.SelectMany(x => indexes, (name, index) => new TestResult(name, index));
 
-			result.ShouldBeOfType<ISource<TestResult>>();
+			result.ShouldBeOfType<IGenerator<TestResult>>();
 		}
 
 		[Test]
-		public void SourceSelectManyAsQuery()
+		public void GeneratorSelectManyAsQuery()
 		{
-			var names = StringSources.Numbered("Item {1}");
-			var indexes = IntSources.Incrementing(0);
+			var names = StringGenerators.Numbered("Item {1}");
+			var indexes = IntGenerators.Incrementing(0);
 
-			ISource<TestResult> source = from name in names
+			IGenerator<TestResult> generator = from name in names
 			             from index in indexes
 			             select new TestResult(name, index);
 			
-			var results = source.Take(3);
+			var results = generator.Take(3);
 		}
 	}
 }

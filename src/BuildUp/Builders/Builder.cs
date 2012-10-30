@@ -13,77 +13,77 @@ namespace BuildUp.Builders
 	/// <typeparam name="T"></typeparam>
 	/// <typeparam name="TBuilder">The concrete type of the builder class. This self-referencing generic type parameter
 	/// allows us to define behaviour in this base class that returns an instance of the concrete builder type.</typeparam>
-	public abstract class Builder<T,TBuilder> : ISource<T> 
+	public abstract class Builder<T,TBuilder> : IGenerator<T> 
 		where TBuilder : Builder<T,TBuilder>, new()
 	{
-	    private Source<T> source;
+	    private Generator<T> generator;
 
-	    protected abstract Source<T> GetDefaultSource();
+	    protected abstract Generator<T> GetDefaultGenerator();
 
-        protected void UseCustomSource(Source<T> customSource)
+        protected void UseCustomGenerator(Generator<T> customGenerator)
         {
-            this.source = customSource;
+            this.generator = customGenerator;
         }
 
-		private Source<T> Source
+		private Generator<T> Generator
 	    {
-	        get { return source ?? (source = GetDefaultSource()); }
+	        get { return generator ?? (generator = GetDefaultGenerator()); }
 	    }
 
 		/// <summary>
-		/// Creates a new instance of the current builder class using a different child source
+		/// Creates a new instance of the current builder class using a different child generator
 		/// </summary>
-		protected TBuilder ChangeChildSource<TChild>(int index, ISource<TChild> childSource)
+		protected TBuilder ChangeChildGenerator<TChild>(int index, IGenerator<TChild> childGenerator)
 		{
-			var newSource = Source.ModifyChildSources(childSequences => childSequences.ReplaceSourceAt(index, childSource));
-			return CloneUsingNewSource(newSource);
+			var newGenerator = Generator.ModifyChildGenerators(generators => generators.ReplaceGeneratorAt(index, childGenerator));
+			return Clone(newGenerator);
 		}
 		
         /// <summary>
-        /// Creates a new instance of the builder using a different source
+        /// Creates a new instance of the builder using a different generator
         /// </summary>
-        /// <param name="newSource"></param>
+        /// <param name="newGenerator"></param>
         /// <returns></returns>
-		protected TBuilder CloneUsingNewSource(Source<T> newSource)
+		protected TBuilder Clone(Generator<T> newGenerator)
 		{
 		    var builder = new TBuilder();
-            builder.UseCustomSource(newSource);
+            builder.UseCustomGenerator(newGenerator);
 		    return builder;
 		}
 
 		public IEnumerable<T> Build()
 		{
-			return Source.Build();
+			return Generator.Build();
 		}
 
-		IEnumerable ISource.Build()
+		IEnumerable IGenerator.Build()
 		{
 			return Build();
 		}
 
-		public ISource<TResult> Select<TResult>(Func<T, TResult> selector)
+		public IGenerator<TResult> Select<TResult>(Func<T, TResult> selector)
 		{
-			return Source.Select(selector);
+			return Generator.Select(selector);
 		}
 
-		public ISource<T> Select(Action<T> action)
+		public IGenerator<T> Select(Action<T> action)
 		{
-			return Source.Select(action);
+			return Generator.Select(action);
 		}
 
-		public ISource<TResult> SelectMany<TCollection, TResult>(Func<ISource<T>, ISource<TCollection>> sequenceSelector, Func<T, TCollection, TResult> resultSelector)
+		public IGenerator<TResult> SelectMany<TCollection, TResult>(Func<IGenerator<T>, IGenerator<TCollection>> sequenceSelector, Func<T, TCollection, TResult> resultSelector)
 		{
-			return Source.SelectMany(sequenceSelector, resultSelector);
+			return Generator.SelectMany(sequenceSelector, resultSelector);
 		}
 
-		public ISource<T> SelectMany<TCollection>(Func<ISource<T>, ISource<TCollection>> childSequenceSelector, Action<T, TCollection> modify)
+		public IGenerator<T> SelectMany<TCollection>(Func<IGenerator<T>, IGenerator<TCollection>> childSequenceSelector, Action<T, TCollection> modify)
 		{
-			return Source.SelectMany(childSequenceSelector, modify);
+			return Generator.SelectMany(childSequenceSelector, modify);
 		}
 
-		public ISource<T> ModifySequence(Func<IEnumerable<object>, IEnumerable<object>> modify)
+		public IGenerator<T> ModifySequence(Func<IEnumerable<object>, IEnumerable<object>> modify)
 		{
-			return Source.ModifySequence(modify);
+			return Generator.ModifySequence(modify);
 		}
 	}
 }

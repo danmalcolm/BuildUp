@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using BuildUp.Tests.BuilderExamples.Builders;
-using BuildUp.ValueSources;
+using BuildUp.ValueGenerators;
 using NUnit.Framework;
 using BuildUp.Tests.Common;
 
@@ -11,7 +11,7 @@ namespace BuildUp.Tests.BuilderExamples
 	public class Examples
 	{
 		[Test]
-		public void default_ctor_arg_sources_used_by_builder()
+		public void default_ctor_arg_generators_used_by_builder()
 		{
 			var hotels = new HotelBuilder().Take(3);
 			var expected = new[]
@@ -27,7 +27,7 @@ namespace BuildUp.Tests.BuilderExamples
 		public void lots_of_bookings()
 		{
 			var hotels = new HotelBuilder().Loop(5);
-			var dates = DateTimeSources.IncrementingDays(DateTime.Now.Date).Loop(25); // 5 bookings at each hotel per day
+			var dates = DateTimeGenerators.IncrementingDays(DateTime.Now.Date).Loop(25); // 5 bookings at each hotel per day
 			var bookings = new BookingBuilder().AtHotel(hotels).StartingOn(dates).Take(50).ToArray();
 			
 		}
@@ -35,7 +35,7 @@ namespace BuildUp.Tests.BuilderExamples
 		[Test]
 		public void modifying_instances_after_creation()
 		{
-			var notes = StringSources.Numbered("Stuff {1}");
+			var notes = StringGenerators.Numbered("Stuff {1}");
 			var customers = new CustomerBuilder().Select(c => c.RecordHistory(DateTime.Now, ""));
 		}
 

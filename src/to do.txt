@@ -1,6 +1,6 @@
 -----------------------------------------
 
-Buildup.TestData - lots of sources:
+Buildup.TestData - lots of generators:
 
 FirstNames
 LastNames
@@ -29,10 +29,10 @@ Have specific things like SSN and ZipCode (US), etc
 
 -----------------------------------------
 
-Generate the versions of CompositeSource.Select<T1, T2, T3> etc use T4?
+Generate the versions of Generators.Select<T1, T2, T3> etc use T4?
 
 -----------------------------------------
 
-Use named keys to access child sources within ChildSourceMap in addition to positional index
+Use named keys to access child generators within ChildGeneratorCollection in addition to positional index
 
 -----------------------------------------

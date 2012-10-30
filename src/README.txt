@@ -56,28 +56,28 @@ A model like this can't be set up using conventions as the behaviour is usually 
 accommodate the test scenarios you're working with. The idea of BuildUp is that it provides some basic scaffolding so that you can declare these scenarios
 and mix and match various bits.
 
-You can quickly combine various sources of data as declaratively as possible
+You can quickly combine various generators of data as declaratively as possible
 
 
-WHY DOESN'T ISource<T> implement IEnumerable<T>
+WHY DOESN'T IGenerator<T> implement IEnumerable<T>
 
 This was tempting but was not done for a few reasons. Instead, a method is called to trigger
-creation of an IEnumerable by the source, e.g. orderSource.Build();
+creation of an IEnumerable by the generator, e.g. orderGenerator.Build();
 
-from name in nameSource.Build()
+from name in nameGenerator.Build()
 
-arguments for (a source is a sequence):
-Viewing source as a sequence of objects makes api a bit more concise, names.Take(4) etc is better than names.Build().Take(4)
+arguments for (a generator is a sequence):
+Viewing generator as a sequence of objects makes api a bit more concise, names.Take(4) etc is better than names.Build().Take(4)
 
-against (a source is a source of a sequence, not the sequence itself!):
+against (a generator is a generator of a sequence, not the sequence itself!):
 semantic collision, e.g. subtle differences in Select and SelectMany depending on whether extension methods are referenced
-loss of composability - too easy for user to slip from working with immutable ISource<T> to IEnumerable<T>
+loss of composability - too easy for user to slip from working with immutable IGenerator<T> to IEnumerable<T>
 
 compromise:
 
 probably better for user to generate sequence explicitly
 
-have a few extension methods so can access generated sequence, transitioning from ISource to IEnumerable:
+have a few extension methods so can access generated sequence, transitioning from IGenerator to IEnumerable:
 
 Single
 Take

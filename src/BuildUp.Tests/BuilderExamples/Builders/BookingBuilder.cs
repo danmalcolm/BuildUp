@@ -1,36 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
 using BuildUp.Builders;
-using BuildUp.ValueSources;
+using BuildUp.ValueGenerators;
 
 namespace BuildUp.Tests.BuilderExamples.Builders
 {
 	public class BookingBuilder : Builder<Booking, BookingBuilder>
 	{
-		protected override Source<Booking> GetDefaultSource()
+		protected override Generator<Booking> GetDefaultGenerator()
 		{
-			return Source.Create
+			return Generators.Create
 			(
 				(context, hotel, customer, startDate) => new Booking(hotel, customer, startDate),
 				new HotelBuilder(),
 				new CustomerBuilder(),
-				DateTimeSources.IncrementingDays(DateTime.Now.Date)
+				DateTimeGenerators.IncrementingDays(DateTime.Now.Date)
 			);
 		}
 
-		public BookingBuilder AtHotel(ISource<Hotel> hotels)
+		public BookingBuilder AtHotel(IGenerator<Hotel> hotels)
 		{
-			return ChangeChildSource(0, hotels);
+			return ChangeChildGenerator(0, hotels);
 		}
 
-		public BookingBuilder WithCustomer(ISource<Customer> customers)
+		public BookingBuilder WithCustomer(IGenerator<Customer> customers)
 		{
-			return ChangeChildSource(1, customers);
+			return ChangeChildGenerator(1, customers);
 		}
 
-		public BookingBuilder StartingOn(ISource<DateTime> startDates)
+		public BookingBuilder StartingOn(IGenerator<DateTime> startDates)
 		{
-			return ChangeChildSource(2, startDates);
+			return ChangeChildGenerator(2, startDates);
 		}
 	}
 }

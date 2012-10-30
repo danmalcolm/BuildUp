@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
-
-namespace BuildUp.ValueSources
+﻿namespace BuildUp.ValueGenerators
 {
-	public static class StringSources
+	public static class StringGenerators
 	{
 		/// <summary>
 		/// Creates a sequence of strings with numeric values used for the placeholders in a format string. The {0} 
@@ -10,20 +8,20 @@ namespace BuildUp.ValueSources
 		/// placeholder will be replaced by the one-based index. 
 		/// <example>
 		/// <para>
-		/// StringSources.Numbered("customer-{0}"); // gives "customer-0", "customer-1", "customer-2" ...
+		/// StringGenerators.Numbered("customer-{0}"); // gives "customer-0", "customer-1", "customer-2" ...
 		/// </para>
 		/// </example>
 		/// <example>
 		/// <para>
-		/// StringSources.Numbered("customer-{1}"); // gives "customer-1", "customer-2", "customer-3" ...
+		/// StringGenerators.Numbered("customer-{1}"); // gives "customer-1", "customer-2", "customer-3" ...
 		/// </para>
 		/// </example>
 		/// </summary>
 		/// <param name="format"></param>
 		/// <returns></returns>
-		public static ISource<string> Numbered(string format)
+		public static IGenerator<string> Numbered(string format)
 		{
-			return Source.Create(c => string.Format(format, c.Index, c.Index + 1));
+			return Generators.Create(c => string.Format(format, c.Index, c.Index + 1));
 		}
 
 		/// <summary>
@@ -31,9 +29,9 @@ namespace BuildUp.ValueSources
 		/// </summary>
 		/// <param name="value"></param>
 		/// <returns></returns>
-		public static ISource<string> Constant(string value)
+		public static IGenerator<string> Constant(string value)
 		{
-			return Source.Create(c => value);
+			return Generators.Create(c => value);
 		}
 
 		
