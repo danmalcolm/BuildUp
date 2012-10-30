@@ -1,14 +1,14 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildUp", "BuildUp\BuildUp.csproj", "{1940F353-B0FC-4B83-8920-1511E2BA4408}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildUp.Tests", "BuildUp.Tests\BuildUp.Tests.csproj", "{6CB8F24C-08FF-4756-8827-45ADC470106E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{C2ECB659-07C5-4445-A114-6D0B7187CFCB}"
 	ProjectSection(SolutionItems) = preProject
-		README.txt = README.txt
-		to do.txt = to do.txt
+		..\README.md = ..\README.md
+		..\TODO.txt = ..\TODO.txt
 	EndProjectSection
 EndProject
 Global
