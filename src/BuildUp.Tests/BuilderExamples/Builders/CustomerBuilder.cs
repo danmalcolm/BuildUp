@@ -1,16 +1,16 @@
-﻿using BuildUp.Tests.ComplexModelExamples.Simple;
+﻿using BuildUp.Builders;
 using BuildUp.ValueSources;
 
 namespace BuildUp.Tests.BuilderExamples.Builders
 {
 	public class CustomerBuilder : Builder<Customer,CustomerBuilder>
 	{
-		protected override ICompositeSource<Customer> GetDefaultSource()
+		protected override Source<Customer> GetDefaultSource()
 		{
-			return CompositeSource.Create
+			return Source.Create
 			(
 				(context, code, name) => new Customer(code, name),
-				StringSources.Numbered("Customer-{0}"),
+				StringSources.Numbered("Customer-{1}"),
 				Names.Default
 			);
 		}

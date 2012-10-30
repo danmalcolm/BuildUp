@@ -1,0 +1,38 @@
+-----------------------------------------
+
+Buildup.TestData - lots of sources:
+
+FirstNames
+LastNames
+People
+email addresses
+phone numbers
+mobile phone numbers
+
+Company Names
+
+Postcodes
+
+US Zipcodes
+
+1000 of each, enough? Measure size of binaries and profile memory and see if something like 100000 names in memory is viable
+
+-----------------------------------------
+
+Buildup.TestData.Regional?
+
+Have specific things like SSN and ZipCode (US), etc
+
+
+-----------------------------------------
+
+
+-----------------------------------------
+
+Generate the versions of CompositeSource.Select<T1, T2, T3> etc use T4?
+
+-----------------------------------------
+
+Use named keys to access child sources within ChildSourceMap in addition to positional index
+
+-----------------------------------------

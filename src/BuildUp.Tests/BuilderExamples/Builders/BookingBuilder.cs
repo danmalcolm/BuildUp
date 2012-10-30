@@ -1,13 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
+using BuildUp.Builders;
 using BuildUp.ValueSources;
 
 namespace BuildUp.Tests.BuilderExamples.Builders
 {
 	public class BookingBuilder : Builder<Booking, BookingBuilder>
 	{
-		protected override ICompositeSource<Booking> GetDefaultSource()
+		protected override Source<Booking> GetDefaultSource()
 		{
-			return CompositeSource.Create
+			return Source.Create
 			(
 				(context, hotel, customer, startDate) => new Booking(hotel, customer, startDate),
 				new HotelBuilder(),

@@ -1,0 +1,42 @@
+﻿<#@ template language="C#v3.5" #>
+<#@ assembly name="System.Core.dll" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Collections" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.Text.RegularExpressions" #>
+<#@ template hostspecific="True" #> 
+namespace T4
+{
+	public class Example
+	{
+		<#=GenerateConcatMethods()#>
+	}
+
+	
+}
+
+
+<#+
+
+public static string GenerateConcatMethods()
+{
+	var methods = new StringBuilder();
+	for(int i = 1; i <= 10; i++)
+	{
+		var values = Enumerable.Range(0, i).ToArray();
+		var args = string.Join(", ", values.Select(index => string.Format("string value{0}", index + 1)));
+		var concatArgs = string.Join(", ", values.Select(index => string.Format("value{0}", index + 1)));
+		methods.AppendFormat(@"
+		public static string ConcatValues({0})
+		{{
+			return string.Concat({1});
+		}}", args, concatArgs);
+	}
+	return methods.ToString();
+} 
+
+#>
+

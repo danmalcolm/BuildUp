@@ -1,40 +1,30 @@
-using System.Linq;
-using BuildUp.Tests.Common;
+﻿using System.Linq;
+using BuildUp.ValueSources;
 using NUnit.Framework;
+using BuildUp.Tests.Common;
 
-namespace BuildUp.Tests
+namespace BuildUp.Tests.SourceExtensionsSpecs
 {
 	[TestFixture]
-	public class SourceExtensionsSpecs
+	public class setting_member_of_source
 	{
-
+		ISource<LittleMan> source = Source.Create(context => new LittleMan("Man " + (context.Index + 1), 20));
+			
 		[Test]
-		public void simple_select()
+		public void settable_property_with_value()
 		{
-			var source1 = Source.Create(context => context.Index);
-			var source2 = source1.Select(x => x*2);
-
-			source2.Take(5).ShouldMatchSequence(0, 2, 4, 6, 8);
+			var source1 = source.Set(x => x.FavouriteColour, "Pink");
+			source1.Take(3).Select(x => x.FavouriteColour).ShouldMatchSequence("Pink", "Pink", "Pink");
 		}
 
 		[Test]
-		public void simple_freeze()
+		public void settable_property_with_sequence()
 		{
-			var source1 = Source.Create(context => context.Index);
-			var source2 = source1.Freeze();
-
-			source1.Take(5).ShouldMatchSequence(0, 1, 2, 3, 4);
-			source2.Take(5).ShouldMatchSequence(0, 0, 0, 0, 0);
-		}
-
-		[Test]
-		public void repeat_each()
-		{
-			var source1 = Source.Create(context => context.Index);
-			var source2 = source1.RepeatEach(3);
-
-			source1.Take(3).ShouldMatchSequence(0, 1, 2);
-			source2.Take(9).ShouldMatchSequence(0, 0, 0, 1, 1, 1, 2, 2, 2);
+			var colours = new [] { "Pink", "Blue", "Green", "Yellow" };
+			var colourSource = Source.Create(colours);
+			var source1 = source.Set(x => x.FavouriteColour, colourSource);
+			
+			source1.Take(4).Select(x => x.FavouriteColour).ShouldMatchSequence(colours);
 		}
 
 		

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using BuildUp.Tests.ComplexModelExamples.Simple;
 
 namespace BuildUp.Tests.BuilderExamples
 {

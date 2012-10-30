@@ -1,4 +1,5 @@
-﻿using BuildUp.ValueSources;
+﻿using System.Collections.Generic;
+using BuildUp.ValueSources;
 
 namespace BuildUp.Tests.BuilderExamples.Builders
 {
@@ -8,9 +9,9 @@ namespace BuildUp.Tests.BuilderExamples.Builders
 		{
 			get
 			{
-				return CompositeSource.Create((context, firstName, lastName) => new Name("Mr", firstName, lastName),
+				return Source.Create((context, firstName, lastName) => new Name("Mr", firstName, lastName),
 				                              StringSources.Constant("John"),
-				                              StringSources.Numbered("Last Name {0}"));
+				                              StringSources.Numbered("Last Name {1}"));
 			}
 		}
 	}

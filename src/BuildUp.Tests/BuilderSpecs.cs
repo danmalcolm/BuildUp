@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using BuildUp.Builders;
 using BuildUp.ValueSources;
 using NUnit.Framework;
 using BuildUp.Tests.Common;
@@ -19,17 +21,17 @@ namespace BuildUp.Tests
 		}
 
         [Test]
-        public void building_after_changing_a_source()
+        public void building_after_changing_a_child_source()
         {
-            var source = new LittleManBuilder().WithName(StringSources.Numbered("Super Little Man {0}"));
+            var source = new LittleManBuilder().WithName(StringSources.Numbered("Super Little Man {1}"));
             var expected = new[] { new { Name = "Super Little Man 1", Age = 38 }, new { Name = "Super Little Man 2", Age = 38 }, new { Name = "Super Little Man 3", Age = 38 } };
             source.Take(3).Select(x => new { x.Name, x.Age }).ShouldMatchSequence(expected);
         }
 
         [Test]
-        public void building_after_changing_both_sources()
+        public void building_after_changing_both_child_sources()
         {
-            var source = new LittleManBuilder().WithName(StringSources.Numbered("Super Little Man {0}")).WithAge(IntSources.Incrementing(30, 2));
+            var source = new LittleManBuilder().WithName(StringSources.Numbered("Super Little Man {1}")).WithAge(IntSources.Incrementing(30, 2));
             var expected = new[] { new { Name = "Super Little Man 1", Age = 30 }, new { Name = "Super Little Man 2", Age = 32 }, new { Name = "Super Little Man 3", Age = 34 } };
             source.Take(3).Select(x => new { x.Name, x.Age }).ShouldMatchSequence(expected);
         }
@@ -49,12 +51,12 @@ namespace BuildUp.Tests
 
 		public class LittleManBuilder : Builder<LittleMan,LittleManBuilder>
 		{
-            protected override ICompositeSource<LittleMan> GetDefaultSource()
+            protected override Source<LittleMan> GetDefaultSource()
             {
-                return CompositeSource.Create
+                return Source.Create
                 (
                     (context, name, age) => new LittleMan(name, age),
-                    StringSources.Numbered("Little Man {0}"),
+                    StringSources.Numbered("Little Man {1}"),
                     IntSources.Constant(38)
                 );
             }
@@ -70,7 +72,7 @@ namespace BuildUp.Tests
 				return ChangeChildSource(0, name);
 			}
 
-            public LittleManBuilder WithAge(ISource<int> age)
+			public LittleManBuilder WithAge(ISource<int> age)
             {
 				return ChangeChildSource(1, age);
             }
