@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using BuildUp.Builders;
 using BuildUp.ValueSources;
 
 namespace BuildUp.Tests.BuilderExamples.Builders

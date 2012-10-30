@@ -6,9 +6,8 @@ namespace BuildUp.ValueSources
 	{
 		/// <summary>
 		/// Creates a sequence of strings with numeric values used for the placeholders in a format string. The {0} 
-		/// placeholder will be replaced by the zero-based index of the value's position in the sequences. The {1} 
-		/// placeholder will be replaced by the one-based index. supplied format string the one-based indexed of the position of the sequence
-		/// to the {0} placeholder in a format string. Generates more human friendly sequences, e.g. customer-1, customer-2
+		/// placeholder will be replaced by the zero-based index of the value's position in the sequence. The {1} 
+		/// placeholder will be replaced by the one-based index. 
 		/// <example>
 		/// <para>
 		/// StringSources.Numbered("customer-{0}"); // gives "customer-0", "customer-1", "customer-2" ...

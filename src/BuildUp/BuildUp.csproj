@@ -40,14 +40,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Builders\Builder.cs" />
+    <Compile Include="Source`1.cs" />
     <Compile Include="CreateContext.cs" />
-    <Compile Include="Builder.cs" />
-    <Compile Include="ChildSourceMap.cs" />
-    <Compile Include="ContextSource.cs" />
+    <Compile Include="ChildSourceCollection.cs" />
     <Compile Include="ISource.cs" />
     <Compile Include="SourceExtensions.cs" />
-    <Compile Include="SourceSequenceAccessExtensions.cs" />
-    <Compile Include="Utility\EnumerableUtility.cs" />
+    <Compile Include="SequenceAccessExtensions.cs" />
     <Compile Include="Utility\Reflection\MemberAccessor.cs" />
     <Compile Include="ValueSources\DateTimeSources.cs" />
     <Compile Include="ValueSources\StringSources.cs" />

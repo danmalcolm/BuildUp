@@ -26,34 +26,6 @@ Have specific things like SSN and ZipCode (US), etc
 
 -----------------------------------------
 
-Should ISource<T> implement IEnumerable????????????? DONE (it doesn't)
-
-other options:
-have a method to get the ienumberable, e.g. Create() or CreateSequence(), Sequence, Build()
-
-from name in nameSource.Sequence
-
-for (a source is a sequence):
-Viewing source as a sequence of objects makes api a bit more concise, names.Take(4) etc is better than names.Sequence.Take(4)
-
-against (a source is a source of a sequence, not the sequence itself!):
-semantic collision, e.g. subtle differences in Select and SelectMany
-loss of composability - too easy for user to slip from working with immutable ISource<T> to IEnumerable<T>
-
-compromise:
-
-probably better for user to generate sequence explicitly
-
-have a few extension methods so can access generated sequence, transitioning from ISource to IEnumerable:
-
-Single
-Take
-Skip
-
-
-
-
-
 
 -----------------------------------------
 

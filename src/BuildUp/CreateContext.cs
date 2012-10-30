@@ -4,7 +4,8 @@ using System.Linq;
 namespace BuildUp
 {
 	/// <summary>
-	/// Contains values made available to the function used by a source to generate objects
+	/// Contains values made available to a source's create function. A separate instance is created for
+	/// each object within the sequence being generated.
 	/// </summary>
 	public class CreateContext
 	{
@@ -13,10 +14,10 @@ namespace BuildUp
 			
 		}
 
-		public CreateContext(int index, IEnumerable<object> values)
+		public CreateContext(int index, IEnumerable<object> childSourceValues)
 		{
 			Index = index;
-			ChildSourceValues = values.ToArray();
+			ChildSourceValues = childSourceValues.ToArray();
 		}
 
         /// <summary>
@@ -25,7 +26,7 @@ namespace BuildUp
 		public int Index { get; private set; }
 
 		/// <summary>
-		/// The values from child sources that provide values used to create the object
+		/// The values from child sources made available to the create function to generate an object
 		/// </summary>
 		public object[] ChildSourceValues { get; private set; }
 	}

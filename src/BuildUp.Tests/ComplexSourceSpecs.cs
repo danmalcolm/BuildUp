@@ -6,7 +6,7 @@ using NUnit.Framework;
 namespace BuildUp.Tests.CompositeSourceSpecs
 {
 	[TestFixture]
-	public class CompositeSourceExtensionsSpecs
+	public class ComplexSourceSpecs
 	{
 		private class AdvancedLeopard
 		{
@@ -77,7 +77,7 @@ namespace BuildUp.Tests.CompositeSourceSpecs
 					StringSources.Numbered("Little Man {1}"),
 					IntSources.Constant(38)
 				);
-			var source2 = source1.ModifyChildSources(sources => sources.ReplaceAt(1, IntSources.Incrementing(44)));
+			var source2 = source1.ModifyChildSources(sources => sources.ReplaceSourceAt(1, IntSources.Incrementing(44)));
 			
 			source1.Take(3).Select(x => x.Age).ShouldMatchSequence(38, 38, 38);
 			source2.Take(3).Select(x => x.Age).ShouldMatchSequence(44, 45, 46);

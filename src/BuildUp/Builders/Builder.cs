@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace BuildUp
+namespace BuildUp.Builders
 {
 	/// <summary>
 	/// Base class for typical *Builder classes (CustomerBuilder, OrderBuilder) that allow test code to vary values used
@@ -35,7 +35,7 @@ namespace BuildUp
 		/// </summary>
 		protected TBuilder ChangeChildSource<TChild>(int index, ISource<TChild> childSource)
 		{
-			var newSource = Source.ModifyChildSources(childSequences => childSequences.ReplaceAt(index, childSource));
+			var newSource = Source.ModifyChildSources(childSequences => childSequences.ReplaceSourceAt(index, childSource));
 			return CloneUsingNewSource(newSource);
 		}
 		
