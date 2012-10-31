@@ -19,8 +19,6 @@ namespace BuildUp
 			return new Generator<T>(childGenerators, create);
 		}
 
-		#region Create functions
-
 		/// <summary>
 		/// Creates a generator based on an existing sequence
 		/// </summary>
@@ -102,8 +100,5 @@ namespace BuildUp
 				return create(context, value1, value2, value3);
 			}, generatorMap);
 		}
-
-		#endregion
 	}
-
 }

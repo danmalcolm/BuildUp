@@ -1,5 +1,14 @@
 -----------------------------------------
 
+Restructuring
+
+Move Select and SelectMany to extension methods. IGenerator<T> should be a lot simpler
+
+Better handling of IEnumerable generators, e.g. Build simply returns the sequence
+
+
+-----------------------------------------
+
 Buildup.TestData - lots of generators:
 
 FirstNames
