@@ -5,9 +5,9 @@ namespace BuildUp.Tests.BuilderExamples.Builders
 {
 	public class CustomerBuilder : Builder<Customer,CustomerBuilder>
 	{
-		protected override Generator<Customer> GetDefaultGenerator()
+		protected override ComplexGenerator<Customer> GetDefaultGenerator()
 		{
-			return Generators.Create
+			return Generator.Create
 			(
 				(context, code, name) => new Customer(code, name),
 				StringGenerators.Numbered("Customer-{1}"),

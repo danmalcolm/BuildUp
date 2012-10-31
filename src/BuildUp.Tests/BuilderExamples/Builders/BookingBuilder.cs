@@ -7,9 +7,9 @@ namespace BuildUp.Tests.BuilderExamples.Builders
 {
 	public class BookingBuilder : Builder<Booking, BookingBuilder>
 	{
-		protected override Generator<Booking> GetDefaultGenerator()
+		protected override ComplexGenerator<Booking> GetDefaultGenerator()
 		{
-			return Generators.Create
+			return Generator.Create
 			(
 				(context, hotel, customer, startDate) => new Booking(hotel, customer, startDate),
 				new HotelBuilder(),

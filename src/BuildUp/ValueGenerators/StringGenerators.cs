@@ -21,7 +21,7 @@
 		/// <returns></returns>
 		public static IGenerator<string> Numbered(string format)
 		{
-			return Generators.Create(c => string.Format(format, c.Index, c.Index + 1));
+			return Generator.Create(index => string.Format(format, index, index + 1));
 		}
 
 		/// <summary>
@@ -31,7 +31,7 @@
 		/// <returns></returns>
 		public static IGenerator<string> Constant(string value)
 		{
-			return Generators.Create(c => value);
+			return Generator.Create(c => value);
 		}
 
 		

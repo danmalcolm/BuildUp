@@ -40,11 +40,11 @@ namespace BuildUp.Tests
 		[Test]
 		public void objects_constructed_from_2_simple_generators()
 		{
-			var generator1 = Generators.Create
+			var generator1 = Generator.Create
 				(
 					(context, name, age) => new Person(name, age),
 					StringGenerators.Numbered("Little Man {1}"),
-					IntGenerators.Constant(31)
+					Generator.Constant(31)
 				);
 			generator1.Take(3).Select(x => x.Name).ShouldMatchSequence("Little Man 1", "Little Man 2", "Little Man 3");
 			generator1.Take(3).Select(x => x.Age).ShouldMatchSequence(31, 31, 31);
@@ -53,14 +53,14 @@ namespace BuildUp.Tests
 		[Test]
 		public void objects_constructed_from_simple_generator_and_composite_generator()
 		{
-			var cars = Generators.Create((context, name, age) => new Car(name, age),
+			var cars = Generator.Create((context, name, age) => new Car(name, age),
 			                                       StringGenerators.Numbered("Car {1}"),
-			                                       IntGenerators.Constant(2));
-			var drivers = Generators.Create
+			                                       Generator.Constant(2));
+			var drivers = Generator.Create
 				(
 					(context, name, age, car) => new Driver(name, age, car),
 					StringGenerators.Numbered("Leopard {1}"),
-					IntGenerators.Constant(31),
+					Generator.Constant(31),
 					cars
 				);
 			drivers.Take(3).Select(x => x.Name).ShouldMatchSequence("Leopard 1", "Leopard 2", "Leopard 3");
@@ -71,11 +71,11 @@ namespace BuildUp.Tests
 		[Test]
 		public void clone_replacing_child_generator_by_position()
 		{
-			var generator1 = Generators.Create
+			var generator1 = Generator.Create
 				(
 					(context, name, age) => new Person(name, age),
 					StringGenerators.Numbered("Little Man {1}"),
-					IntGenerators.Constant(38)
+					Generator.Constant(38)
 				);
 			var generator2 = generator1.ModifyChildGenerators(generators => generators.ReplaceGeneratorAt(1, IntGenerators.Incrementing(44)));
 			

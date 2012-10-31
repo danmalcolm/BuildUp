@@ -5,9 +5,9 @@ namespace BuildUp.Tests.BuilderExamples.Builders
 {
 	public class HotelBuilder : Builder<Hotel,HotelBuilder>
 	{
-		protected override Generator<Hotel> GetDefaultGenerator()
+		protected override ComplexGenerator<Hotel> GetDefaultGenerator()
 		{
-			return Generators.Create
+			return Generator.Create
 			(
 				(context, code, name) => new Hotel(code, name),
 				StringGenerators.Numbered("hotel-{1}"),

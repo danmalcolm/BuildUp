@@ -9,7 +9,7 @@ namespace BuildUp.Tests.BuilderExamples.Builders
 		{
 			get
 			{
-				return Generators.Create((context, firstName, lastName) => new Name("Mr", firstName, lastName),
+				return Generator.Create((context, firstName, lastName) => new Name("Mr", firstName, lastName),
 				                              StringGenerators.Constant("John"),
 				                              StringGenerators.Numbered("Last Name {1}"));
 			}

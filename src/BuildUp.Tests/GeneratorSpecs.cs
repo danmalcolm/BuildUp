@@ -1,6 +1,4 @@
-﻿//using System.Linq;
-
-using System.Linq;
+﻿using System.Linq;
 using BuildUp.ValueGenerators;
 using NUnit.Framework;
 using BuildUp.Tests.Common;
@@ -14,14 +12,14 @@ namespace BuildUp.Tests
 		[Test]
 		public void simple_generator()
 		{
-			var generator = Generators.Create(context => context.Index);
+			var generator = Generator.Create(index => index);
 			generator.Take(5).ShouldMatchSequence(0,1,2,3,4);
 		}
 
 		[Test]
 		public void different_iterations_should_return_identical_sequences()
 		{
-			var generator = Generators.Create(context => context.Index);
+			var generator = Generator.Create(index => index);
 			var first = generator.Take(5);
 			var second = generator.Take(5);
 			first.ShouldMatchSequence(second);
@@ -30,7 +28,7 @@ namespace BuildUp.Tests
 		[Test]
 		public void combining_with_function()
 		{
-			var generator1 = Generators.Create(context => context.Index);
+			var generator1 = Generator.Create(index => index);
 			var generator2 = generator1.Select(value => value*10);
 			
 			generator1.Take(3).ShouldMatchSequence(0, 1, 2);
@@ -40,7 +38,7 @@ namespace BuildUp.Tests
 		[Test]
 		public void combining_with_action()
 		{
-			var generator1 = Generators.Create(context => new Person("Man " + (context.Index + 1), 20));
+			var generator1 = Generator.Create(index => new Person("Man " + (index + 1), 20));
 			var generator2 = generator1.Select(man => man.ChangeName("Frank"));
 
 			generator1.Take(3).Select(x => new { x.Name, x.Age }).ShouldMatchSequence(new { Name = "Man 1", Age = 20 }, new { Name = "Man 2", Age = 20 }, new { Name = "Man 3", Age = 20 });

@@ -51,13 +51,13 @@ namespace BuildUp.Tests
 
 		public class LittleManBuilder : Builder<LittleMan,LittleManBuilder>
 		{
-            protected override Generator<LittleMan> GetDefaultGenerator()
+            protected override ComplexGenerator<LittleMan> GetDefaultGenerator()
             {
-                return Generators.Create
+                return Generator.Create
                 (
                     (context, name, age) => new LittleMan(name, age),
                     StringGenerators.Numbered("Little Man {1}"),
-                    IntGenerators.Constant(38)
+                    Generator.Constant(38)
                 );
             }
 

@@ -31,6 +31,18 @@ Examples
 --------
 
 
+Why go to all this trouble of creating IGenerator<T>? Why not just work with IEnumerable<T>?
+--------------------------------------------------------------------------------------------
+
+IGenerator<T> implementations contain logic to generate sequences, they are not the sequence themselves. Think of a generator as a container that holds the logic used to create a sequence. 
+
+This explicit separation makes it simple to recreate new sequences for each test. Imagine if you had ten unit tests within a test fixture, each of which starts with a sequence of orders in a known state, exerts some behaviour and tests for expected changes in the state. You'll need to create a fresh set of orders for each test. If you were creating the sequence manually you'd have to create a CreateCustomers using procedural code. Generators aim to provide a home for this behaviour.
+
+There are a large number of extension methods available for IGenerator<T> that are specific to building up test data. We didn't want to define these on IEnumerable<T> and "pollute" code that works with IEnumerable<T> throughout your application.
+
+It also gives us more options for composing generators. Generators themselves are immutable and a range of methods exist to combine them together into new generators. 
+
+
 A Note on Automatic Test Data Generation
 ----------------------------------------
 

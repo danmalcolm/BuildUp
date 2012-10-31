@@ -7,7 +7,7 @@ namespace BuildUp.Tests
 	[TestFixture]
 	public class GeneratorExtensionsSpecs
 	{
-		readonly IGenerator<Person> generator = Generators.Create(context => new Person("Man " + (context.Index + 1), 20));
+		readonly IGenerator<Person> generator = Generator.Create(index => new Person("Man " + (index + 1), 20));
 			
 		[Test]
 		public void settable_property_with_value()
@@ -20,7 +20,7 @@ namespace BuildUp.Tests
 		public void settable_property_with_sequence()
 		{
 			var colours = new [] { "Pink", "Blue", "Green", "Yellow" };
-			var colourGenerator = Generators.Create(colours);
+			var colourGenerator = Generator.FromSequence(colours);
 			var generator1 = generator.Set(x => x.FavouriteColour, colourGenerator);
 			
 			generator1.Take(4).Select(x => x.FavouriteColour).ShouldMatchSequence(colours);

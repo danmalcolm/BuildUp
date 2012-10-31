@@ -16,16 +16,16 @@ namespace BuildUp.Builders
 	public abstract class Builder<T,TBuilder> : IGenerator<T> 
 		where TBuilder : Builder<T,TBuilder>, new()
 	{
-	    private Generator<T> generator;
+	    private ComplexGenerator<T> generator;
 
-	    protected abstract Generator<T> GetDefaultGenerator();
+	    protected abstract ComplexGenerator<T> GetDefaultGenerator();
 
-        protected void UseCustomGenerator(Generator<T> customGenerator)
+        protected void UseCustomGenerator(ComplexGenerator<T> customGenerator)
         {
             this.generator = customGenerator;
         }
 
-		private Generator<T> Generator
+		private ComplexGenerator<T> Generator
 	    {
 	        get { return generator ?? (generator = GetDefaultGenerator()); }
 	    }
@@ -44,7 +44,7 @@ namespace BuildUp.Builders
         /// </summary>
         /// <param name="newGenerator"></param>
         /// <returns></returns>
-		protected TBuilder Clone(Generator<T> newGenerator)
+		protected TBuilder Clone(ComplexGenerator<T> newGenerator)
 		{
 		    var builder = new TBuilder();
             builder.UseCustomGenerator(newGenerator);
@@ -79,11 +79,6 @@ namespace BuildUp.Builders
 		public IGenerator<T> SelectMany<TCollection>(Func<IGenerator<T>, IGenerator<TCollection>> childSequenceSelector, Action<T, TCollection> modify)
 		{
 			return Generator.SelectMany(childSequenceSelector, modify);
-		}
-
-		public IGenerator<T> ModifySequence(Func<IEnumerable<object>, IEnumerable<object>> modify)
-		{
-			return Generator.ModifySequence(modify);
 		}
 	}
 }
