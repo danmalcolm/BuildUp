@@ -16,6 +16,7 @@ namespace BuildUp.Builders
 	public abstract class Builder<T,TBuilder> : IGenerator<T> 
 		where TBuilder : Builder<T,TBuilder>, new()
 	{
+
 	    private ComplexGenerator<T> generator;
 
 	    protected abstract ComplexGenerator<T> GetDefaultGenerator();
@@ -40,7 +41,8 @@ namespace BuildUp.Builders
 		}
 		
         /// <summary>
-        /// Creates a new instance of the builder using a different generator
+        /// Creates a new instance of the builder using a different generator. This is intended to allow implementors
+        /// to use the chainable methods that return a new builder, e.g. orderBuilder.WithCustomer(customers).StartingOn(dates)
         /// </summary>
         /// <param name="newGenerator"></param>
         /// <returns></returns>
@@ -61,24 +63,5 @@ namespace BuildUp.Builders
 			return Build();
 		}
 
-		public IGenerator<TResult> Select<TResult>(Func<T, TResult> selector)
-		{
-			return Generator.Select(selector);
-		}
-
-		public IGenerator<T> Select(Action<T> action)
-		{
-			return Generator.Select(action);
-		}
-
-		public IGenerator<TResult> SelectMany<TCollection, TResult>(Func<IGenerator<T>, IGenerator<TCollection>> sequenceSelector, Func<T, TCollection, TResult> resultSelector)
-		{
-			return Generator.SelectMany(sequenceSelector, resultSelector);
-		}
-
-		public IGenerator<T> SelectMany<TCollection>(Func<IGenerator<T>, IGenerator<TCollection>> childSequenceSelector, Action<T, TCollection> modify)
-		{
-			return Generator.SelectMany(childSequenceSelector, modify);
-		}
 	}
 }

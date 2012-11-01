@@ -9,31 +9,38 @@ namespace BuildUp
     /// </summary>
 	public class Generator
 	{
+		#region Simple generator creation
+
+		/// <summary>
+		/// Creates a generator that generates a sequence repeating a single object
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="instance"></param>
+		/// <returns></returns>
 		public static IGenerator<T> Constant<T>(T instance)
 		{
-			return FromSequence(InfiniteSequence(instance));
+			return Create(index => instance);
 		} 
 
-		private static IEnumerable<T> InfiniteSequence<T>(T instance)
-		{
-			while(true)
-			{
-				yield return instance;
-			}
-		}
-
+		/// <summary>
+		/// Creates a generator that generates each object in a sequence using a function
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="create">The function used to generate each object in the sequence. It is invoked with a
+		/// single parameter, which is the zero-based index of the object in the sequence.
+		/// </param>
+		/// <returns></returns>
 		public static IGenerator<T> Create<T>(Func<int, T> create)
 		{
 			return new SimpleGenerator<T>(create);
 		}
 
-		private static ComplexGenerator<T> Create<T>(Func<CreateContext, T> create, ChildGeneratorCollection childGenerators)
-		{
-			return new ComplexGenerator<T>(childGenerators, create);
-		}
+		#endregion
+
+		#region SequenceGenerator creation
 
 		/// <summary>
-		/// Creates a generator based on an existing sequence
+		/// Creates a generator that provides objects from an existing sequence
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <param name="sequence"></param>
@@ -44,7 +51,7 @@ namespace BuildUp
 		}
 
 		/// <summary>
-		/// Creates a generator based on a function that returns an existing sequence
+		/// Creates a generator that provides objects from an existing sequence
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <param name="sequence"></param>
@@ -53,6 +60,17 @@ namespace BuildUp
 		{
 			return new SequenceGenerator<T>(sequence);
 		}
+
+		#endregion
+
+		#region ComplexGenerator creation
+
+		private static ComplexGenerator<T> Create<T>(Func<CreateContext, T> create, ChildGeneratorCollection childGenerators)
+		{
+			return new ComplexGenerator<T>(childGenerators, create);
+		}
+
+		// Below are strongly typed ways of creating ComplexGenerators
 
 		/// <summary>
 		/// Creates a generator using the supplied function and child generator that provides an additional value used by the 
@@ -124,5 +142,7 @@ namespace BuildUp
 				return create(context, value1, value2, value3);
 			}, generatorMap);
 		}
+
+		#endregion
 	}
 }

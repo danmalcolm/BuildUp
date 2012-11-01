@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace BuildUp
 {
 	/// <summary>
-	/// Generates a sequence of objects suitable for unit testing, test data generation etc
+	/// Generates a sequence of objects 
 	/// </summary>
 	public interface IGenerator
 	{
@@ -13,7 +13,7 @@ namespace BuildUp
 	}
 
 	/// <summary>
-	/// Generates a sequence of objects suitable for unit testing, test data generation etc
+	/// Generates a sequence of objects 
 	/// </summary>
 	/// <typeparam name="TObject"></typeparam>
 	public interface IGenerator<out TObject> : IGenerator
@@ -23,6 +23,5 @@ namespace BuildUp
 		/// </summary>
 		/// <returns></returns>
 		new IEnumerable<TObject> Build();
-				
 	}
 }
