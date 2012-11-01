@@ -5,7 +5,7 @@ namespace BuildUp.Tests.BuilderExamples.Builders
 {
 	public class HotelBuilder : Builder<Hotel,HotelBuilder>
 	{
-		protected override ComplexGenerator<Hotel> GetDefaultGenerator()
+		protected override IGenerator<Hotel> GetDefaultGenerator()
 		{
 			return Generator.Create
 			(

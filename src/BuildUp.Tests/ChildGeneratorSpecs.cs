@@ -76,7 +76,7 @@ namespace BuildUp.Tests
 					(context, name, age) => new Person(name, age),
 					StringGenerators.Numbered("Little Man {1}"),
 					Generator.Constant(38)
-				);
+				) as ComplexGenerator<Person>;
 			var generator2 = generator1.ModifyChildGenerators(generators => generators.ReplaceGeneratorAt(1, IntGenerators.Incrementing(44)));
 			
 			generator1.Take(3).Select(x => x.Age).ShouldMatchSequence(38, 38, 38);

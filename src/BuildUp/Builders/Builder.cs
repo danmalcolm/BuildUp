@@ -17,16 +17,16 @@ namespace BuildUp.Builders
 		where TBuilder : Builder<T,TBuilder>, new()
 	{
 
-	    private ComplexGenerator<T> generator;
+	    private IGenerator<T> generator;
 
-	    protected abstract ComplexGenerator<T> GetDefaultGenerator();
+	    protected abstract IGenerator<T> GetDefaultGenerator();
 
-        protected void UseCustomGenerator(ComplexGenerator<T> customGenerator)
+        protected void UseCustomGenerator(IGenerator<T> customGenerator)
         {
             this.generator = customGenerator;
         }
 
-		private ComplexGenerator<T> Generator
+		private IGenerator<T> Generator
 	    {
 	        get { return generator ?? (generator = GetDefaultGenerator()); }
 	    }
@@ -36,7 +36,12 @@ namespace BuildUp.Builders
 		/// </summary>
 		protected TBuilder ChangeChildGenerator<TChild>(int index, IGenerator<TChild> childGenerator)
 		{
-			var newGenerator = Generator.ModifyChildGenerators(generators => generators.ReplaceGeneratorAt(index, childGenerator));
+			var complexGenerator = Generator as ComplexGenerator<T>;
+			if(complexGenerator == null)
+			{
+				throw new InvalidOperationException("Cannot modify child generators when this builder is not based on a ComplexGenerator.");
+			}
+			var newGenerator = complexGenerator.ModifyChildGenerators(generators => generators.ReplaceGeneratorAt(index, childGenerator));
 			return Clone(newGenerator);
 		}
 		
@@ -46,7 +51,7 @@ namespace BuildUp.Builders
         /// </summary>
         /// <param name="newGenerator"></param>
         /// <returns></returns>
-		protected TBuilder Clone(ComplexGenerator<T> newGenerator)
+		protected TBuilder Clone(IGenerator<T> newGenerator)
 		{
 		    var builder = new TBuilder();
             builder.UseCustomGenerator(newGenerator);

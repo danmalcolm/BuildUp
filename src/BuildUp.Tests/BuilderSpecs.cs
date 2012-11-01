@@ -51,7 +51,7 @@ namespace BuildUp.Tests
 
 		public class LittleManBuilder : Builder<LittleMan,LittleManBuilder>
 		{
-            protected override ComplexGenerator<LittleMan> GetDefaultGenerator()
+            protected override IGenerator<LittleMan> GetDefaultGenerator()
             {
                 return Generator.Create
                 (

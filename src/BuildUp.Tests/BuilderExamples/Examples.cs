@@ -36,7 +36,7 @@ namespace BuildUp.Tests.BuilderExamples
 		public void modifying_instances_after_creation()
 		{
 			var notes = StringGenerators.Numbered("Stuff {1}");
-			var customers = new CustomerBuilder().Select(c => c.RecordHistory(DateTime.Now, ""));
+			var customers = new CustomerBuilder().Select(c => c.RecordHistory(DateTime.Now, "some notes")).Take(5);
 		}
 
 		
