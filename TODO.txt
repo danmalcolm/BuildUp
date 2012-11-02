@@ -1,5 +1,9 @@
 -----------------------------------------
 
+ComplexGenerators - to support strong typing of child generators, do we code-gen items from 1 to 16 child generators, e.g. using a Tuple or similar?
+
+-----------------------------------------
+
 Restructuring
 
 Builder needs to support substitution of child generators used in constructor, e.g. 

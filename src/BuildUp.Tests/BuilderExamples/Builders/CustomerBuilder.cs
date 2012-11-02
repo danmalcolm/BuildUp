@@ -3,7 +3,7 @@ using BuildUp.ValueGenerators;
 
 namespace BuildUp.Tests.BuilderExamples.Builders
 {
-	public class CustomerBuilder : Builder<Customer,CustomerBuilder>
+	public class CustomerBuilder : BuilderBase<Customer,CustomerBuilder>
 	{
 		protected override IGenerator<Customer> GetDefaultGenerator()
 		{

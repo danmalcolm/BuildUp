@@ -13,11 +13,10 @@ namespace BuildUp.Builders
 	/// <typeparam name="T"></typeparam>
 	/// <typeparam name="TBuilder">The concrete type of the builder class. This self-referencing generic type parameter
 	/// allows us to define behaviour in this base class that returns an instance of the concrete builder type.</typeparam>
-	public abstract class Builder<T,TBuilder> : IGenerator<T> 
-		where TBuilder : Builder<T,TBuilder>, new()
+	public abstract class BuilderBase<T,TBuilder> : IGenerator<T> 
+		where TBuilder : BuilderBase<T,TBuilder>, new()
 	{
-
-	    private IGenerator<T> generator;
+		private IGenerator<T> generator;
 
 	    protected abstract IGenerator<T> GetDefaultGenerator();
 
@@ -34,14 +33,14 @@ namespace BuildUp.Builders
 		/// <summary>
 		/// Creates a new instance of the current builder class using a different child generator
 		/// </summary>
-		protected TBuilder ChangeChildGenerator<TChild>(int index, IGenerator<TChild> childGenerator)
+		protected TBuilder ReplaceChildAtIndex<TChild>(int index, IGenerator<TChild> childGenerator)
 		{
-			var complexGenerator = Generator as ComplexGenerator<T>;
+			var complexGenerator = Generator as IComplexGenerator<T>;
 			if(complexGenerator == null)
 			{
-				throw new InvalidOperationException("Cannot modify child generators when this builder is not based on a ComplexGenerator.");
+				throw new InvalidOperationException("Cannot modify child generators when this builder is not based on a IComplexGenerator.");
 			}
-			var newGenerator = complexGenerator.ModifyChildGenerators(generators => generators.ReplaceGeneratorAt(index, childGenerator));
+			var newGenerator = complexGenerator.ChangeChildren(generators => generators.ReplaceAt(index, childGenerator));
 			return Clone(newGenerator);
 		}
 		

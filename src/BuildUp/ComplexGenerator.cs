@@ -9,7 +9,7 @@ namespace BuildUp
 	/// Generates a sequence of objects based on values provided by one or more child generators
 	/// </summary>
 	/// <typeparam name="TObject"></typeparam>
-	public class ComplexGenerator<TObject> : IGenerator<TObject>
+	public class ComplexGenerator<TObject> : IComplexGenerator<TObject>
 	{
 		private readonly ChildGeneratorCollection childGenerators;
 		private readonly Func<CreateContext, TObject> create;
@@ -19,7 +19,7 @@ namespace BuildUp
 			this.childGenerators = childGenerators;
 			this.create = create;
 		}
-		
+
 		public IEnumerable<TObject> Build()
 		{
 			// Generate the sequence
@@ -33,16 +33,10 @@ namespace BuildUp
 			return Build();
 		}
 
-		/// <summary>
-		/// Creates a copy of this generator using a different collection of child generators
-		/// </summary>
-		/// <param name="modify"></param>
-		/// <returns></returns>
-		public ComplexGenerator<TObject> ModifyChildGenerators(Func<ChildGeneratorCollection, ChildGeneratorCollection> modify)
+		public IComplexGenerator<TObject> ChangeChildren(Func<ChildGeneratorCollection, ChildGeneratorCollection> change)
 		{
-			var newChildGenerators = modify(childGenerators);
+			var newChildGenerators = change(childGenerators);
 			return new ComplexGenerator<TObject>(newChildGenerators, create);
 		}
-
 	}
 }

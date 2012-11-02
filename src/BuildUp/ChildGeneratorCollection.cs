@@ -27,7 +27,7 @@ namespace BuildUp
 		/// <param name="index"></param>
 		/// <param name="generator"></param>
 		/// <returns></returns>
-		public ChildGeneratorCollection ReplaceGeneratorAt<T>(int index, IGenerator<T> generator)
+		public ChildGeneratorCollection ReplaceAt<T>(int index, IGenerator<T> generator)
 		{
 			if (index > childGenerators.Length)
 			{

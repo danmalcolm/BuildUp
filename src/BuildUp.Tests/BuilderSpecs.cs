@@ -49,7 +49,7 @@ namespace BuildUp.Tests
 			public int Age { get; private set; }
 		}
 
-		public class LittleManBuilder : Builder<LittleMan,LittleManBuilder>
+		public class LittleManBuilder : BuilderBase<LittleMan,LittleManBuilder>
 		{
             protected override IGenerator<LittleMan> GetDefaultGenerator()
             {
@@ -69,12 +69,12 @@ namespace BuildUp.Tests
 
 			public LittleManBuilder WithName(IGenerator<string> name)
 			{
-				return ChangeChildGenerator(0, name);
+				return ReplaceChildAtIndex(0, name);
 			}
 
 			public LittleManBuilder WithAge(IGenerator<int> age)
             {
-				return ChangeChildGenerator(1, age);
+				return ReplaceChildAtIndex(1, age);
             }
             
 		} 

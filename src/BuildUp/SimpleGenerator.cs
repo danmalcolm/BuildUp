@@ -6,7 +6,7 @@ using System.Linq;
 namespace BuildUp
 {
 	/// <summary>
-	/// Uses a function to generate a sequence of objects
+	/// Uses a function to generate each object in the sequence
 	/// </summary>
 	/// <typeparam name="TObject"></typeparam>
 	public class SimpleGenerator<TObject> : IGenerator<TObject>

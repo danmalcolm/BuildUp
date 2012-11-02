@@ -40,7 +40,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Builders\Builder.cs" />
+    <Compile Include="Builders\BuilderBase.cs" />
+    <Compile Include="IComplexGenerator.cs" />
     <Compile Include="SimpleGenerator.cs" />
     <Compile Include="ComplexGenerator.cs" />
     <Compile Include="CreateContext.cs" />

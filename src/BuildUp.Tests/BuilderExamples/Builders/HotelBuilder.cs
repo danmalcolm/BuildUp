@@ -3,7 +3,7 @@ using BuildUp.ValueGenerators;
 
 namespace BuildUp.Tests.BuilderExamples.Builders
 {
-	public class HotelBuilder : Builder<Hotel,HotelBuilder>
+	public class HotelBuilder : BuilderBase<Hotel,HotelBuilder>
 	{
 		protected override IGenerator<Hotel> GetDefaultGenerator()
 		{

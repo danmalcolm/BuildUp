@@ -58,7 +58,7 @@
     <Compile Include="BuilderExamples\CustomerHistoryItem.cs" />
     <Compile Include="BuilderExamples\Hotel.cs" />
     <Compile Include="BuilderSpecs.cs" />
-    <Compile Include="ChildGeneratorSpecs.cs" />
+    <Compile Include="ComplexGeneratorSpecs.cs" />
     <Compile Include="Person.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Common\Specification.cs" />

@@ -65,7 +65,7 @@ namespace BuildUp
 
 		#region ComplexGenerator creation
 
-		private static IGenerator<T> Create<T>(Func<CreateContext, T> create, ChildGeneratorCollection childGenerators)
+		private static IComplexGenerator<T> Create<T>(Func<CreateContext, T> create, ChildGeneratorCollection childGenerators)
 		{
 			return new ComplexGenerator<T>(childGenerators, create);
 		}
@@ -82,7 +82,7 @@ namespace BuildUp
 		/// <param name="create">The function used to create an object using values from the child generators</param>
 		/// <param name="generator1">The child generator used to provide the first additional parameter supplied to the create function</param>
 		/// <returns></returns>
-		public static IGenerator<T> Create<T, T1>(Func<CreateContext, T1, T> create, IGenerator<T1> generator1)
+		public static IComplexGenerator<T> Create<T, T1>(Func<CreateContext, T1, T> create, IGenerator<T1> generator1)
 		{
 			var generatorMap = new ChildGeneratorCollection(generator1);
 			return Create(context =>
@@ -104,7 +104,7 @@ namespace BuildUp
 		/// <param name="generator1">The child generator used to provide the first additional parameter supplied to the create function</param>
 		/// <param name="generator2">The child generator used to provide the second additional parameter supplied to the create function</param>
 		/// <returns></returns>
-		public static IGenerator<T> Create<T, T1, T2>(Func<CreateContext, T1, T2, T> create, IGenerator<T1> generator1, IGenerator<T2> generator2)
+		public static IComplexGenerator<T> Create<T, T1, T2>(Func<CreateContext, T1, T2, T> create, IGenerator<T1> generator1, IGenerator<T2> generator2)
 		{
 			var generators = new ChildGeneratorCollection(generator1, generator2);
 			return Create(context =>
@@ -129,7 +129,7 @@ namespace BuildUp
 		/// <param name="generator2">The child generator used to provide the second additional parameter supplied to the create function</param>
 		/// <param name="generator3">The child generator used to provide the third additional parameter supplied to the create function</param>
 		/// <returns></returns>
-		public static IGenerator<T> Create<T, T1, T2, T3>(Func<CreateContext, T1, T2, T3, T> create,
+		public static IComplexGenerator<T> Create<T, T1, T2, T3>(Func<CreateContext, T1, T2, T3, T> create,
 															   IGenerator<T1> generator1,
 															   IGenerator<T2> generator2, IGenerator<T3> generator3)
 		{
