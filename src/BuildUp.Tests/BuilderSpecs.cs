@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using BuildUp.Builders;
 using BuildUp.ValueGenerators;
@@ -10,35 +11,76 @@ namespace BuildUp.Tests
 	[TestFixture]
 	public class BuilderSpecs
 	{
+		private void AssertObjectsMatch<TObject,TCompare>(IGenerator<TObject> generator, Func<TObject,TCompare> map, TCompare[] expected)
+		{
+			var actual = generator.Take(expected.Length);
+			var mapped = actual.Select(map);
+			mapped.ShouldMatchSequence(expected);
+		}
 
 		[Test]
 		public void building_with_default_generators()
 		{
-			var generator = new LittleManBuilder();
-			var expected = new[]
-			{new {Name = "Little Man 1", Age = 38}, new {Name = "Little Man 2", Age = 38}, new {Name = "Little Man 3", Age = 38}};
-			generator.Take(3).Select(x => new {x.Name, x.Age}).ShouldMatchSequence(expected);
+			var builder = new MutablePersonBuilder();
+			var expected = new[] { new { Name = "Man 1", Age = 38 }, new { Name = "Man 2", Age = 38 }, new { Name = "Man 3", Age = 38 } };
+			AssertObjectsMatch(builder, x => new { x.Name, x.Age }, expected);
 		}
 
         [Test]
-        public void building_after_changing_a_child_generator()
+        public void building_after_changing_a_child_generator_in_place()
         {
-            var generator = new LittleManBuilder().WithName(StringGenerators.Numbered("Super Little Man {1}"));
-            var expected = new[] { new { Name = "Super Little Man 1", Age = 38 }, new { Name = "Super Little Man 2", Age = 38 }, new { Name = "Super Little Man 3", Age = 38 } };
-            generator.Take(3).Select(x => new { x.Name, x.Age }).ShouldMatchSequence(expected);
+            var builder = new MutablePersonBuilder().WithName(StringGenerators.Numbered("Super Man {1}"));
+            var expected = new[] { new { Name = "Super Man 1", Age = 38 }, new { Name = "Super Man 2", Age = 38 }, new { Name = "Super Man 3", Age = 38 } };
+			AssertObjectsMatch(builder, x => new { x.Name, x.Age }, expected);
         }
 
         [Test]
-        public void building_after_changing_both_child_generators()
+        public void building_after_changing_multiple_child_generators_in_place()
         {
-            var generator = new LittleManBuilder().WithName(StringGenerators.Numbered("Super Little Man {1}")).WithAge(IntGenerators.Incrementing(30, 2));
-            var expected = new[] { new { Name = "Super Little Man 1", Age = 30 }, new { Name = "Super Little Man 2", Age = 32 }, new { Name = "Super Little Man 3", Age = 34 } };
-            generator.Take(3).Select(x => new { x.Name, x.Age }).ShouldMatchSequence(expected);
+            var builder = new MutablePersonBuilder()
+				.WithName(StringGenerators.Numbered("Super Man {1}"))
+				.WithAge(IntGenerators.Incrementing(30, 2));
+            var expected = new[] { new { Name = "Super Man 1", Age = 30 }, new { Name = "Super Man 2", Age = 32 }, new { Name = "Super Man 3", Age = 34 } };
+			AssertObjectsMatch(builder, x => new { x.Name, x.Age }, expected);
         }
 
-		public class LittleMan
+		[Test]
+		public void copy_should_use_new_generator()
 		{
-			public LittleMan(string name, int age)
+			var builder = new ImmutablePersonBuilder().WithName(StringGenerators.Numbered("Super Man {1}"));
+			var expected = new[] { new { Name = "Super Man 1", Age = 38 }, new { Name = "Super Man 2", Age = 38 }, new { Name = "Super Man 3", Age = 38 } };
+			AssertObjectsMatch(builder, x => new { x.Name, x.Age }, expected);
+		}
+
+		[Test]
+		public void copy_should_use_multiple_new_generators()
+		{
+			var builder = new ImmutablePersonBuilder().WithName(StringGenerators.Numbered("Super Man {1}")).WithAge(IntGenerators.Incrementing(30, 2));
+			var expected = new[] { new { Name = "Super Man 1", Age = 30 }, new { Name = "Super Man 2", Age = 32 }, new { Name = "Super Man 3", Age = 34 } };
+			AssertObjectsMatch(builder, x => new { x.Name, x.Age }, expected);
+		}
+
+		[Test]
+		public void creating_modified_copies_should_not_modify_originals()
+		{
+			var first = new ImmutablePersonBuilder();
+			var second = first.WithName(StringGenerators.Numbered("Super Man {1}"));
+			var third = second.WithAge(IntGenerators.Incrementing(38, 1));
+
+			var expected = new[] { new { Name = "Man 1", Age = 38 }, new { Name = "Man 2", Age = 38 }, new { Name = "Man 3", Age = 38 } };
+			AssertObjectsMatch(first, x => new { x.Name, x.Age }, expected);
+
+			expected = new[] { new { Name = "Super Man 1", Age = 38 }, new { Name = "Super Man 2", Age = 38 }, new { Name = "Super Man 3", Age = 38 } };
+			AssertObjectsMatch(second, x => new { x.Name, x.Age }, expected);
+
+			expected = new[] { new { Name = "Super Man 1", Age = 38 }, new { Name = "Super Man 2", Age = 39 }, new { Name = "Super Man 3", Age = 40 } };
+			AssertObjectsMatch(third, x => new { x.Name, x.Age }, expected);
+		}
+
+
+		public class Person
+		{
+			public Person(string name, int age)
 			{
 				Name = name;
 				Age = age;
@@ -49,34 +91,50 @@ namespace BuildUp.Tests
 			public int Age { get; private set; }
 		}
 
-		public class LittleManBuilder : BuilderBase<LittleMan,LittleManBuilder>
+		public class MutablePersonBuilder : BuilderBase<Person,MutablePersonBuilder>
 		{
-            protected override IGenerator<LittleMan> GetDefaultGenerator()
-            {
-                return Generator.Create
-                (
-                    (context, name, age) => new LittleMan(name, age),
-                    StringGenerators.Numbered("Little Man {1}"),
-                    Generator.Constant(38)
-                );
-            }
+			private IGenerator<string> names = StringGenerators.Numbered("Man {1}");
+			private IGenerator<int> ages = Generator.Constant(38);
 
-            // The problem with these With* modifying methods is they rely on the index of the
-            // generators used by the create function. If the position of two constructor
-            // parameters of the same type were changed, then refactoring tools would
-            // not change this logic. Possibly need to use expressions and some funky
-            // syntax to make this more refactoring friendly, e.g. 
-
-			public LittleManBuilder WithName(IGenerator<string> name)
+			protected override IGenerator<Person> GetGenerator()
 			{
-				return ReplaceChildAtIndex(0, name);
+				return from name in names
+					   from age in ages
+					   select new Person(name, age);
 			}
 
-			public LittleManBuilder WithAge(IGenerator<int> age)
-            {
-				return ReplaceChildAtIndex(1, age);
-            }
-            
+			public MutablePersonBuilder WithName(IGenerator<string> names)
+			{
+				return Change(me => me.names = names);
+			}
+
+			public MutablePersonBuilder WithAge(IGenerator<int> ages)
+			{
+				return Change(me => me.ages = ages);
+			}
+		}
+
+		public class ImmutablePersonBuilder : BuilderBase<Person, ImmutablePersonBuilder>
+		{
+			private IGenerator<string> names = StringGenerators.Numbered("Man {1}");
+			private IGenerator<int> ages = Generator.Constant(38);
+
+			protected override IGenerator<Person> GetGenerator()
+			{
+				return from name in names
+					   from age in ages
+					   select new Person(name, age);
+			}
+
+			public ImmutablePersonBuilder WithName(IGenerator<string> names)
+			{
+				return Copy(me => me.names = names);
+			}
+
+			public ImmutablePersonBuilder WithAge(IGenerator<int> ages)
+			{
+				return Copy(me => me.ages = ages);
+			}
 		} 
 	}
 }

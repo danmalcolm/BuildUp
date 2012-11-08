@@ -5,14 +5,14 @@ namespace BuildUp.Tests.BuilderExamples.Builders
 {
 	public class HotelBuilder : BuilderBase<Hotel,HotelBuilder>
 	{
-		protected override IGenerator<Hotel> GetDefaultGenerator()
+		private readonly IGenerator<string> codes = StringGenerators.Numbered("hotel-{1}");  
+		private readonly IGenerator<string> names = StringGenerators.Numbered("Hotel {1}");
+
+		protected override IGenerator<Hotel> GetGenerator()
 		{
-			return Generator.Create
-			(
-				(context, code, name) => new Hotel(code, name),
-				StringGenerators.Numbered("hotel-{1}"),
-				StringGenerators.Numbered("Hotel {1}")
-			);
+			return from code in codes
+			       from name in names
+			       select new Hotel(code, name);
 		}
 	}
 }

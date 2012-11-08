@@ -5,14 +5,21 @@ namespace BuildUp.Tests.BuilderExamples.Builders
 {
 	public class CustomerBuilder : BuilderBase<Customer,CustomerBuilder>
 	{
-		protected override IGenerator<Customer> GetDefaultGenerator()
+		private IGenerator<string> codes = StringGenerators.Numbered("Customer-{1}");
+		private IGenerator<Name> names = Names.Default;
+
+		protected override IGenerator<Customer> GetGenerator()
 		{
-			return Generator.Create
-			(
-				(context, code, name) => new Customer(code, name),
-				StringGenerators.Numbered("Customer-{1}"),
-				Names.Default
-			);
+			return from code in codes
+			       from name in names
+			       select new Customer(code, name);
 		}
+
+		// alternative creation of complex generator
+		protected IGenerator<Customer> GetGenerator2()
+		{
+			return Generator.Create((c, code, name) => new Customer(code, name), codes, names);
+		}
+
 	}
 }

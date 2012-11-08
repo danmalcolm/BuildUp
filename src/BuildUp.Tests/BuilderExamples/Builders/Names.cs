@@ -9,9 +9,9 @@ namespace BuildUp.Tests.BuilderExamples.Builders
 		{
 			get
 			{
-				return Generator.Create((context, firstName, lastName) => new Name("Mr", firstName, lastName),
-				                              StringGenerators.Constant("John"),
-				                              StringGenerators.Numbered("Last Name {1}"));
+				return from firstName in Generator.Constant("John")
+				       from lastName in StringGenerators.Numbered("Last Name {1}")
+				       select new Name("Mr", firstName, lastName);
 			}
 		}
 	}

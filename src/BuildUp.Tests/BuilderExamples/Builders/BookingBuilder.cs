@@ -7,30 +7,31 @@ namespace BuildUp.Tests.BuilderExamples.Builders
 {
 	public class BookingBuilder : BuilderBase<Booking, BookingBuilder>
 	{
-		protected override IGenerator<Booking> GetDefaultGenerator()
+		private IGenerator<Hotel> hotels = new HotelBuilder();
+		private IGenerator<Customer> customers = new CustomerBuilder();
+		private IGenerator<DateTime> startDates = DateTimeGenerators.IncrementingDays(new DateTime(2012, 1, 1));
+
+		protected override IGenerator<Booking> GetGenerator()
 		{
-			return Generator.Create
-			(
-				(context, hotel, customer, startDate) => new Booking(hotel, customer, startDate),
-				new HotelBuilder(),
-				new CustomerBuilder(),
-				DateTimeGenerators.IncrementingDays(DateTime.Now.Date)
-			);
+			return from hotel in hotels
+			       from customer in customers
+			       from date in startDates
+			       select new Booking(hotel, customer, date);
 		}
 
 		public BookingBuilder AtHotel(IGenerator<Hotel> hotels)
 		{
-			return ReplaceChildAtIndex(0, hotels);
+			return Copy(me => me.hotels = hotels);
 		}
 
 		public BookingBuilder WithCustomer(IGenerator<Customer> customers)
 		{
-			return ReplaceChildAtIndex(1, customers);
+			return Copy(me => me.customers = customers);
 		}
 
 		public BookingBuilder StartingOn(IGenerator<DateTime> startDates)
 		{
-			return ReplaceChildAtIndex(2, startDates);
+			return Copy(me => me.startDates = startDates);
 		}
 	}
 }
