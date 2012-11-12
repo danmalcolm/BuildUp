@@ -1,5 +1,4 @@
-﻿using BuildUp.Builders;
-using BuildUp.ValueGenerators;
+﻿using BuildUp.ValueGenerators;
 
 namespace BuildUp.Tests.BuilderExamples.Builders
 {
@@ -18,7 +17,7 @@ namespace BuildUp.Tests.BuilderExamples.Builders
 		// alternative creation of complex generator
 		protected IGenerator<Customer> GetGenerator2()
 		{
-			return Generator.Create((c, code, name) => new Customer(code, name), codes, names);
+			return Generator.Create((code, name) => new Customer(code, name), codes, names);
 		}
 
 	}

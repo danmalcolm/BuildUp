@@ -16,7 +16,7 @@ namespace BuildUp.Utility.Reflection
 		}
 	}
 	// TODO: Improve efficiency by: caching accessors, using compiled expression trees to get / set
-	// Priority right now is best API for IGenerators
+
 	public class MemberAccessor<TObject, TMember>
 	{
 		private readonly PropertyInfo property;

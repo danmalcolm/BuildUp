@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using BuildUp.Builders;
 using BuildUp.ValueGenerators;
 
 namespace BuildUp.Tests.BuilderExamples.Builders
 {
 	public class BookingBuilder : BuilderBase<Booking, BookingBuilder>
 	{
-		private IGenerator<Hotel> hotels = new HotelBuilder();
+		private IGenerator<Hotel> hotels = new HotelBuilder().Freeze();
 		private IGenerator<Customer> customers = new CustomerBuilder();
 		private IGenerator<DateTime> startDates = DateTimeGenerators.IncrementingDays(new DateTime(2012, 1, 1));
 

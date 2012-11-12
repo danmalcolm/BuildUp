@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace BuildUp
 {
 	/// <summary>
-	/// Provides access by enumerating an existing sequence
+	/// Provides objects from an existing sequence
 	/// </summary>
 	/// <typeparam name="TObject"></typeparam>
 	public class SequenceGenerator<TObject> : IGenerator<TObject>

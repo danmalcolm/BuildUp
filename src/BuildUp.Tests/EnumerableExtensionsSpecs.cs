@@ -33,7 +33,7 @@ namespace BuildUp.Tests
 		{
 			var generator = Generator.Create
 				(
-					(context, name, age) => new Person(name, age),
+					(name, age) => new Person(name, age),
 					StringGenerators.Numbered("Little Man {1}"),
 					Generator.Constant(38)
 				).Loop(2);
@@ -41,6 +41,24 @@ namespace BuildUp.Tests
 
 		}
 
-		
+		private class Person
+		{
+			public Person(string name, int age)
+			{
+				Name = name;
+				Age = age;
+			}
+
+			public string Name { get; private set; }
+
+			public int Age { get; private set; }
+
+			public string FavouriteColour { get; set; }
+
+			public void ChangeName(string name)
+			{
+				Name = name;
+			}
+		}
 	}
 }

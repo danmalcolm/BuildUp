@@ -1,30 +1,8 @@
 -----------------------------------------
 
-ComplexGenerators - to support strong typing of child generators, do we code-gen items from 1 to 16 child generators, e.g. using a Tuple or similar?
+Generate the versions of Generators.Select<T1, T2, T3> etc use T4?
 
 -----------------------------------------
-
-Restructuring
-
-Builder needs to support substitution of child generators used in constructor, e.g. 
-
-OrderBuilder
-	.WithCustomer(customers) // This should replace the generator used to supply param for the Order ctor
-	.WithStatus(OrderStatus.Accepted) // This is a simple set operation
-
-// What if things are called in this order?
-OrderBuilder
-	.WithStatus(OrderStatus.Accepted)
-	.WithCustomer(customers)
-
-
-Generators are immutable, which means that a builder "loses" access to the generator with the constructor call.
-
-Does builder become mutable and allow change in state? Not good, don't get reuse, e.g. creating more specialised ones.
-
-Builder contains generators used for ctor call + changes to objects after created? Then, you can't leverage all the built-in generator logic, just the strongly typed With... methods.
-
-Builder inherits from ComplexGenerator and can change child sources using protected methods? Different generator is returned. If you use any of the other extension methods that return IGenerator<T>, you'll no longer have access to the builder class. Not dissimilar to OrderedEnumerable etc. You can't go something.OrderBy(.).Take(.).ThenBy()
 
 
 -----------------------------------------
@@ -56,12 +34,4 @@ Have specific things like SSN and ZipCode (US), etc
 -----------------------------------------
 
 
------------------------------------------
 
-Generate the versions of Generators.Select<T1, T2, T3> etc use T4?
-
------------------------------------------
-
-Use named keys to access child generators within ChildGeneratorCollection in addition to positional index
-
------------------------------------------

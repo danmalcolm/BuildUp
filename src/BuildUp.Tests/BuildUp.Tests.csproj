@@ -51,7 +51,6 @@
     <Compile Include="BuilderExamples\Name.cs" />
     <Compile Include="Common\AssertionExtensions.cs" />
     <Compile Include="Common\CollectionAssertionExtensions.cs" />
-    <Compile Include="Common\ContextSpecification.cs" />
     <Compile Include="BuilderExamples\Booking.cs" />
     <Compile Include="BuilderExamples\Examples.cs" />
     <Compile Include="BuilderExamples\Customer.cs" />
@@ -65,9 +64,6 @@
     <Compile Include="EnumerableExtensionsSpecs.cs" />
     <Compile Include="GeneratorExtensionsSpecs.cs" />
     <Compile Include="GeneratorSpecs.cs" />
-    <Compile Include="Spikes\MultipleEnumerators.cs" />
-    <Compile Include="Spikes\SelectMany.cs" />
-    <Compile Include="Spikes\TuplesAsTypeParam.cs" />
     <Compile Include="Utility\MemberAccessorSpecs.cs" />
   </ItemGroup>
   <ItemGroup>
