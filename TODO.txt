@@ -28,7 +28,7 @@ Postcodes
 
 US Zipcodes
 
-1000 of each, enough? Measure size of binaries and profile memory and see if something like 100000 names in memory is viable
+How many of each?
 
 -----------------------------------------
 

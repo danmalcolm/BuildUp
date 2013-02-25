@@ -31,12 +31,10 @@ namespace BuildUp.Tests
 		[Test]
 		public void looping_generator_of_complex_objects_should_repeat_same_instances()
 		{
-			var generator = Generator.Create
-				(
-					(name, age) => new Person(name, age),
-					StringGenerators.Numbered("Little Man {1}"),
-					Generator.Constant(38)
-				).Loop(2);
+		    var generator = from name in StringGenerators.Numbered("Little Man {1}")
+		                    from age in Generator.Constant(38)
+		                    select new Person(name, age);
+            generator = generator.Loop(2);
 			generator.Take(4).Distinct().Count().ShouldEqual(2);
 
 		}

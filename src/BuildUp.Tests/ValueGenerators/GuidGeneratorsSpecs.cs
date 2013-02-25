@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using BuildUp.ValueGenerators;
@@ -22,14 +23,16 @@ namespace BuildUp.Tests.ValueGenerators
             sequence1.ShouldMatchSequence(sequence2);
         }
 
-        [Test]
+        [Test,Explicit]
         public void should_not_generate_duplicates()
         {
             const int minSeed = 1;
-            const int maxSeed = 10;
-            const int count = 1000000;
+            const int maxSeed = int.MaxValue;
+            const int count = 1;
             var guids = new ConcurrentDictionary<Guid,int>();
-            Parallel.For(minSeed, maxSeed + 1, seed =>
+            var watch = new Stopwatch();
+            watch.Start();
+            Parallel.For(minSeed, maxSeed, seed =>
             {
                 var generator1 = GuidGenerators.Incrementing(seed);
                 foreach (var guid in generator1.Take(count))
@@ -37,8 +40,9 @@ namespace BuildUp.Tests.ValueGenerators
                     guids.AddOrUpdate(guid, 1, (g, c) => c + 1);
                 }
             });
-
-            guids.Keys.Count.ShouldEqual((maxSeed - minSeed + 1) * count);
+            watch.Stop();
+            Console.WriteLine("Ran test in {0}ms", watch.ElapsedMilliseconds);
+            guids.Keys.LongCount().ShouldEqual((maxSeed - minSeed) * (long)count);
         } 
     }
 }

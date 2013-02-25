@@ -13,12 +13,5 @@ namespace BuildUp.Tests.BuilderExamples.Builders
 			       from name in names
 			       select new Customer(code, name);
 		}
-
-		// alternative creation of complex generator
-		protected IGenerator<Customer> GetGenerator2()
-		{
-			return Generator.Create((code, name) => new Customer(code, name), codes, names);
-		}
-
 	}
 }
