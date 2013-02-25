@@ -24,11 +24,7 @@ namespace BuildUp.Tests
 			var second = generator.Take(5);
 			first.ShouldMatchSequence(second);
 		}
-
-		
-
-		
-
+        
 		[Test]
 		public void modifying_sequence_should_be_applied_to_generated_objects()
 		{

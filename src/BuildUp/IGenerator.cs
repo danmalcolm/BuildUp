@@ -19,7 +19,7 @@ namespace BuildUp
 	public interface IGenerator<out TObject> : IGenerator
 	{
 		/// <summary>
-		/// Creates the objects
+		/// Returns the sequence of objects
 		/// </summary>
 		/// <returns></returns>
 		new IEnumerable<TObject> Build();

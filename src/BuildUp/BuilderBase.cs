@@ -20,8 +20,8 @@ namespace BuildUp
 		where TBuilder : BuilderBase<TObject,TBuilder>, new()
 	{
 		/// <summary>
-		/// Modifies the current instance using the supplied function and returns it. Can be used to reduce the amount
-		/// of code needed to add chainable set-up methods to mutable builder implementations.
+		/// Modifies the current instance using the supplied function and returns the current instance. 
+		/// Designed to reduce the amount of code needed to add chainable set-up methods to mutable builder implementations.
 		/// </summary>
 		/// <example>
 		/// <code> 

@@ -25,7 +25,7 @@ namespace BuildUp
 		public IEnumerable<TObject> Build()
 		{
 			var sequence = getSequence();
-// ReSharper disable LoopCanBeConvertedToQuery - don't want to expose the original sequence, which could be a mutable
+// ReSharper disable LoopCanBeConvertedToQuery - don't want to expose the original sequence, which could be mutable
 			foreach(var item in sequence)
 // ReSharper restore LoopCanBeConvertedToQuery
 			{

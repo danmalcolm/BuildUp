@@ -23,17 +23,5 @@
 		{
 			return Generator.Create(index => string.Format(format, index, index + 1));
 		}
-
-		/// <summary>
-		/// Creates a sequence repeating the same constant value
-		/// </summary>
-		/// <param name="value"></param>
-		/// <returns></returns>
-		public static IGenerator<string> Constant(string value)
-		{
-			return Generator.Create(c => value);
-		}
-
-		
 	}
 }

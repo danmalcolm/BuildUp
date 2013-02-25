@@ -48,6 +48,7 @@
     <Compile Include="SequenceAccessExtensions.cs" />
     <Compile Include="SequenceGenerator.cs" />
     <Compile Include="Utility\Reflection\MemberAccessor.cs" />
+    <Compile Include="ValueGenerators\GuidGenerators.cs" />
     <Compile Include="ValueGenerators\DateTimeGenerators.cs" />
     <Compile Include="ValueGenerators\StringGenerators.cs" />
     <Compile Include="ValueGenerators\IntGenerators.cs" />

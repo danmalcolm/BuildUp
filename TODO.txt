@@ -2,6 +2,12 @@
 
 Generate the versions of Generators.Select<T1, T2, T3> etc use T4?
 
+[NoCopy] - attribute used on builder properties and fields to exclude from copy.
+
+Some kind of solution for child collections?
+
+
+
 -----------------------------------------
 
 

@@ -54,18 +54,18 @@ namespace BuildUp
 		/// Creates a generator that provides objects from an existing sequence
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
-		/// <param name="sequence"></param>
+		/// <param name="getSequence"></param>
 		/// <returns></returns>
-		public static IGenerator<T> FromSequence<T>(Func<IEnumerable<T>> sequence)
+		public static IGenerator<T> FromSequence<T>(Func<IEnumerable<T>> getSequence)
 		{
-			return new SequenceGenerator<T>(sequence);
+			return new SequenceGenerator<T>(getSequence);
 		}
 
 		#endregion
 
 		#region ComplexGenerator creation
 
-		// Below are strongly typed ways of creating ComplexGenerators
+		// Below are shortcut methods used to combine multiple generators
 
 		/// <summary>
 		/// Creates a generator using the supplied function and child generators that provide additional values used by the 

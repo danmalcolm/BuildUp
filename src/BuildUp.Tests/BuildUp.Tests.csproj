@@ -65,6 +65,7 @@
     <Compile Include="GeneratorExtensionsSpecs.cs" />
     <Compile Include="GeneratorSpecs.cs" />
     <Compile Include="Utility\MemberAccessorSpecs.cs" />
+    <Compile Include="ValueGenerators\GuidGeneratorsSpecs.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
