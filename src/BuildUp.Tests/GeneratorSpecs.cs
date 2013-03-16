@@ -28,7 +28,7 @@ namespace BuildUp.Tests
 		[Test]
 		public void modifying_sequence_should_be_applied_to_generated_objects()
 		{
-			var generator = StringGenerators.Numbered("{1}").ModifySequence(x => x.Skip(2));
+			var generator = StringGenerator.Numbered("{1}").ModifySequence(x => x.Skip(2));
 			generator.Take(3).ShouldMatchSequence("3", "4", "5");
 		}
 

@@ -2,10 +2,12 @@
 
 namespace BuildUp.ValueGenerators
 {
-	public static class GuidGenerators
+	public static class GuidGenerator
 	{
 		/// <summary>
         /// Creates a sequence of Guids based on a sequence of random numbers based on the seed value.
+        /// The sequence is deterministic, the same sequence being generated each time, useful
+        /// when a predictable sequence is required.
         /// These follow version 4 UUID format defined in http://www.ietf.org/rfc/rfc4122.txt
         /// <example>
         /// <para>

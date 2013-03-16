@@ -1,6 +1,6 @@
 ﻿namespace BuildUp.ValueGenerators
 {
-	public static class StringGenerators
+	public static class StringGenerator
 	{
 		/// <summary>
 		/// Creates a sequence of strings with numeric values used for the placeholders in a format string. The {0} 
@@ -8,12 +8,12 @@
 		/// placeholder will be replaced by the one-based index. 
 		/// <example>
 		/// <para>
-		/// StringGenerators.Numbered("customer-{0}"); // gives "customer-0", "customer-1", "customer-2" ...
+		/// StringGenerator.Numbered("customer-{0}"); // gives "customer-0", "customer-1", "customer-2" ...
 		/// </para>
 		/// </example>
 		/// <example>
 		/// <para>
-		/// StringGenerators.Numbered("customer-{1}"); // gives "customer-1", "customer-2", "customer-3" ...
+		/// StringGenerator.Numbered("customer-{1}"); // gives "customer-1", "customer-2", "customer-3" ...
 		/// </para>
 		/// </example>
 		/// </summary>

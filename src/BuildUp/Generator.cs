@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using BuildUp.ValueGenerators;
 
 namespace BuildUp
 {
@@ -39,6 +40,17 @@ namespace BuildUp
 
 		#region SequenceGenerator creation
 
+        /// <summary>
+        /// Creates a generator that provides objects from an existing sequence
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="sequence"></param>
+        /// <returns></returns>
+        public static IGenerator<T> FromSequence<T>(params T[] sequence)
+        {
+            return FromSequence((IEnumerable<T>)sequence);
+    	}
+
 		/// <summary>
 		/// Creates a generator that provides objects from an existing sequence
 		/// </summary>
@@ -63,5 +75,6 @@ namespace BuildUp
 
 		#endregion
 
-	}
+        
+    }
 }

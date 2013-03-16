@@ -10,7 +10,7 @@ namespace BuildUp.Tests.BuilderExamples.Builders
 			get
 			{
 				return from firstName in Generator.Constant("John")
-				       from lastName in StringGenerators.Numbered("Last Name {1}")
+				       from lastName in StringGenerator.Numbered("Last Name {1}")
 				       select new Name("Mr", firstName, lastName);
 			}
 		}

@@ -31,7 +31,7 @@ namespace BuildUp.Tests
 		[Test]
 		public void looping_generator_of_complex_objects_should_repeat_same_instances()
 		{
-		    var generator = from name in StringGenerators.Numbered("Little Man {1}")
+		    var generator = from name in StringGenerator.Numbered("Little Man {1}")
 		                    from age in Generator.Constant(38)
 		                    select new Person(name, age);
             generator = generator.Loop(2);

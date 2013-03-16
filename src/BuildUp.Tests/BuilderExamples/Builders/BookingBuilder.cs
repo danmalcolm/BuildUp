@@ -8,7 +8,7 @@ namespace BuildUp.Tests.BuilderExamples.Builders
 	{
 		private IGenerator<Hotel> hotels = new HotelBuilder().Freeze();
 		private IGenerator<Customer> customers = new CustomerBuilder();
-		private IGenerator<DateTime> startDates = DateTimeGenerators.IncrementingDays(new DateTime(2012, 1, 1));
+		private IGenerator<DateTime> startDates = DateGenerator.Incrementing(new DateTime(2012, 1, 1), TimeSpan.FromDays(1));
 
 		protected override IGenerator<Booking> GetGenerator()
 		{

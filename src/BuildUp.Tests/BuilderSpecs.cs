@@ -28,7 +28,7 @@ namespace BuildUp.Tests
         [Test]
         public void building_after_changing_a_child_generator_in_place()
         {
-            var builder = new MutablePersonBuilder().WithName(StringGenerators.Numbered("Super Man {1}"));
+            var builder = new MutablePersonBuilder().WithName(StringGenerator.Numbered("Super Man {1}"));
             var expected = new[] { new { Name = "Super Man 1", Age = 38 }, new { Name = "Super Man 2", Age = 38 }, new { Name = "Super Man 3", Age = 38 } };
 			AssertObjectsMatch(builder, x => new { x.Name, x.Age }, expected);
         }
@@ -37,8 +37,8 @@ namespace BuildUp.Tests
         public void building_after_changing_multiple_child_generators_in_place()
         {
             var builder = new MutablePersonBuilder()
-				.WithName(StringGenerators.Numbered("Super Man {1}"))
-				.WithAge(IntGenerators.Incrementing(30, 2));
+				.WithName(StringGenerator.Numbered("Super Man {1}"))
+				.WithAge(IntGenerator.Incrementing(30, 2));
             var expected = new[] { new { Name = "Super Man 1", Age = 30 }, new { Name = "Super Man 2", Age = 32 }, new { Name = "Super Man 3", Age = 34 } };
 			AssertObjectsMatch(builder, x => new { x.Name, x.Age }, expected);
         }
@@ -46,7 +46,7 @@ namespace BuildUp.Tests
 		[Test]
 		public void copy_should_use_new_generator()
 		{
-			var builder = new ImmutablePersonBuilder().WithName(StringGenerators.Numbered("Super Man {1}"));
+			var builder = new ImmutablePersonBuilder().WithName(StringGenerator.Numbered("Super Man {1}"));
 			var expected = new[] { new { Name = "Super Man 1", Age = 38 }, new { Name = "Super Man 2", Age = 38 }, new { Name = "Super Man 3", Age = 38 } };
 			AssertObjectsMatch(builder, x => new { x.Name, x.Age }, expected);
 		}
@@ -54,7 +54,7 @@ namespace BuildUp.Tests
 		[Test]
 		public void copy_should_use_multiple_new_generators()
 		{
-			var builder = new ImmutablePersonBuilder().WithName(StringGenerators.Numbered("Super Man {1}")).WithAge(IntGenerators.Incrementing(30, 2));
+			var builder = new ImmutablePersonBuilder().WithName(StringGenerator.Numbered("Super Man {1}")).WithAge(IntGenerator.Incrementing(30, 2));
 			var expected = new[] { new { Name = "Super Man 1", Age = 30 }, new { Name = "Super Man 2", Age = 32 }, new { Name = "Super Man 3", Age = 34 } };
 			AssertObjectsMatch(builder, x => new { x.Name, x.Age }, expected);
 		}
@@ -63,8 +63,8 @@ namespace BuildUp.Tests
 		public void creating_modified_copies_should_not_modify_originals()
 		{
 			var first = new ImmutablePersonBuilder();
-			var second = first.WithName(StringGenerators.Numbered("Super Man {1}"));
-			var third = second.WithAge(IntGenerators.Incrementing(38, 1));
+			var second = first.WithName(StringGenerator.Numbered("Super Man {1}"));
+			var third = second.WithAge(IntGenerator.Incrementing(38, 1));
 
 			var expected = new[] { new { Name = "Man 1", Age = 38 }, new { Name = "Man 2", Age = 38 }, new { Name = "Man 3", Age = 38 } };
 			AssertObjectsMatch(first, x => new { x.Name, x.Age }, expected);
@@ -92,7 +92,7 @@ namespace BuildUp.Tests
 
 		public class MutablePersonBuilder : BuilderBase<Person,MutablePersonBuilder>
 		{
-			private IGenerator<string> names = StringGenerators.Numbered("Man {1}");
+			private IGenerator<string> names = StringGenerator.Numbered("Man {1}");
 			private IGenerator<int> ages = Generator.Constant(38);
 
 			protected override IGenerator<Person> GetGenerator()
@@ -115,7 +115,7 @@ namespace BuildUp.Tests
 
 		public class ImmutablePersonBuilder : BuilderBase<Person, ImmutablePersonBuilder>
 		{
-			private IGenerator<string> names = StringGenerators.Numbered("Man {1}");
+			private IGenerator<string> names = StringGenerator.Numbered("Man {1}");
 			private IGenerator<int> ages = Generator.Constant(38);
 
 			protected override IGenerator<Person> GetGenerator()

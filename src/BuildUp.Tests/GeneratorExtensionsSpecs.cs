@@ -50,8 +50,8 @@ namespace BuildUp.Tests
 		[Test]
 		public void combining_2_generators_with_select_many_method_call()
 		{
-			var names = StringGenerators.Numbered("Man {1}");
-			var ages = IntGenerators.Incrementing(30);
+			var names = StringGenerator.Numbered("Man {1}");
+			var ages = IntGenerator.Incrementing(30);
 
 			var generator = names.SelectMany(x => ages, (name, age) => new Person(name, age));
 			generator.Take(3).Select(x => new { x.Name, x.Age }).ShouldMatchSequence(new { Name = "Man 1", Age = 30 }, new { Name = "Man 2", Age = 31 }, new { Name = "Man 3", Age = 32 });
@@ -61,8 +61,8 @@ namespace BuildUp.Tests
 		[Test]
 		public void combining_2_generators_with_select_many_query_syntax()
 		{
-			var generator = from name in StringGenerators.Numbered("Man {1}")
-							from age in IntGenerators.Incrementing(30)
+			var generator = from name in StringGenerator.Numbered("Man {1}")
+							from age in IntGenerator.Incrementing(30)
 							select new Person(name, age);
 			generator.Take(3).Select(x => new { x.Name, x.Age }).ShouldMatchSequence(new { Name = "Man 1", Age = 30 }, new { Name = "Man 2", Age = 31 }, new { Name = "Man 3", Age = 32 });
 
@@ -71,9 +71,9 @@ namespace BuildUp.Tests
 		[Test]
 		public void combining_3_generators_with_select_many_query_syntax()
 		{
-			var generator = from name in StringGenerators.Numbered("Man {1}")
-							from age in IntGenerators.Incrementing(30)
-							from colour in StringGenerators.Numbered("Colour {1}")
+			var generator = from name in StringGenerator.Numbered("Man {1}")
+							from age in IntGenerator.Incrementing(30)
+							from colour in StringGenerator.Numbered("Colour {1}")
 							select new Person(name, age) { FavouriteColour = colour }; // cheers, compiler!
 			var expectedValues = new[]
 			{

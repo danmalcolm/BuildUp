@@ -1,36 +1,46 @@
 BuildUp
 =======
 
-A library to ease the pain of creating test objects for automated testing and demo data.
-
 Introduction
 ------------
 
-If you're writing unit tests against an object model, you'll probably go through the following process:
+A library to ease the pain of creating objects for automated testing or demo data.
 
-I need an Order object in my test, better create one...
+Examples:
 
-Hmm, I've written quite a few tests and now I've got lots of new Order() statements sprinkled throughout. I'm also repeating a lot of order modification logic, like adding lines, setting customers etc. This is a bad thing, because I'll have loads of code to change if the constructor signature changes.  Obviously I shouldn't be newing up and setting up objects repeatedly in my tests. I'd better have a look around at the various patterns for doing this. Hey, the [ObjectMother](http://martinfowler.com/bliki/ObjectMother.html) pattern looks good. 
 
-OK, so the ObjectMother pattern is useful, but I've ended up with a load of methods like CreateOrderWithInStockProducts, 
-CreateOrderWithAnOverseasShippingAddressAndAnOutOfStockProduct. It's hard to remember which tests are sharing these methods. It's also difficult to introduce smaller variations to the Orders being built. Is there a better approach?
 
-Ah ha! The [Test Data Builder](http://c2.com/cgi/wiki?TestDataBuilder) pattern is what I'm after. I can create an OrderBuilder class that creates Orders using some sensible default steps, then add methods to customise how my Orders are initialised when they are built.
+Purpose
+-------
+
+If you're writing unit tests against an object model, this may be familiar:
+
+"I need an Order object in my test, better create one..."
+
+"Hmm, now I've got lots of new Order() statements sprinkled throughout my tests (and my colleages are getting annoyed with me for humming Blue Monday). I'm also repeating a lot of order modification logic, like adding lines, setting customers etc. I'll have loads of code to change if the constructor signature changes and there's lots of repetition. Obviously I shouldn't be newing up and duplicating set-up code in my tests."
+
+"Hey, the [ObjectMother](http://martinfowler.com/bliki/ObjectMother.html) pattern looks good. Yep, definitely useful, but I've ended up with a load of methods like CreateOrderWithInStockProducts, 
+CreateOrderWithAnOverseasShippingAddressAndAnOutOfStockProduct. It's hard to remember which tests are sharing these methods. It's also difficult to introduce smaller variations to the Orders being built. Is there a better approach?"
+
+"Ah ha! The [Test Data Builder](http://c2.com/cgi/wiki?TestDataBuilder) pattern is what I'm after. I can create an OrderBuilder class that creates Orders with some sensible default values, then add methods to customise how my Orders are initialised when they are built. "
 
 There are numerous articles describing a similar evolution from manual object creation to Object Mother to the Test Data Builder pattern http://www.natpryce.com/articles/000714.html http://defragdev.com/blog/?p=147
 
-BuildUp is designed to support the Test Data Builder pattern but tries to add a little more composability to the mix.
+So, is our intrepid developer happy? What happens next?
 
+"I'm a lot happier with my object builders. They seem a little bit clunky to build though, lots of repetition. What if I need to build a list of objects, it's hard to write builder classes that support this."
+
+BuildUp is designed to support the Test Data Builder pattern. It also provides an object creation API that advances beyond the idea of having a single monolithic builder class and adds a little more composability to the mix.
+
+- As we saw in the examples above, everything is a sequence
+- Emphasises a declarative, composable style, allowing objects to be generated and combined in interesting ways
 - Provides some common utility functionality, scaffolding and base classes to make new builders easy and quick to build with the minimum of duplication
-- Emphasises a declarative, composable style, allowing values and objects to be generated and combined in interesting ways
 
 
 Using Generators
 ----------------
 
-Generators define a stream of objects.
-
-
+Generators are used to create sequences of objects. BuildUp contains some primitive object generators that support the kinds of sequences that you might need to work with.
 
 
 Using Builders
