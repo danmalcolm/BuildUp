@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using BuildUp.ValueGenerators;
+using BuildUp.Builders;
+using BuildUp.Generators;
 using NUnit.Framework;
 using BuildUp.Tests.Common;
 

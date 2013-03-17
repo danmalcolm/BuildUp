@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
+using BuildUp.Generators;
 using BuildUp.Tests.BuilderExamples.Builders;
-using BuildUp.ValueGenerators;
 using NUnit.Framework;
 using BuildUp.Tests.Common;
 
@@ -36,7 +36,7 @@ namespace BuildUp.Tests.BuilderExamples
 		public void modifying_instances_after_creation()
 		{
 			var notes = StringGenerator.Numbered("Stuff {1}");
-			var customers = new CustomerBuilder().Select(c => c.RecordHistory(DateTime.Now, "some notes")).Take(5);
+			var customers = new CustomerBuilder().Modify(c => c.RecordHistory(DateTime.Now, "some notes")).Take(5);
 		}
 
 		

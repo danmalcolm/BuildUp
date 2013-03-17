@@ -4,8 +4,7 @@ using System.Reflection;
 
 namespace BuildUp.Utility.Reflection
 {
-
-	public class MemberAccessor
+    internal class MemberAccessor
 	{
 		public static MemberAccessor<TObject, TMember> For<TObject, TMember>(Expression<Func<TObject, TMember>> expression)
 		{
@@ -17,7 +16,7 @@ namespace BuildUp.Utility.Reflection
 	}
 	// TODO: Improve efficiency by: caching accessors, using compiled expression trees to get / set
 
-	public class MemberAccessor<TObject, TMember>
+    internal class MemberAccessor<TObject, TMember>
 	{
 		private readonly PropertyInfo property;
 

@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace BuildUp
+namespace BuildUp.Generators
 {
 	public static class ModifySequenceExtensions
 	{

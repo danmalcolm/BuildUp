@@ -1,4 +1,5 @@
-﻿using BuildUp.ValueGenerators;
+﻿using BuildUp.Builders;
+using BuildUp.Generators;
 
 namespace BuildUp.Tests.BuilderExamples.Builders
 {

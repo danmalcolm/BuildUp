@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using BuildUp.ValueGenerators;
 
-namespace BuildUp
+namespace BuildUp.Generators
 {
 	/// <summary>
     /// Creates instances of IGenerator&lt;T&gt; using a range of creation methods
@@ -21,19 +19,32 @@ namespace BuildUp
 		public static IGenerator<T> Constant<T>(T instance)
 		{
 			return Create(index => instance);
-		} 
+		}
 
-		/// <summary>
-		/// Creates a generator that generates each object in a sequence using a function
-		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <param name="create">The function used to generate each object in the sequence. It is invoked with a
-		/// single parameter, which is the zero-based index of the object in the sequence.
-		/// </param>
-		/// <returns></returns>
-		public static IGenerator<T> Create<T>(Func<int, T> create)
+        /// <summary>
+        /// Creates a generator that generates each object in a sequence using a function
+        /// </summary>
+        /// <typeparam name="TObject">The type of object generated</typeparam>
+        /// <param name="create">The function used to generate each object in the sequence. It is invoked with one parameter: the zero-based index of the object in the sequence.
+        /// </param>
+        /// <returns></returns>
+        public static IGenerator<TObject> Create<TObject>(Func<int, TObject> create)
+        {
+            return new SimpleGenerator<TObject,EmptyContext>((c,i) => create(i), () => null);
+        }
+
+	    /// <summary>
+	    /// Creates a generator that generates each object in a sequence using a function
+	    /// </summary>
+	    /// <typeparam name="TObject">The type of object generated</typeparam>
+	    /// <typeparam name="TContext">An additional value made available to the create function </typeparam>
+	    /// <param name="create">The function used to generate each object in the sequence. It is invoked with two parameters, the context value and the zero-based index of the object in the sequence.
+	    /// </param>
+	    /// <param name="createContext"></param>
+	    /// <returns></returns>
+	    public static IGenerator<TObject> Create<TObject,TContext>(Func<TContext,int,TObject> create, Func<TContext> createContext)
 		{
-			return new SimpleGenerator<T>(create);
+			return new SimpleGenerator<TObject,TContext>(create, createContext);
 		}
 
 		#endregion

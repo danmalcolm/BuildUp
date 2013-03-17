@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using BuildUp.Generators;
 
 namespace BuildUp.Tests.BuilderExamples.Builders
 {
@@ -9,7 +10,7 @@ namespace BuildUp.Tests.BuilderExamples.Builders
 	{
 		public static IGenerator<Customer> WithHistoryItem(this IGenerator<Customer> customers, DateTime date, string notes)
 		{
-			return customers.Select(customer => customer.RecordHistory(date, notes));
+			return customers.Modify(customer => customer.RecordHistory(date, notes));
 		}
 	}
 }

@@ -1,9 +1,9 @@
-﻿using System.Linq;
-using BuildUp.ValueGenerators;
-using NUnit.Framework;
+using System.Linq;
+using BuildUp.Generators;
 using BuildUp.Tests.Common;
+using NUnit.Framework;
 
-namespace BuildUp.Tests
+namespace BuildUp.Tests.Generators
 {
 	[TestFixture]
 	public class GeneratorSpecs
@@ -24,7 +24,14 @@ namespace BuildUp.Tests
 			var second = generator.Take(5);
 			first.ShouldMatchSequence(second);
 		}
-        
+
+        [Test]
+        public void simple_generator_with_context()
+        {
+            var generator = Generator.Create((index, context) => index + context, () => 3);
+            generator.Take(5).ShouldMatchSequence(3, 4, 5, 6, 7);
+        }
+
 		[Test]
 		public void modifying_sequence_should_be_applied_to_generated_objects()
 		{

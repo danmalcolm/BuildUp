@@ -1,0 +1,4 @@
+namespace BuildUp.Tests.Generators
+{
+	
+}

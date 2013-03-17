@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Linq.Expressions;
 using BuildUp.Utility.Reflection;
 
-namespace BuildUp
+namespace BuildUp.Generators
 {
 	public static class GeneratorExtensions
 	{
@@ -26,7 +26,7 @@ namespace BuildUp
 		/// <param name="generator"> </param>
 		/// <param name="action"></param>
 		/// <returns></returns>
-		public static IGenerator<TObject> Select<TObject>(this IGenerator<TObject> generator, Action<TObject> action)
+		public static IGenerator<TObject> Modify<TObject>(this IGenerator<TObject> generator, Action<TObject> action)
 		{
 			return generator.Select(x =>
 			{
@@ -105,7 +105,7 @@ namespace BuildUp
 		{
 			var accessor = MemberAccessor.For(expression);
 			Action<TObject> set = x => accessor.SetValue(x, value);
-			return generator.Select(set);
+			return generator.Modify(set);
 		}
 
 	    /// <summary>

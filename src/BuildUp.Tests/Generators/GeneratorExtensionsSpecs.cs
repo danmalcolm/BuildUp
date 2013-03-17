@@ -1,9 +1,9 @@
-﻿using System.Linq;
-using BuildUp.ValueGenerators;
-using NUnit.Framework;
+using System.Linq;
+using BuildUp.Generators;
 using BuildUp.Tests.Common;
+using NUnit.Framework;
 
-namespace BuildUp.Tests
+namespace BuildUp.Tests.Generators
 {
 	[TestFixture]
 	public class GeneratorExtensionsSpecs
@@ -98,7 +98,7 @@ namespace BuildUp.Tests
 		public void modifying_using_action()
 		{
 			var generator1 = Generator.Create(index => new Person("Man " + (index + 1), 20));
-			var generator2 = generator1.Select(man => man.ChangeName("Frank"));
+			var generator2 = generator1.Modify(man => man.ChangeName("Frank"));
 
 			generator1.Take(3).Select(x => new { x.Name, x.Age })
 				.ShouldMatchSequence(new { Name = "Man 1", Age = 20 }, new { Name = "Man 2", Age = 20 }, new { Name = "Man 3", Age = 20 });

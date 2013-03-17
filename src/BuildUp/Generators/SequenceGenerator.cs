@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace BuildUp
+namespace BuildUp.Generators
 {
 	/// <summary>
 	/// Provides objects from an existing sequence

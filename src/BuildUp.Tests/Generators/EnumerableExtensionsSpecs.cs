@@ -1,9 +1,9 @@
 using System.Linq;
+using BuildUp.Generators;
 using BuildUp.Tests.Common;
-using BuildUp.ValueGenerators;
 using NUnit.Framework;
 
-namespace BuildUp.Tests
+namespace BuildUp.Tests.Generators
 {
 	[TestFixture]
 	public class EnumerableExtensionsSpecs

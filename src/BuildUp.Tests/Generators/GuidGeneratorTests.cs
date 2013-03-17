@@ -1,25 +1,33 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using BuildUp.ValueGenerators;
-using NUnit.Framework;
+using BuildUp.Generators;
 using BuildUp.Tests.Common;
+using NUnit.Framework;
 
-namespace BuildUp.Tests.ValueGenerators
+namespace BuildUp.Tests.Generators
 {
-    public class GuidGeneratorsSpecs
+    public class GuidGeneratorTests
     {
         
         [Test]
-        public void different_generators_using_same_seed_should_produce_identical_sequences()
+        public void incrementing_generators_using_same_seed_should_produce_identical_sequences()
         {
             var generator1 = GuidGenerator.Incrementing(10);
             var generator2 = GuidGenerator.Incrementing(10);
             var sequence1 = generator1.Take(10).ToArray();
             var sequence2 = generator2.Take(10).ToArray();
+            sequence1.ShouldMatchSequence(sequence2);
+        }
+
+        [Test]
+        public void incrementing_generator_should_repeat_identical_sequences()
+        {
+            var generator1 = GuidGenerator.Incrementing(10);
+            var sequence1 = generator1.Take(10).ToArray();
+            var sequence2 = generator1.Take(10).ToArray();
             sequence1.ShouldMatchSequence(sequence2);
         }
 

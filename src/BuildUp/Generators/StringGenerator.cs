@@ -1,4 +1,4 @@
-﻿namespace BuildUp.ValueGenerators
+namespace BuildUp.Generators
 {
 	public static class StringGenerator
 	{

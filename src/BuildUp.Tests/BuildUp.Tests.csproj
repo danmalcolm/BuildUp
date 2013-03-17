@@ -57,15 +57,14 @@
     <Compile Include="BuilderExamples\CustomerHistoryItem.cs" />
     <Compile Include="BuilderExamples\Hotel.cs" />
     <Compile Include="BuilderSpecs.cs" />
-    <Compile Include="Demos\ReadMeExamples.cs" />
-    <Compile Include="Person.cs" />
+    <Compile Include="Generators\EnumerableExtensionsSpecs.cs" />
+    <Compile Include="Generators\GeneratorExtensionsSpecs.cs" />
+    <Compile Include="Generators\GeneratorSpecs.cs" />
+    <Compile Include="Generators\GuidGeneratorTests.cs" />
+    <Compile Include="Generators\Person.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Common\Specification.cs" />
-    <Compile Include="EnumerableExtensionsSpecs.cs" />
-    <Compile Include="GeneratorExtensionsSpecs.cs" />
-    <Compile Include="GeneratorSpecs.cs" />
     <Compile Include="Utility\MemberAccessorSpecs.cs" />
-    <Compile Include="ValueGenerators\GuidGeneratorsSpecs.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -76,7 +75,9 @@
       <Name>BuildUp</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="ValueGenerators\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -1,21 +1,24 @@
-﻿using System;
+using System;
 
-namespace BuildUp.ValueGenerators
+namespace BuildUp.Generators
 {
+    /// <summary>
+    /// Creates generators for Guids
+    /// </summary>
 	public static class GuidGenerator
 	{
-		/// <summary>
-        /// Creates a sequence of Guids based on a sequence of random numbers based on the seed value.
-        /// The sequence is deterministic, the same sequence being generated each time, useful
-        /// when a predictable sequence is required.
-        /// These follow version 4 UUID format defined in http://www.ietf.org/rfc/rfc4122.txt
+        /// <summary>
+        /// Generates a sequence of Guids based on random numbers generated using the seed value.
+        /// The sequence is deterministic, i.e., using the same seed will result in the same 
+        /// sequence, making it useful where a predictable, known sequence is required.
+        /// The values generated follow version 4 UUID format defined in http://www.ietf.org/rfc/rfc4122.txt
         /// <example>
         /// <para>
         /// 
         /// </para>
         /// </example>
         /// </summary>
-        /// <param name="start"></param>
+        /// <param name="seed"> </param>
         /// <returns></returns>
         public static IGenerator<Guid> Incrementing(int seed)
         {
@@ -57,9 +60,7 @@ namespace BuildUp.ValueGenerators
       values.
              */
 
-            var random = new Random(seed);
-
-            return Generator.Create(index =>
+            return Generator.Create((random,index) =>
             {
                 var nextBytes = new byte[16];
                 random.NextBytes(nextBytes);
@@ -76,7 +77,7 @@ namespace BuildUp.ValueGenerators
 
                 var next = new Guid(nextBytes);
                 return next;
-            });
+            }, () => new Random(seed));
         }
 
 

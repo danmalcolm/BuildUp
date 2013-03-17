@@ -2,8 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
+using BuildUp.Generators;
 
-namespace BuildUp
+namespace BuildUp.Builders
 {
 	/// <summary>
 	/// Base class for typical *Builder classes (CustomerBuilder, OrderBuilder) that allow test code to vary values used
