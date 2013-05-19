@@ -34,4 +34,9 @@ namespace BuildUp.Generators
 			return Build();
 		}
 	}
+
+    internal class EmptyContext
+    {
+        public static readonly EmptyContext Instance = new EmptyContext();
+    }
 }

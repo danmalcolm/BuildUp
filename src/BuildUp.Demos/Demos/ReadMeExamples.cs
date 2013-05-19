@@ -13,7 +13,7 @@ namespace BuildUp.Demos.Demos
             var codes = StringGenerator.Numbered("user-{0}");
             var ages = Generator.Constant(21);
             var randomAges = IntGenerator.Random(18, 60, 5);
-            var boringColours = Generator.FromSequence("grey", "olive");
+            var boringColours = Generator.Values("grey", "olive");
 
             // These are the building blocks that can be combined in
             // interesting ways to create more interesting objects
@@ -49,7 +49,7 @@ namespace BuildUp.Demos.Demos
             adminUserGenerator = userGenerator.Set(c => c.IsAdmin, true);
 
             // This generator will set a property based on values from another generator
-            var niceColours = Generator.FromSequence("Pink", "Red", "Green", "Lilac").Loop(4);
+            var niceColours = Generator.Values("Pink", "Red", "Green", "Lilac").Loop(4);
             var artisticUserGenerator = userGenerator.Set(c => c.FavouriteColour, niceColours);
         }
 
@@ -83,7 +83,7 @@ namespace BuildUp.Demos.Demos
             // { UserName="customer-0"}, { UserName="customer-1"}, { UserName="customer-2"} ...
 
             // Generates value using a function
-            var generator4 = Generator.FromSequence(new[] { "Red", "Green", "Blue" });
+            var generator4 = Generator.Values(new[] { "Red", "Green", "Blue" });
             var values4 = generator4.Build();
             // "Red", "Green", "Blue"
         }
@@ -115,7 +115,7 @@ namespace BuildUp.Demos.Demos
             var generator4 = StringGenerator.Numbered("Item {0}");
             var values4 = generator4.Build(); // "Item 0", "Item 1", "Item 2" ...
 
-            var generator5 = GuidGenerator.Incrementing(1);
+            var generator5 = GuidGenerator.Random(1);
             var values5 = generator5.Build();
         }
 

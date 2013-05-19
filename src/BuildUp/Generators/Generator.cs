@@ -11,7 +11,7 @@ namespace BuildUp.Generators
 		#region Simple generator creation
 
 		/// <summary>
-		/// Creates a generator that generates an infinite sequence repeating a single object
+		/// Creates a generator that generates an infinite sequence repeating a single value
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <param name="instance"></param>
@@ -49,17 +49,17 @@ namespace BuildUp.Generators
 
 		#endregion
 
-		#region SequenceGenerator creation
+		#region Sequences
 
         /// <summary>
-        /// Creates a generator that provides objects from an existing sequence
+        /// Creates a generator that provides zero or more existing values
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="sequence"></param>
         /// <returns></returns>
-        public static IGenerator<T> FromSequence<T>(params T[] sequence)
+        public static IGenerator<T> Values<T>(params T[] sequence)
         {
-            return FromSequence((IEnumerable<T>)sequence);
+            return Sequence(sequence);
     	}
 
 		/// <summary>
@@ -68,7 +68,7 @@ namespace BuildUp.Generators
 		/// <typeparam name="T"></typeparam>
 		/// <param name="sequence"></param>
 		/// <returns></returns>
-		public static IGenerator<T> FromSequence<T>(IEnumerable<T> sequence)
+		public static IGenerator<T> Sequence<T>(IEnumerable<T> sequence)
 		{
 			return new SequenceGenerator<T>(() => sequence);
 		}
@@ -79,7 +79,7 @@ namespace BuildUp.Generators
 		/// <typeparam name="T"></typeparam>
 		/// <param name="getSequence"></param>
 		/// <returns></returns>
-		public static IGenerator<T> FromSequence<T>(Func<IEnumerable<T>> getSequence)
+		public static IGenerator<T> Sequence<T>(Func<IEnumerable<T>> getSequence)
 		{
 			return new SequenceGenerator<T>(getSequence);
 		}

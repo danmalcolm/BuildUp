@@ -36,8 +36,24 @@ namespace BuildUp.Tests.Generators
 		                    select new Person(name, age);
             generator = generator.Loop(2);
 			generator.Take(4).Distinct().Count().ShouldEqual(2);
-
 		}
+
+        [Test]
+        public void repeat_each()
+        {
+            var generator = Generator.Values(1, 2, 3).RepeatEach(3);
+            generator.Take(9).ShouldMatchSequence(1, 1, 1, 2, 2, 2, 3, 3, 3);
+        }
+
+        [Test]
+        public void repeat_each_with_generator_of_complex_objects_should_repeat_same_instances()
+        {
+            var generator = from name in StringGenerator.Numbered("Little Man {1}")
+                            from age in Generator.Constant(38)
+                            select new Person(name, age);
+            generator = generator.RepeatEach(3);
+            generator.Take(6).Distinct().Count().ShouldEqual(2);
+        }
 
 		private class Person
 		{

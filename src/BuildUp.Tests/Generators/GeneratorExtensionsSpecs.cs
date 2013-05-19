@@ -22,7 +22,7 @@ namespace BuildUp.Tests.Generators
 		{
 			var generator = Generator.Create(index => new Person("Man " + (index + 1), 20));
 			var colours = new[] { "Pink", "Blue", "Green", "Yellow" };
-			var colourGenerator = Generator.FromSequence(colours);
+			var colourGenerator = Generator.Values(colours);
 			var generator1 = generator.Set(x => x.FavouriteColour, colourGenerator);
 			
 			generator1.Take(4).Select(x => x.FavouriteColour).ShouldMatchSequence(colours);
@@ -31,8 +31,8 @@ namespace BuildUp.Tests.Generators
 		[Test]
 		public void combining_two_generators()
 		{
-			var generator1 = Generator.FromSequence(new[] {"a", "b", "c", "d"});
-			var generator2 = Generator.FromSequence(new[] {"1", "2", "3", "4"});
+			var generator1 = Generator.Values(new[] {"a", "b", "c", "d"});
+			var generator2 = Generator.Values(new[] {"1", "2", "3", "4"});
 			var combined = generator1.Combine(generator2, (x, y) => x + y);
 			combined.Take(4).ShouldMatchSequence("a1", "b2", "c3", "d4");
 		}
@@ -41,8 +41,8 @@ namespace BuildUp.Tests.Generators
 		[Test]
 		public void combining_two_generators_length_should_be_length_of_shortest()
 		{
-			var generator1 = Generator.FromSequence(new[] { "a", "b", "c", "d" });
-			var generator2 = Generator.FromSequence(new[] { "1", "2" });
+			var generator1 = Generator.Values(new[] { "a", "b", "c", "d" });
+			var generator2 = Generator.Values(new[] { "1", "2" });
 			var combined = generator1.Combine(generator2, (x, y) => x + y);
 			combined.Take(10).ShouldMatchSequence("a1", "b2");
 		}
@@ -105,6 +105,57 @@ namespace BuildUp.Tests.Generators
 			generator2.Take(3).Select(x => new { x.Name, x.Age })
 				.ShouldMatchSequence(new { Name = "Frank", Age = 20 }, new { Name = "Frank", Age = 20 }, new { Name = "Frank", Age = 20 });
 		}
+
+        [Test]
+        public void modifying_using_action_and_values_from_another_generator()
+        {
+            var generator1 = Generator.Create(index => new Person("Man " + (index + 1), 20));
+            var generator2 = StringGenerator.Numbered("Frank Man {1}");
+            var generator3 = generator1.Modify(generator2, (man, name) => man.ChangeName(name));
+
+            generator1.Take(3).Select(x => new { x.Name, x.Age })
+                .ShouldMatchSequence(new { Name = "Man 1", Age = 20 }, new { Name = "Man 2", Age = 20 }, new { Name = "Man 3", Age = 20 });
+            generator3.Take(3).Select(x => new { x.Name, x.Age })
+                .ShouldMatchSequence(new { Name = "Frank Man 1", Age = 20 }, new { Name = "Frank Man 2", Age = 20 }, new { Name = "Frank Man 3", Age = 20 });
+        }
+
+
+        [Test]
+        public void when_building_sequences_of_values_should_create_collections_of_length_specified()
+        {
+            var generator1 = IntGenerator.Incrementing(1);
+            var generator2 = generator1.SequencesOf(2);
+            var collections = generator2.Take(3).ToList();
+            collections[0].ShouldMatchSequence(1, 2);
+            collections[1].ShouldMatchSequence(3, 4);
+            collections[2].ShouldMatchSequence(5, 6);
+        }
+
+
+        [Test]
+        public void when_building_sequences_of_values_should_create_collections_of_lengths_specified_by_generator()
+        {
+            var generator1 = IntGenerator.Incrementing(1);
+            var generator2 = generator1.SequencesOf(IntGenerator.Incrementing(1));
+            var collections = generator2.Take(3).ToList();
+            collections[0].ShouldMatchSequence(1);
+            collections[1].ShouldMatchSequence(2, 3);
+            collections[2].ShouldMatchSequence(4, 5, 6);
+        }
+
+        [Test]
+        public void when_building_sequences_of_values_should_stop_populating_collections_when_at_end_of_source_sequence()
+        {
+            var generator1 = Generator.Values(1, 2, 3, 4, 5, 6, 7);
+            var generator2 = generator1.SequencesOf(IntGenerator.Incrementing(1));
+            var collections = generator2.Take(5).ToList();
+            collections[0].ShouldMatchSequence(1);
+            collections[1].ShouldMatchSequence(2, 3);
+            collections[2].ShouldMatchSequence(4, 5, 6); 
+            collections[3].ShouldMatchSequence(7);
+            collections[4].ShouldBeEmpty();
+        }
+
 
 		private class Person
 		{

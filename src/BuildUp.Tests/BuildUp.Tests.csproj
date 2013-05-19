@@ -57,6 +57,7 @@
     <Compile Include="BuilderExamples\CustomerHistoryItem.cs" />
     <Compile Include="BuilderExamples\Hotel.cs" />
     <Compile Include="BuilderSpecs.cs" />
+    <Compile Include="Generators\DateGeneratorSpecs.cs" />
     <Compile Include="Generators\EnumerableExtensionsSpecs.cs" />
     <Compile Include="Generators\GeneratorExtensionsSpecs.cs" />
     <Compile Include="Generators\GeneratorSpecs.cs" />

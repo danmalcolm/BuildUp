@@ -3,7 +3,7 @@ using System;
 namespace BuildUp.Generators
 {
     /// <summary>
-    /// Creates generators for Guids
+    /// Provides access to some useful Guid value generators
     /// </summary>
 	public static class GuidGenerator
 	{
@@ -20,7 +20,7 @@ namespace BuildUp.Generators
         /// </summary>
         /// <param name="seed"> </param>
         /// <returns></returns>
-        public static IGenerator<Guid> Incrementing(int seed)
+        public static IGenerator<Guid> Random(int seed)
         {
             /*
             http://www.ietf.org/rfc/rfc4122.txt

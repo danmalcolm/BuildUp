@@ -29,7 +29,7 @@ namespace BuildUp.Builders
 		/// public class BookingBuilder : BuilderBase&lt;Booking, BookingBuilder&gt;
 		///	{
 		///		private IGenerator&lt;Hotel&gt; hotels = new HotelBuilder();
-		///		private IGenerator&lt;DateTime&gt; startDates = DateGenerator.Incrementing(new DateTime(2012, 1, 1));
+		///		private IGenerator&lt;DateTime&gt; startDates = DateGenerator.Random(new DateTime(2012, 1, 1));
 		///
 		///		// ...
 		///
