@@ -12,9 +12,12 @@ Some kind of solution for child collections?
 
 -----------------------------------------
 
-Buildup.TestData - lots of generators:
+Buildup.TestData. - lots of generators:
+
+Always regional, by locale - people can add their own - 500 of each
 
 FirstNames
+
 LastNames
 People
 email addresses

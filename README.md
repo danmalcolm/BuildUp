@@ -13,7 +13,7 @@ Examples:
 Purpose
 -------
 
-If you're writing unit tests against an object model, this may be familiar:
+If you're writing unit tests against an object model, you're approach to creating objects might have evolved along the following lines:
 
 "I need an Order object in my test, better create one..."
 
@@ -30,7 +30,7 @@ So, is our intrepid developer happy? What happens next?
 
 "I'm a lot happier with my object builders. They seem a little bit clunky to build though, lots of repetition. What if I need to build a list of objects, it's hard to write builder classes that support this."
 
-BuildUp is designed to support the Test Data Builder pattern. It also provides an object creation API that advances beyond the idea of having a single monolithic builder class and adds a little more composability to the mix.
+BuildUp is designed to support the Test Data Builder pattern. It provides an object creation API that evolves beyond the idea of having a single monolithic builder class and adds a little more composability to the mix.
 
 - As we saw in the examples above, everything is a sequence
 - Emphasises a declarative, composable style, allowing objects to be generated and combined in interesting ways
@@ -40,7 +40,7 @@ BuildUp is designed to support the Test Data Builder pattern. It also provides a
 Using Generators
 ----------------
 
-Generators are used to create sequences of objects. BuildUp contains some primitive object generators that support the kinds of sequences that you might need to work with.
+Generators are used to create sequences of values, from primitive values to custom objects. BuildUp contains some primitive object generators that support the kinds of sequences that you might need to work with.
 
 
 Using Builders
@@ -100,7 +100,7 @@ API Design Decisions
 Why does IGenerator<T> have a Build() method that you need to call to create the sequence? Couldn't IGenerator<T> just implement IEnumerable<T>?
 -------------------------------------------------------------------------------------------------
 
-Think of generators as things that contains the logic used to create a sequence. They are not the sequence themselves.
+Think of generators as things that contain the logic used to create a sequence. They are not the sequence themselves.
 
 Benefits:
 
