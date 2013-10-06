@@ -1,20 +1,112 @@
 -----------------------------------------
+API for the built-in generators
 
+Options:
+
+
+1. The Generator class + more specialised generators, e.g.
+
+Generator.Constant, Generator.Values
+
+DateGenerator.Values
+
+StringGenerator
+
+* Generators easier to find
+
+* New custom generators easy to add e.g. could add
+
+EntityPropGenerator.CodeFor<Customer>() // "customer-1", "customer-2"
+EntityPropGenerator.NameFor<Customer>() // "Customer 1", "Customer 2"
+
+
+2. Single Generator class with more specialised methods
+
+Generator.Dates("2013-12-21", "2013-12-22");
+
+Generator.Templated("customer-{1}")
+
+* Similar principle to HtmlHelper in Mvc, e.g. has a boatload of methods - use partials to make more manageable.
+* 
+* More obvious where things live
+
+Option a (call it Build):
+
+Build.Dates("2013-12-21", "2013-12-22");
+Build.StringFormat("customer-{1}")
+
+* "Build" shorted than "Generator"
+
+
+3a. More fluent API, e.g.
+
+Generate.Dates.Sequence("2013-12-21", "2013-12-22")
+Generate.Strings.FromTemplate("2013-12-21", "2013-12-22")
+
+
+3b. More fluent API, e.g.
+
+SequenceOf.Dates("2013-12-21", "2013-12-22")
+SequenceOf.Strings
+Generate.Strings.FromTemplate("2013-12-21", "2013-12-22")
+
+Sequence.Dates("2013-12-21", "2013-12-22")
+Sequence.Strings
+
+
+
+
+4. Need to instantiate generator somewhere, e.g. store in field
+
+private Generator generator = new Generator();
+
+...
+
+generator.Dates("2013-12-21", "2013-12-22");
+
+* Allows app to inherit and add specific methods.
+
+
+
+5. Extension methods
+
+
+
+-----------------------------------------
+Builders
 
 [NoCopy] - attribute used on builder properties and fields to exclude from copy.
 
-Some kind of solution for child collections?
+
+-----------------------------------------
+Wiki / Docs
+
+- Introduce
+
+- Basic generators
+
+- Built-in generators
+
+- Extending generators
+
+- Combining generators
+
+- Modifying sequence
+
+
 
 
 
 -----------------------------------------
+BuildUp.TestData
 
-
------------------------------------------
+Separate project containing lots of pre-built generators for people, companies, addresses etc.
 
 Buildup.TestData. - lots of generators:
 
 Always regional, by locale - people can add their own - 500 of each
+
+Needs to be locale specific, e.g. we can't have "generic" address data - address shape and format varies..
 
 FirstNames
 

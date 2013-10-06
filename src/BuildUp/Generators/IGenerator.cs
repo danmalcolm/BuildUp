@@ -4,23 +4,27 @@ using System.Collections.Generic;
 namespace BuildUp.Generators
 {
 	/// <summary>
-	/// Generates a sequence of objects 
+	/// Generates a sequence of values 
 	/// </summary>
 	public interface IGenerator
 	{
-		IEnumerable Build();
+        /// <summary>
+        /// Generates the sequence of objects
+        /// </summary>
+        /// <returns></returns>
+		IEnumerable Create();
 	}
 
 	/// <summary>
-	/// Generates a sequence of objects 
+	/// Generates a sequence of values 
 	/// </summary>
 	/// <typeparam name="TObject"></typeparam>
 	public interface IGenerator<out TObject> : IGenerator
 	{
 		/// <summary>
-		/// Returns the sequence of objects
+        /// Generates the sequence of objects
 		/// </summary>
 		/// <returns></returns>
-		new IEnumerable<TObject> Build();
+		new IEnumerable<TObject> Create();
 	}
 }

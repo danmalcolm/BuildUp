@@ -5,7 +5,8 @@ using System.Linq;
 namespace BuildUp.Generators
 {
     /// <summary>
-    /// Extension methods for applying change to sequence of objects generated
+    /// Extension methods for applying change to sequence of objects generated. These things involve changing the
+    /// order, rather than the values themselves
     /// </summary>
 	public static class ModifySequenceExtensions
 	{
@@ -18,7 +19,7 @@ namespace BuildUp.Generators
 		/// <returns></returns>
 		public static IGenerator<T> ModifySequence<T>(this IGenerator<T> generator, Func<IEnumerable<T>,IEnumerable<T>> modify)
 		{
-			return Generator.Sequence(() => modify(generator.Build()));
+			return Generator.Values(() => modify(generator.Create()));
 		} 
 
 		/// <summary>
@@ -70,7 +71,7 @@ namespace BuildUp.Generators
 		/// <returns></returns>
 		public static IGenerator<T> Loop<T>(this IGenerator<T> generator, int count)
 		{
-			return Generator.Sequence(() => Loop(generator.Build(), count));
+			return Generator.Values(() => Loop(generator.Create(), count));
 		}
 
 		private static IEnumerable<T> Loop<T>(IEnumerable<T> sequence, int count)

@@ -59,33 +59,31 @@ namespace BuildUp.Generators
         /// <returns></returns>
         public static IGenerator<T> Values<T>(params T[] sequence)
         {
-            return Sequence(sequence);
+            return new SequenceGenerator<T>(() => sequence);
     	}
 
 		/// <summary>
-		/// Creates a generator that provides objects from an existing sequence
+		/// Creates a generator that provides values from an existing sequence
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <param name="sequence"></param>
 		/// <returns></returns>
-		public static IGenerator<T> Sequence<T>(IEnumerable<T> sequence)
+		public static IGenerator<T> Values<T>(IEnumerable<T> sequence)
 		{
 			return new SequenceGenerator<T>(() => sequence);
 		}
 
 		/// <summary>
-		/// Creates a generator that provides objects from an existing sequence
+		/// Creates a generator that provides values from a sequence returned by a function
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <param name="getSequence"></param>
 		/// <returns></returns>
-		public static IGenerator<T> Sequence<T>(Func<IEnumerable<T>> getSequence)
+		public static IGenerator<T> Values<T>(Func<IEnumerable<T>> getSequence)
 		{
 			return new SequenceGenerator<T>(getSequence);
 		}
 
 		#endregion
-
-        
     }
 }

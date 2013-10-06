@@ -32,12 +32,6 @@ namespace BuildUp.Tests.Generators
             generator.Take(5).ShouldMatchSequence(3, 4, 5, 6, 7);
         }
 
-		[Test]
-		public void modifying_sequence_should_be_applied_to_generated_objects()
-		{
-			var generator = StringGenerator.Numbered("{1}").ModifySequence(x => x.Skip(2));
-			generator.Take(3).ShouldMatchSequence("3", "4", "5");
-		}
 
 	}
 }

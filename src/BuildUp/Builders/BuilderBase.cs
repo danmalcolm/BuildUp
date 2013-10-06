@@ -84,14 +84,14 @@ namespace BuildUp.Builders
 
 		protected abstract IGenerator<TObject> GetGenerator();
  
-		public IEnumerable<TObject> Build()
+		public IEnumerable<TObject> Create()
 		{
-			return GetGenerator().Build();
+			return GetGenerator().Create();
 		}
 
-		IEnumerable IGenerator.Build()
+		IEnumerable IGenerator.Create()
 		{
-			return Build();
+			return Create();
 		}
 
 	}
