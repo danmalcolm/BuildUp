@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace BuildUp.Generators
 {
 	/// <summary>
-	/// Uses a function to generate objects
+	/// Implementation that uses a function to generate each value
 	/// </summary>
 	/// <typeparam name="TObject"></typeparam>
 	public class SimpleGenerator<TObject, TContext> : IGenerator<TObject>
@@ -19,7 +19,7 @@ namespace BuildUp.Generators
             this.createContext = createContext;
         }
 
-	    public IEnumerable<TObject> Build()
+	    public IEnumerable<TObject> Create()
 		{
 			int index = 0;
 	        var context = createContext();
@@ -29,9 +29,9 @@ namespace BuildUp.Generators
 			}
 		}
 
-		IEnumerable IGenerator.Build()
+		IEnumerable IGenerator.Create()
 		{
-			return Build();
+			return Create();
 		}
 	}
 

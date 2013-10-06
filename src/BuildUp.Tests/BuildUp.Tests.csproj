@@ -58,11 +58,11 @@
     <Compile Include="BuilderExamples\Hotel.cs" />
     <Compile Include="BuilderSpecs.cs" />
     <Compile Include="Generators\DateGeneratorSpecs.cs" />
-    <Compile Include="Generators\EnumerableExtensionsSpecs.cs" />
     <Compile Include="Generators\GeneratorExtensionsSpecs.cs" />
     <Compile Include="Generators\GeneratorSpecs.cs" />
-    <Compile Include="Generators\GuidGeneratorTests.cs" />
-    <Compile Include="Generators\Person.cs" />
+    <Compile Include="Generators\GuidGeneratorSpecs.cs" />
+    <Compile Include="Generators\ModifySequenceExtensionsSpecs.cs" />
+    <Compile Include="Generators\SequenceAccessExtensionsSpecs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Common\Specification.cs" />
     <Compile Include="Utility\MemberAccessorSpecs.cs" />

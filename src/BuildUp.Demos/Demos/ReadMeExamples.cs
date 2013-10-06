@@ -32,13 +32,13 @@ namespace BuildUp.Demos.Demos
                                  FavouriteColour = colour
                              };
 
-            // Build a sequence of objects - IEnumerable<User>
-            var users = userGenerator.Build();
+            // Create a sequence of objects - IEnumerable<User>
+            var users = userGenerator.Create();
 
             // Just build one
             var user = userGenerator.First();
 
-            // Build just a few
+            // Create just a few
             var fiveCustomers = userGenerator.Take(5).ToList();
 
             // Create new generators based on an existing generator
@@ -69,22 +69,22 @@ namespace BuildUp.Demos.Demos
         {
             // Builds sequence containing the same value
             var generator1 = Generator.Constant(1);
-            var values1 = generator1.Build();
+            var values1 = generator1.Create();
             // 1, 1, 1, 1, 1 ...
 
             // Generates value using a function
             var generator2 = Generator.Create(i => "User " + i);
-            var values2 = generator2.Build();
+            var values2 = generator2.Create();
             // "User 0", "User 1", "User 2" ...
 
             // Creating complex types
             var generator3 = Generator.Create(i => new Customer("customer-" + i));
-            var values3 = generator3.Build();
+            var values3 = generator3.Create();
             // { UserName="customer-0"}, { UserName="customer-1"}, { UserName="customer-2"} ...
 
             // Generates value using a function
             var generator4 = Generator.Values(new[] { "Red", "Green", "Blue" });
-            var values4 = generator4.Build();
+            var values4 = generator4.Create();
             // "Red", "Green", "Blue"
         }
 
@@ -104,19 +104,19 @@ namespace BuildUp.Demos.Demos
         {
             // Some other built-in generators for common value types and strings
             var generator1 = IntGenerator.Incrementing(1);
-            var values1 = generator1.Build(); // 1, 2, 3, 4, 5 ...
+            var values1 = generator1.Create(); // 1, 2, 3, 4, 5 ...
 
             var generator2 = IntGenerator.Incrementing(1, 2);
-            var values2 = generator2.Build(); // 1, 3, 5, 7 ...
+            var values2 = generator2.Create(); // 1, 3, 5, 7 ...
 
             var generator3 = StringGenerator.Numbered("User {1}");
-            var values3 = generator3.Build(); // "User 1", "User 2", "User 3" ...
+            var values3 = generator3.Create(); // "User 1", "User 2", "User 3" ...
 
             var generator4 = StringGenerator.Numbered("Item {0}");
-            var values4 = generator4.Build(); // "Item 0", "Item 1", "Item 2" ...
+            var values4 = generator4.Create(); // "Item 0", "Item 1", "Item 2" ...
 
-            var generator5 = GuidGenerator.Random(1);
-            var values5 = generator5.Build();
+            var generator5 = GuidGenerator.Sequence(1);
+            var values5 = generator5.Create();
         }
 
 

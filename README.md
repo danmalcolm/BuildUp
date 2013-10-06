@@ -30,34 +30,44 @@ So, is our intrepid developer happy? What happens next?
 
 "I'm a lot happier with my object builders. They seem a little bit clunky to build though, lots of repetition. What if I need to build a list of objects, it's hard to write builder classes that support this."
 
+Introducing BuildUp
+-------------------
+
 BuildUp is designed to support the Test Data Builder pattern. It also provides an object creation API that advances beyond the idea of having a single monolithic builder class and adds a little more composability to the mix.
 
 - As we saw in the examples above, everything is a sequence
 - Emphasises a declarative, composable style, allowing objects to be generated and combined in interesting ways
-- Provides some common utility functionality, scaffolding and base classes to make new builders easy and quick to build with the minimum of duplication
+- Provides some common utility functionality and base classes to make new builders easy and quick to build with the minimum of duplication
 
 
 Using Generators
 ----------------
 
-Generators are used to create sequences of objects. BuildUp contains some primitive object generators that support the kinds of sequences that you might need to work with.
+Generators create sequences of values and are the foundation of BuildUp - a bit like the individual LEGO pieces that. BuildUp contains some primitive object generators that support the kinds of sequences that you might need to work with. In turn, you can combine and modify generators to build more complex objects and sequences.
+
+
+Immutability
+
+Generators are immutable. Any method called that modifies a generator's behaviour will return a new generator instance with the changed behaviour. The original generator will not be changed. Immutability has many benefits - in this scenario, it gives confidence and promotes reuse or base builder types.
+
+Limitations of generators.
 
 
 Using Builders
 --------------
 
-Generators can get you quite a long way. However the compositional nature of the API introduces a problem. Imagine an Order class with the following constructor: 
+Generators can get you quite a long way. However the stateless, compositional nature of the API introduces a problem as you can't subsequently modify values that are set once via constructor parameters. Imagine an Order class with the following constructor: 
 
-public class Order 
-{
-    public Order(Customer customer, DateTime date) 
+    public class Order 
     {
-        this.Customer = customer;
-        ...
-    }
+        public Order(Customer customer, DateTime date) 
+        {
+            this.Customer = customer;
+            ...
+        }
 
-    public Customer Customer { get; private set; }
-}
+        public Customer Customer { get; private set; }
+    }
 
 The Customer to which an Order belongs is set only via the constructor. In the above example, we demonstrated various methods to specify modifications to the generated objects. 
 
@@ -79,7 +89,7 @@ public class OrderBuilder : BuilderBase<T>
 }
 
 Notice 4 things:
-- We have fields (properties can be used also) used to store generators used to generate the objects
+- We have fields (properties can be used also) containing generators used to generate values used to create our objects
 - You aren't limited to using generators to generate child values, e.g. single value is used for the date.
 - The GetGenerator method returns a generator that generates the objects using the builder's generators and values
 - We have meaningful methods to modify these fields. If you have a behavioural domain model where state is changed via meaningful methods (instead of setters or directly adding / removing items from collections), then there may be methods on the builder that match the target object's behaviour. You don't have to do things this way. With a more data-centric model, you could allow the values to be modified via properties.
