@@ -5,18 +5,18 @@ namespace BuildUp.Generators
     /// <summary>
     /// Provides access to some useful int value generators
     /// </summary>
-	public static class IntGenerator
-	{
+    public static class IntGenerator
+    {
         /// <summary>
         /// Generates an incrementing sequence of values
         /// </summary>
         /// <param name="start"></param>
         /// <param name="increment"></param>
         /// <returns></returns>
-		public static IGenerator<int> Incrementing(int start, int increment=1)
-		{
-			return Generator.Create(index => start + index * increment); 
-		}
+        public static IGenerator<int> Incrementing(int start, int increment = 1)
+        {
+            return Generator.Create(index => start + index * increment);
+        }
 
         /// <summary>
         /// Generates a random sequence of values within a given range. The sequence is 
@@ -28,7 +28,7 @@ namespace BuildUp.Generators
         /// <returns></returns>
         public static IGenerator<int> Random(int min, int max, int seed)
         {
-            return Generator.Create((random,index) => random.Next(min, max + 1), () => new Random(seed));
-        } 
-	}
+            return Generator.Create((random, index) => random.Next(min, max + 1), () => new Random(seed));
+        }
+    }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using BuildUp.Utility;
 
 namespace BuildUp.Generators
 {
@@ -8,8 +9,6 @@ namespace BuildUp.Generators
     /// </summary>
 	public static class DateGenerator
 	{
-        // TODO - better name?
-
 		/// <summary>
 		/// Generates a sequence of dates beginning with a start date and incrementing by the specified
 		/// amount for each subsequent value
@@ -48,6 +47,27 @@ namespace BuildUp.Generators
         {
             var dates = values.Select(DateTime.Parse);
             return Generator.Values(dates);
+        }
+
+        /// <summary>
+        /// Generates a random sequence of DateTime values within a given range. The sequence is 
+        /// deterministic, i.e., using the same seed will result in the same sequence.
+        /// </summary>
+        /// <param name="min">The inclusive lower bound of the range</param>
+        /// <param name="max">The inclusive upper bound of the range</param>
+        /// <param name="seed">Value used to seed the generated Dates</param>
+        /// <returns></returns>
+        public static IGenerator<DateTime> Random(DateTime min, DateTime max, int seed, DateTimePrecision precision = DateTimePrecision.Millisecond)
+        {
+            if(max < min)
+                throw new ArgumentException("Should be greater than the min date", "max");
+            var timeSpan = max - min;
+return Generator.Create((random, index) =>
+            {
+                long ticks = random.NextLong(0, timeSpan.Ticks);
+                DateTime dateTime = min.AddTicks(ticks);
+                return DateTrimmer.ToPrecision(dateTime, precision);
+            }, () => new Random(seed));
         }
 
 	}

@@ -1,10 +1,10 @@
 -----------------------------------------
-API for the built-in generators
+API for the standard generators
 
 Options:
 
 
-1. The Generator class + more specialised generators, e.g.
+1. Basic Generator class + more specialised generators, e.g.
 
 Generator.Constant, Generator.Values
 
@@ -12,12 +12,13 @@ DateGenerator.Values
 
 StringGenerator
 
-* Generators easier to find
++ Generators easier to find
++ New custom generators easy to add e.g. could add
 
-* New custom generators easy to add e.g. could add
+EntityPropGenerator.CodesFor<Customer>() // "customer-1", "customer-2"
+EntityPropGenerator.NamesFor<Customer>() // "Customer 1", "Customer 2"
 
-EntityPropGenerator.CodeFor<Customer>() // "customer-1", "customer-2"
-EntityPropGenerator.NameFor<Customer>() // "Customer 1", "Customer 2"
+- Bit awkward, e.g. Generator.Values(new Date(..) is same as DateGenerator
 
 
 2. Single Generator class with more specialised methods

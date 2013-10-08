@@ -4,9 +4,13 @@ BuildUp
 Introduction
 ------------
 
-A library to ease the pain of creating objects for automated testing or demo data.
+A library to ease the pain of creating objects used for automated tests or demo data.
+
+See the introduction on the Wiki for background.
 
 Examples:
+
+
 
 
 

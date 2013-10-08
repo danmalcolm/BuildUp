@@ -9,14 +9,44 @@ namespace BuildUp.Demos.Demos
     {
         public void Introduction1()
         {
+            // In BuildUp, everything is a sequence
+
+            // Generators create sequences of simple values
+
             // Create some simple generators
             var codes = StringGenerator.Numbered("user-{0}");
-            var ages = Generator.Constant(21);
-            var randomAges = IntGenerator.Random(18, 60, 5);
-            var boringColours = Generator.Values("grey", "olive");
 
-            // These are the building blocks that can be combined in
+            // Call create to generate the values
+            codes.Create(); // Gives us { "user-0", "user-1", "user-2" ... }
+
+            var ages = Generator.Constant(21); // Gives us { 21, 21, 21 ... }
+            var randomAges = IntGenerator.Random(18, 60, 5);
+            
+            codes.Take(3).ToList(); // Gives use { "user-0", "user-1" }
+            
+            // There's an emphasis on convenience and readability with support for many test data scenarios
+            DateGenerator.Values("2012-01-05T11:00", "2012-01-05T12:00"); 
+
+            // OK, not so exciting
+
+
+
+        }
+
+        public void Inroduct()
+        {
+        // Modify the objects made by generators
+           
+
+
+            // Modify the sequence of objects made by generators
+            
+
+
+            // These are the building blocks (think LEGO pieces) that can be combined in
             // interesting ways to create more interesting objects
+
+
         }
 
         public void Introduction2()

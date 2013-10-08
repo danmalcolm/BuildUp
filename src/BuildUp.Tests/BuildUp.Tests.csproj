@@ -57,6 +57,9 @@
     <Compile Include="BuilderExamples\CustomerHistoryItem.cs" />
     <Compile Include="BuilderExamples\Hotel.cs" />
     <Compile Include="BuilderSpecs.cs" />
+    <Compile Include="Generators\FriendlyDateStringParserSpecs.cs" />
+    <Compile Include="Generators\DateTrimmerSpecs.cs" />
+    <Compile Include="Generators\IntGeneratorSpecs.cs" />
     <Compile Include="Generators\DateGeneratorSpecs.cs" />
     <Compile Include="Generators\GeneratorExtensionsSpecs.cs" />
     <Compile Include="Generators\GeneratorSpecs.cs" />

@@ -43,7 +43,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Builders\BuilderBase.cs" />
+    <Compile Include="Generators\FriendlyDateStringParser.cs" />
+    <Compile Include="Generators\DateTrimmer.cs" />
     <Compile Include="Generators\DateGenerator.cs" />
+    <Compile Include="Generators\DateTimePrecision.cs" />
     <Compile Include="Generators\Generator.cs" />
     <Compile Include="Generators\GeneratorExtensions.cs" />
     <Compile Include="Generators\GuidGenerator.cs" />
@@ -54,6 +57,7 @@
     <Compile Include="Generators\SequenceGenerator.cs" />
     <Compile Include="Generators\SimpleGenerator.cs" />
     <Compile Include="Generators\StringGenerator.cs" />
+    <Compile Include="Utility\RandomExtensions.cs" />
     <Compile Include="Utility\Reflection\MemberAccessor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
