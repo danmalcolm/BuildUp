@@ -9,7 +9,7 @@ namespace BuildUp.Tests.Generators.SequenceAccessExtensions
         [Test]
         public void should_return_first_n_elements_requested()
         {
-            IntGenerator.Incrementing(1).Take(3).ShouldMatchSequence(1, 2, 3);
+            IntGenerator.Step(1).Take(3).ShouldMatchSequence(1, 2, 3);
         }
     }
 
@@ -18,7 +18,7 @@ namespace BuildUp.Tests.Generators.SequenceAccessExtensions
         [Test]
         public void should_return_first_element_created()
         {
-            IntGenerator.Incrementing(1).Take(3).ShouldMatchSequence(1, 2, 3);
+            IntGenerator.Step(1).Take(3).ShouldMatchSequence(1, 2, 3);
         }
     }
 }

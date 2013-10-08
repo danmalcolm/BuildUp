@@ -27,7 +27,7 @@ namespace BuildUp.Tests.BuilderExamples
 		public void lots_of_bookings()
 		{
 			var hotels = new HotelBuilder().Loop(5);
-			var dates = DateGenerator.Incrementing(DateTime.Now.Date, TimeSpan.FromDays(1)).Loop(25); // 5 bookings at each hotel per day
+			var dates = DateGenerator.Step(DateTime.Now.Date, TimeSpan.FromDays(1)).Loop(25); // 5 bookings at each hotel per day
 			var bookings = new BookingBuilder().AtHotel(hotels).StartingOn(dates).Take(50).ToArray();
 			
 		}

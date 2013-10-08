@@ -16,7 +16,7 @@ namespace BuildUp.Generators
 		/// <param name="start"></param>
 		/// <param name="increment"></param>
 		/// <returns></returns>
-		public static IGenerator<DateTime> Incrementing(DateTime start, TimeSpan increment)
+		public static IGenerator<DateTime> Step(DateTime start, TimeSpan increment)
 		{
 			return Generator.Create(index => start + new TimeSpan(increment.Ticks * index));
 		}
@@ -30,10 +30,34 @@ namespace BuildUp.Generators
         /// <param name="start"></param>
         /// <param name="increment"></param>
         /// <returns></returns>
-        public static IGenerator<DateTime> Incrementing(string start, TimeSpan increment)
+        public static IGenerator<DateTime> Step(string start, TimeSpan increment)
         {
             var startDate = DateTime.Parse(start);
-            return Incrementing(startDate, increment);
+            return Step(startDate, increment);
+        }
+
+        /// <summary>
+        /// Generates a sequence of dates beginning with a start date and incrementing by a random value
+        /// within the specified range
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="minStep"> </param>
+        /// <param name="maxStep"> </param>
+        /// <returns></returns>
+        public static IGenerator<DateTime> RandomStep(DateTime start, int seed, TimeSpan minStep, TimeSpan maxStep)
+        {
+            return Generator.Create((context, index) =>
+            {
+                var next = context.Last.Add(TimeSpan.FromTicks(context.Random.NextLong(minStep.Ticks, maxStep.Ticks)));
+                context.Last = next;
+                return next;
+            }, () => new RandomStepContext { Random = new Random(seed), Last = start });
+        }
+
+        private class RandomStepContext
+        {
+            public Random Random { get; set; }
+            public DateTime Last { get; set; }
         }
 
         /// <summary>

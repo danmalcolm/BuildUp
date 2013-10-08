@@ -133,10 +133,10 @@ namespace BuildUp.Demos.Demos
         public void IntroDemo2()
         {
             // Some other built-in generators for common value types and strings
-            var generator1 = IntGenerator.Incrementing(1);
+            var generator1 = IntGenerator.Step(1);
             var values1 = generator1.Create(); // 1, 2, 3, 4, 5 ...
 
-            var generator2 = IntGenerator.Incrementing(1, 2);
+            var generator2 = IntGenerator.Step(1, 2);
             var values2 = generator2.Create(); // 1, 3, 5, 7 ...
 
             var generator3 = StringGenerator.Numbered("User {1}");

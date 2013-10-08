@@ -51,7 +51,7 @@ namespace BuildUp.Tests.Generators
 		public void combining_2_generators_with_select_many_method_call()
 		{
 			var names = StringGenerator.Numbered("Man {1}");
-			var ages = IntGenerator.Incrementing(30);
+			var ages = IntGenerator.Step(30);
 
 			var generator = names.SelectMany(x => ages, (name, age) => new Person(name, age));
 			generator.Take(3).Select(x => new { x.Name, x.Age }).ShouldMatchSequence(new { Name = "Man 1", Age = 30 }, new { Name = "Man 2", Age = 31 }, new { Name = "Man 3", Age = 32 });
@@ -62,7 +62,7 @@ namespace BuildUp.Tests.Generators
 		public void combining_2_generators_with_select_many_query_syntax()
 		{
 			var generator = from name in StringGenerator.Numbered("Man {1}")
-							from age in IntGenerator.Incrementing(30)
+							from age in IntGenerator.Step(30)
 							select new Person(name, age);
 			generator.Take(3).Select(x => new { x.Name, x.Age }).ShouldMatchSequence(new { Name = "Man 1", Age = 30 }, new { Name = "Man 2", Age = 31 }, new { Name = "Man 3", Age = 32 });
 
@@ -72,7 +72,7 @@ namespace BuildUp.Tests.Generators
 		public void combining_3_generators_with_select_many_query_syntax()
 		{
 			var generator = from name in StringGenerator.Numbered("Man {1}")
-							from age in IntGenerator.Incrementing(30)
+							from age in IntGenerator.Step(30)
 							from colour in StringGenerator.Numbered("Colour {1}")
 							select new Person(name, age) { FavouriteColour = colour }; // cheers, compiler!
 			var expectedValues = new[]
@@ -123,7 +123,7 @@ namespace BuildUp.Tests.Generators
         [Test]
         public void when_building_sequences_of_values_should_create_collections_of_length_specified()
         {
-            var generator1 = IntGenerator.Incrementing(1);
+            var generator1 = IntGenerator.Step(1);
             var generator2 = generator1.SequencesOf(2);
             var collections = generator2.Take(3).ToList();
             collections[0].ShouldMatchSequence(1, 2);
@@ -135,8 +135,8 @@ namespace BuildUp.Tests.Generators
         [Test]
         public void when_building_sequences_of_values_should_create_collections_of_lengths_specified_by_generator()
         {
-            var generator1 = IntGenerator.Incrementing(1);
-            var generator2 = generator1.SequencesOf(IntGenerator.Incrementing(1));
+            var generator1 = IntGenerator.Step(1);
+            var generator2 = generator1.SequencesOf(IntGenerator.Step(1));
             var collections = generator2.Take(3).ToList();
             collections[0].ShouldMatchSequence(1);
             collections[1].ShouldMatchSequence(2, 3);
@@ -147,7 +147,7 @@ namespace BuildUp.Tests.Generators
         public void when_building_sequences_of_values_should_stop_populating_collections_when_at_end_of_source_sequence()
         {
             var generator1 = Generator.Values(1, 2, 3, 4, 5, 6, 7);
-            var generator2 = generator1.SequencesOf(IntGenerator.Incrementing(1));
+            var generator2 = generator1.SequencesOf(IntGenerator.Step(1));
             var collections = generator2.Take(5).ToList();
             collections[0].ShouldMatchSequence(1);
             collections[1].ShouldMatchSequence(2, 3);

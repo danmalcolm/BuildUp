@@ -7,14 +7,21 @@ using NUnit.Framework;
 namespace BuildUp.Tests.Generators.IntGeneratorSpecs
 {
 	[TestFixture]
-	public class IncrementingSpecs
+	public class StepSpecs
 	{
 		[Test]
 		public void should_create_ascending_sequence()
 		{
-		    var generator = IntGenerator.Incrementing(1, 3);
+		    var generator = IntGenerator.Step(1, 3);
             generator.Take(3).ShouldMatchSequence(1, 4, 7);
 		}
+
+        [Test]
+        public void should_create_descending_sequence()
+        {
+            var generator = IntGenerator.Step(7, -3);
+            generator.Take(3).ShouldMatchSequence(7, 4, 1);
+        }
 	}
 
     [TestFixture]

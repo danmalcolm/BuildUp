@@ -13,9 +13,23 @@ namespace BuildUp.Generators
         /// <param name="start"></param>
         /// <param name="increment"></param>
         /// <returns></returns>
-        public static IGenerator<int> Incrementing(int start, int increment = 1)
+        public static IGenerator<int> Step(int start, int increment = 1)
         {
             return Generator.Create(index => start + index * increment);
+        }
+
+        /// <summary>
+        /// Generates an incrementing sequence of values
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="minStep"></param>
+        /// <param name="maxStep"> </param>
+        /// <param name="seed"> </param>
+        /// <returns></returns>
+        public static IGenerator<int> RandomStep(int start, int minStep, int maxStep, int seed)
+        {
+            return Generator.Create((context, index) => context.Last + context.Random.Next(minStep, maxStep), 
+                () => new { Random = new Random(seed), Last = start } );
         }
 
         /// <summary>
