@@ -28,8 +28,19 @@ namespace BuildUp.Generators
         /// <returns></returns>
         public static IGenerator<int> RandomStep(int start, int minStep, int maxStep, int? seed = null)
         {
-            return Generator.Create((context, index) => context.Last + context.Random.Next(minStep, maxStep), 
-                () => new { Random = RandomFactory.Create(seed), Last = start } );
+            return Generator.Create((context, index) =>
+            {
+                int result = context.Last + context.Random.Next(minStep, maxStep);
+                context.Last = result;
+                return result;
+            }, 
+            () => new RandomStepContext { Random = RandomFactory.Create(seed), Last = start } );
+        }
+
+        private class RandomStepContext
+        {
+            public Random Random { get; set; }
+            public int Last { get; set; }
         }
 
         /// <summary>

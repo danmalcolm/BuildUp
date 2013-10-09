@@ -5,33 +5,34 @@ using System.Linq;
 using System.Threading.Tasks;
 using BuildUp.Generators;
 using BuildUp.Tests.Common;
-using NUnit.Framework;
+using FluentAssertions;
+using Xunit;
+using Xunit;
 
 namespace BuildUp.Tests.Generators.GuidGeneratorSpecs
 {
     public class SequenceSpecs
     {
 
-        [Test]
+        [Fact]
         public void generators_using_same_seed_should_produce_identical_sequences()
         {
             var generator1 = GuidGenerator.Random(10);
             var generator2 = GuidGenerator.Random(10);
             var sequence1 = generator1.Take(10).ToArray();
             var sequence2 = generator2.Take(10).ToArray();
-            sequence1.ShouldMatchSequence(sequence2);
+            sequence1.Should().Equal(sequence2);
         }
 
-        [Test]
+        [Fact]
         public void should_create_identical_sequences_when_repeated()
         {
             var generator1 = GuidGenerator.Random(10);
             var sequence1 = generator1.Take(10).ToArray();
             var sequence2 = generator1.Take(10).ToArray();
-            sequence1.ShouldMatchSequence(sequence2);
+            sequence1.Should().Equal(sequence2);
         }
-
-        [Test,Explicit]
+        
         public void should_not_generate_duplicates()
         {
             const int minSeed = 1;
@@ -61,7 +62,7 @@ namespace BuildUp.Tests.Generators.GuidGeneratorSpecs
 //            });
             watch.Stop();
             Console.WriteLine("Ran test in {0}ms", watch.ElapsedMilliseconds);
-            guids.Keys.LongCount().ShouldEqual((maxSeed + 1 - minSeed) * count);
+            guids.Keys.LongCount().Should().Be((maxSeed + 1 - minSeed) * count);
         } 
     }
 }

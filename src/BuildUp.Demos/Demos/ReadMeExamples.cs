@@ -2,11 +2,10 @@ using System;
 using System.Linq;
 using BuildUp.Demos.TestObjectsClass;
 using BuildUp.Generators;
-using NUnit.Framework;
+using Xunit;
 
 namespace BuildUp.Demos.Demos
 {
-    [TestFixture]
     public class ReadMeExamples
     {
 
@@ -56,7 +55,6 @@ namespace BuildUp.Demos.Demos
             var fiveCustomers = userGenerator.Take(5).ToList();
         }
 
-        [Test]
         public void Headline2_ComplexObjects()
         {
             // Combine simple value generators together to build more complex objects
@@ -106,7 +104,6 @@ namespace BuildUp.Demos.Demos
 
         }
 
-        [Test]
         public void Headline2_CombinationAndModificationObjects()
         {
             // Combine simple value generators together to build more complex objects

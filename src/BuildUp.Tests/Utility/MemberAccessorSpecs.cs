@@ -2,11 +2,12 @@
 using System.Linq.Expressions;
 using System.Reflection;
 using BuildUp.Utility.Reflection;
-using NUnit.Framework;
+using FluentAssertions;
+using Xunit;
 
 namespace BuildUp.Tests.Utility
 {
-	[TestFixture]
+	
 	public class MemberAccessorSpecs
 	{
 		public class A
@@ -15,13 +16,14 @@ namespace BuildUp.Tests.Utility
 		}
 
 
-		[Test]
+		[Fact]
 		public void accessor_for_settable_property()
 		{
 			var accessor = MemberAccessor.For((A a) => a.SettableProperty);
 			var instance = new A();
 			accessor.SetValue(instance, "Something");
-			Assert.AreEqual("Something", instance.SettableProperty);
+
+			instance.SettableProperty.Should().Be("Something");
 		}
 
 	}
