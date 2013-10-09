@@ -48,7 +48,7 @@ namespace BuildUp.Tests.Generators.DateGeneratorSpecs
         [Test]
         public void each_step_should_be_within_range()
         {
-            var generator = DateGenerator.RandomStep(new DateTime(2000, 1, 1, 0, 0, 0), 1, TimeSpan.FromMinutes(10), TimeSpan.FromMinutes(30));
+            var generator = DateGenerator.RandomStep(new DateTime(2000, 1, 1, 0, 0, 0), TimeSpan.FromMinutes(10), TimeSpan.FromMinutes(30));
             var values = generator.Take(100).ToList();
         }
     }

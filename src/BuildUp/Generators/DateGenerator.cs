@@ -44,14 +44,28 @@ namespace BuildUp.Generators
         /// <param name="minStep"> </param>
         /// <param name="maxStep"> </param>
         /// <returns></returns>
-        public static IGenerator<DateTime> RandomStep(DateTime start, int seed, TimeSpan minStep, TimeSpan maxStep)
+        public static IGenerator<DateTime> RandomStep(string start, TimeSpan minStep, TimeSpan maxStep, int? seed = null)
+        {
+            var startDate = FriendlyDateStringParser.Parse(start);
+            return RandomStep(startDate, minStep, maxStep, seed);
+        }
+
+        /// <summary>
+        /// Generates a sequence of dates beginning with a start date and incrementing by a random value
+        /// within the specified range
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="minStep"> </param>
+        /// <param name="maxStep"> </param>
+        /// <returns></returns>
+        public static IGenerator<DateTime> RandomStep(DateTime start, TimeSpan minStep, TimeSpan maxStep, int? seed = null)
         {
             return Generator.Create((context, index) =>
             {
                 var next = context.Last.Add(TimeSpan.FromTicks(context.Random.NextLong(minStep.Ticks, maxStep.Ticks)));
                 context.Last = next;
                 return next;
-            }, () => new RandomStepContext { Random = new Random(seed), Last = start });
+            }, () => new RandomStepContext { Random = RandomFactory.Create(seed), Last = start });
         }
 
         private class RandomStepContext
@@ -81,7 +95,22 @@ namespace BuildUp.Generators
         /// <param name="max">The inclusive upper bound of the range</param>
         /// <param name="seed">Value used to seed the generated Dates</param>
         /// <returns></returns>
-        public static IGenerator<DateTime> Random(DateTime min, DateTime max, int seed, DateTimePrecision precision = DateTimePrecision.Millisecond)
+        public static IGenerator<DateTime> Random(string min, string max, int? seed = null, DateTimePrecision precision = DateTimePrecision.Millisecond)
+        {
+            var minDate = FriendlyDateStringParser.Parse(min);
+            var maxDate = FriendlyDateStringParser.Parse(max);
+            return Random(minDate, maxDate, seed, precision);
+        }
+
+        /// <summary>
+        /// Generates a random sequence of DateTime values within a given range. The sequence is 
+        /// deterministic, i.e., using the same seed will result in the same sequence.
+        /// </summary>
+        /// <param name="min">The inclusive lower bound of the range</param>
+        /// <param name="max">The inclusive upper bound of the range</param>
+        /// <param name="seed">Value used to seed the generated Dates</param>
+        /// <returns></returns>
+        public static IGenerator<DateTime> Random(DateTime min, DateTime max, int? seed = null, DateTimePrecision precision = DateTimePrecision.Millisecond)
         {
             if(max < min)
                 throw new ArgumentException("Should be greater than the min date", "max");
@@ -91,7 +120,7 @@ return Generator.Create((random, index) =>
                 long ticks = random.NextLong(0, timeSpan.Ticks);
                 DateTime dateTime = min.AddTicks(ticks);
                 return DateTrimmer.ToPrecision(dateTime, precision);
-            }, () => new Random(seed));
+            }, () => RandomFactory.Create(seed));
         }
 
 	}

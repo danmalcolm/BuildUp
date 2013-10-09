@@ -20,7 +20,7 @@ namespace BuildUp.Generators
         /// </summary>
         /// <param name="seed"> </param>
         /// <returns></returns>
-        public static IGenerator<Guid> Sequence(int seed)
+        public static IGenerator<Guid> Random(int? seed = null)
         {
             /*
             http://www.ietf.org/rfc/rfc4122.txt
@@ -77,7 +77,7 @@ namespace BuildUp.Generators
 
                 var next = new Guid(nextBytes);
                 return next;
-            }, () => new Random(seed));
+            }, () => RandomFactory.Create(seed));
         }
 
 

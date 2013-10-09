@@ -94,7 +94,10 @@ Wiki / Docs
 
 - Modifying sequence
 
+- Principles:
 
+   immutable
+   deterministic random sequences
 
 
 

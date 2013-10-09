@@ -15,8 +15,8 @@ namespace BuildUp.Tests.Generators.GuidGeneratorSpecs
         [Test]
         public void generators_using_same_seed_should_produce_identical_sequences()
         {
-            var generator1 = GuidGenerator.Sequence(10);
-            var generator2 = GuidGenerator.Sequence(10);
+            var generator1 = GuidGenerator.Random(10);
+            var generator2 = GuidGenerator.Random(10);
             var sequence1 = generator1.Take(10).ToArray();
             var sequence2 = generator2.Take(10).ToArray();
             sequence1.ShouldMatchSequence(sequence2);
@@ -25,7 +25,7 @@ namespace BuildUp.Tests.Generators.GuidGeneratorSpecs
         [Test]
         public void should_create_identical_sequences_when_repeated()
         {
-            var generator1 = GuidGenerator.Sequence(10);
+            var generator1 = GuidGenerator.Random(10);
             var sequence1 = generator1.Take(10).ToArray();
             var sequence2 = generator1.Take(10).ToArray();
             sequence1.ShouldMatchSequence(sequence2);
@@ -43,7 +43,7 @@ namespace BuildUp.Tests.Generators.GuidGeneratorSpecs
             int seed = minSeed;
             while(seed <= maxSeed)
             {
-                var generator1 = GuidGenerator.Sequence(seed);
+                var generator1 = GuidGenerator.Random(seed);
                 foreach (var guid in generator1.Take(count))
                 {
                     guids.AddOrUpdate(guid, 1, (g, c) => c + 1);
@@ -53,7 +53,7 @@ namespace BuildUp.Tests.Generators.GuidGeneratorSpecs
 
 //            Parallel.For(minSeed, maxSeed + 1, seed =>
 //            {
-//                var generator1 = GuidGenerator.Sequence(seed);
+//                var generator1 = GuidGenerator.Random(seed);
 //                foreach (var guid in generator1.Take(count))
 //                {
 //                    guids.AddOrUpdate(guid, 1, (g, c) => c + 1);

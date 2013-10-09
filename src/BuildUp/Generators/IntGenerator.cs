@@ -26,10 +26,10 @@ namespace BuildUp.Generators
         /// <param name="maxStep"> </param>
         /// <param name="seed"> </param>
         /// <returns></returns>
-        public static IGenerator<int> RandomStep(int start, int minStep, int maxStep, int seed)
+        public static IGenerator<int> RandomStep(int start, int minStep, int maxStep, int? seed = null)
         {
             return Generator.Create((context, index) => context.Last + context.Random.Next(minStep, maxStep), 
-                () => new { Random = new Random(seed), Last = start } );
+                () => new { Random = RandomFactory.Create(seed), Last = start } );
         }
 
         /// <summary>
@@ -40,9 +40,9 @@ namespace BuildUp.Generators
         /// <param name="max">The inclusive upper bound of the range</param>
         /// <param name="seed">Value used to seed the generated numbers</param>
         /// <returns></returns>
-        public static IGenerator<int> Random(int min, int max, int seed)
+        public static IGenerator<int> Random(int min, int max, int? seed = null)
         {
-            return Generator.Create((random, index) => random.Next(min, max + 1), () => new Random(seed));
+            return Generator.Create((random, index) => random.Next(min, max + 1), () => RandomFactory.Create(seed));
         }
     }
 }
