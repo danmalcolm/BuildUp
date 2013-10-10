@@ -4,157 +4,113 @@ BuildUp
 Introduction
 ------------
 
-A library to ease the pain of creating objects used for automated tests or demo data.
-
-See the introduction on the Wiki for background.
-
-Examples:
+A library to ease the pain of creating objects for automated tests or demo data.
 
 
 
+How it Works
+------------
 
+BuildUp provides some infrastructure supporting that make it very easy to create test object builders:
 
-Purpose
--------
+- A range of utility functionality
+- Builder infrastructure
+- Easily build collections of objects (in BuildUp, everything is a sequence)
 
-If you're writing unit tests against an object model, you're approach to creating objects might have evolved along the following lines:
+On a simple project, you might be happy with a simple ObjectBuilder, like FactoryGirl:
 
-"I need an Order object in my test, better create one..."
+    TODO
 
-"Hmm, now I've got lots of new Order() statements sprinkled throughout my tests (and my colleages are getting annoyed with me for humming Blue Monday). I'm also repeating a lot of order modification logic, like adding lines, setting customers etc. I'll have loads of code to change if the constructor signature changes and there's lots of repetition. Obviously I shouldn't be newing up and duplicating set-up code in my tests."
+Test Data Builder for more complex project:
+    
+Here's what you might come up with once you get the hang of it:
 
-"Hey, the [ObjectMother](http://martinfowler.com/bliki/ObjectMother.html) pattern looks good. Yep, definitely useful, but I've ended up with a load of methods like CreateOrderWithInStockProducts, 
-CreateOrderWithAnOverseasShippingAddressAndAnOutOfStockProduct. It's hard to remember which tests are sharing these methods. It's also difficult to introduce smaller variations to the Orders being built. Is there a better approach?"
-
-"Ah ha! The [Test Data Builder](http://c2.com/cgi/wiki?TestDataBuilder) pattern is what I'm after. I can create an OrderBuilder class that creates Orders with some sensible default values, then add methods to customise how my Orders are initialised when they are built. "
-
-There are numerous articles describing a similar evolution from manual object creation to Object Mother to the Test Data Builder pattern http://www.natpryce.com/articles/000714.html http://defragdev.com/blog/?p=147
-
-So, is our intrepid developer happy? What happens next?
-
-"I'm a lot happier with my object builders. They seem a little bit clunky to build though, lots of repetition. What if I need to build a list of objects, it's hard to write builder classes that support this."
-
-Introducing BuildUp
--------------------
-
-BuildUp is designed to support the Test Data Builder pattern. It also provides an object creation API that advances beyond the idea of having a single monolithic builder class and adds a little more composability to the mix.
-
-- As we saw in the examples above, everything is a sequence
-- Emphasises a declarative, composable style, allowing objects to be generated and combined in interesting ways
-- Provides some common utility functionality and base classes to make new builders easy and quick to build with the minimum of duplication
-
-
-Using Generators
-----------------
-
-Generators are used to create sequences of values, from primitive values to custom objects. BuildUp contains some primitive object generators that support the kinds of sequences that you might need to work with.
-
-Generators create sequences of values and are the foundation of BuildUp - a bit like the individual LEGO pieces that. BuildUp contains some primitive object generators that support the kinds of sequences that you might need to work with. In turn, you can combine and modify generators to build more complex objects and sequences.
-
-
-Immutability
-
-Generators are immutable. Any method called that modifies a generator's behaviour will return a new generator instance with the changed behaviour. The original generator will not be changed. Immutability has many benefits - in this scenario, it gives confidence and promotes reuse or base builder types.
-
-Limitations of generators.
-
-
-Using Builders
---------------
-
-Generators can get you quite a long way. However the stateless, compositional nature of the API introduces a problem as you can't subsequently modify values that are set once via constructor parameters. Imagine an Order class with the following constructor: 
-
-    public class Order 
+    public class BookingBuilder : BuilderBase<Booking, BookingBuilder>
     {
-        public Order(Customer customer, DateTime date) 
+        private IGenerator<Hotel> hotels = new HotelBuilder().Freeze();
+        private IGenerator<Customer> customers = new CustomerBuilder();
+        private IGenerator<DateTime> startDates = DateGenerator.Step(new DateTime(2012, 1, 1), TimeSpan.FromDays(1));
+
+        protected override IGenerator<Booking> GetGenerator()
         {
-            this.Customer = customer;
-            ...
+            return from hotel in hotels
+                   from customer in customers
+                   from date in startDates
+                   select new Booking(hotel, customer, date);
         }
 
-        public Customer Customer { get; private set; }
+        public BookingBuilder AtHotel(IGenerator<Hotel> hotels)
+        {
+            return Copy(me => me.hotels = hotels);
+        }
+
+        public BookingBuilder WithCustomer(IGenerator<Customer> customers)
+        {
+            return Copy(me => me.customers = customers);
+        }
+
+        public BookingBuilder StartingOn(IGenerator<DateTime> startDates)
+        {
+            return Copy(me => me.startDates = startDates);
+        }
     }
 
-The Customer to which an Order belongs is set only via the constructor. In the above example, we demonstrated various methods to specify modifications to the generated objects. 
+    
+Generators are the building blocks of BuildUp.
 
-An order generator might be created as follows:
+Create generators to build sequences of values (in BuildUp, everything is a sequence):
 
-var customers = ...
-var dates = ...
-var orders = from c in customers
-    from d in dates
-    select new Order(c, d);
+    var codes = StringGenerator.Numbered("user-{0}");
+    codes.Create(); // Gives us { "user-0", "user-1", "user-2" ... }
 
-There doesn't seem to be a suitable way of configuring a generator to control the values passed to the constructor. We need some kind of state that we can access to define and modify constructor parameters.
+There is range of built-in simple value generators, which should support most test data scenarios, offering balance between automation and customisation:
 
-This is where builders come in. Builders are a custom class that you create, inheriting from BuilderBase<T> e.g. 
+Random sequences of Guids (note that there's an option to seed all random generators to generate a random, but deterministic sequence, so sequence is realistically random, but deterministic).
 
-public class OrderBuilder : BuilderBase<T>
-{
- //TODO example
-}
+    var ids = GuidGenerator.Random(); // { random sequence of Guids, deterministic, based on optional seed parameter)
 
-Notice 4 things:
-- We have fields (properties can be used also) containing generators used to generate values used to create our objects
-- You aren't limited to using generators to generate child values, e.g. single value is used for the date.
-- The GetGenerator method returns a generator that generates the objects using the builder's generators and values
-- We have meaningful methods to modify these fields. If you have a behavioural domain model where state is changed via meaningful methods (instead of setters or directly adding / removing items from collections), then there may be methods on the builder that match the target object's behaviour. You don't have to do things this way. With a more data-centric model, you could allow the values to be modified via properties.
+Fixed values
 
-This puts us back in control - we can vary the values passed to the target constructor by changing the state of the builder.
+    var ages1 = Generator.Constant(21); // { 21, 21, 21 ... }
+    var ages2 = IntGenerator.Random(18, 60); // { random values between 18 and 60 }
 
-Mutable Builders
-----------------
-Mutable builders - When you vary a value, the 
+Incrementing / decrementing:
 
-Immutable builders - A builder's method calls actually return a new builder instance. This prevents errors and also promotes reuse.
+    var scores1 = IntGenerator.Step(2, 2); // { 2, 4, 6 ... }
+
+Incrementing / decrementing by random step (starting at 1 and incrementing by a random value between 10 and 20)
+
+    var scores2 = IntGenerator.RandomStep(1, 10, 20);
+
+Random dates within a range:
+    
+    var signUpDates = DateGenerator.Random("2013-01-01", "2013-12-31"); // { random dates within range ... }
+
+Generate values using a function:
+
+    var generator2 = Generator.Create(i => "User " + i);
+    var values2 = generator2.Create();
+    // "User 0", "User 1", "User 2" ...
+
+Generate custom objects:
+
+    var userGenerator = Generator.Create(i => new User { UserName = "user-" + i });
+
+Building the values:
+
+    var users = userGenerator.Create(); // Builds infinite sequence of users
+    var user = userGenerator.First(); // Just build one
+    var users2 = userGenerator.Take(5).ToList(); // Build a few
+            
+See the [Wiki Introduction Page](https://github.com/danmalcolm/BuildUp/wiki/buildup-generators) for background.
+
+Development
+------------
+
+Coding conventions
+
+Setting up XUnit / R#
 
 
-
-API Design Decisions
---------------------
-
-Why does IGenerator<T> have a Build() method that you need to call to create the sequence? Couldn't IGenerator<T> just implement IEnumerable<T>?
--------------------------------------------------------------------------------------------------
-
-Think of generators as things that contain the logic used to create a sequence. They are not the sequence themselves.
-
-Benefits:
-
-1. It makes its purpose clearer. For example, a unit test class might have the following field:
-
-private IGenerator<Customer> customers;
-
-It's a semantic issue, but I think it reinforces the fact that a fresh sequence of objects will be generated every time we call customers.Build(). This communicates that we can safely reuse the generator to generate the objects used in each individual test. Using IEnumerable would lead to doubts, e.g. "Can I mutate these objects without having side-effects on other tests?", "Will I get the same or a different set of objects every time I enumerate the sequence?".
-
-2. Generators provide a framework for defining how objects are generated in a declarative way. Some operations available on IEnumerable wouldn't make sense in this context, e.g. ElementAt, Reverse etc. Other things are simply done differently, e.g. the SelectMany operator has been implemented to support concise code when combining multiple generators, but is closer to the Zip extension method than SelectMany.
-
-3. BuildUp defines extension methods for IGenerator<T> that are specific to building up test data. Developers may add extension methods specific to their object model. Defining these on IEnumerable<T> would "pollute" code that works with IEnumerable<T> throughout your application. This is similar to the distinction between Rhino Mocks and Moq.
-
-
-A Note on Automatic Test Data Generation
-----------------------------------------
-
-There are a few libraries out there that automate generation of test data, by making intelligent guesses about properties.
-
-BuildUp focuses on the creation of test objects within a behavioural domain model and requires you to do some thinking about providing meaningful data. This is where you typically change the state
-of your objects using method calls:
-
-```
-var booking = new Booking(tour);
-booking.AddAnonymousGuests(4);
-var roomAssignments = new []
-{
-	new RoomAssignment("double", booking.Guests[0], booking.Guests[1]);
-	new RoomAssignment("twin", booking.Guests[2], booking.Guests[3]);
-};
-booking.AssignRooms(roomAssignments);
-```
-
-Why do you do this:
-
-Emphasises the _behaviour_ of your model. You're doing something, not changing properties or adding things to collections.
-Meaningful operations make application code simpler while leaving state checking to the domain
-
-A model like this can't be set up using conventions as the behaviour is usually pretty specific and unique. So you need to think and write manual code to accommodate the test scenarios you're working with. The idea of BuildUp is that it provides some basic scaffolding for you to specify this data in a nice way.
 
 
