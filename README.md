@@ -1,24 +1,22 @@
-BuildUp
-=======
+BuildUp - A test object builder micro-framework for .Net
+======================================================
 
 Introduction
 ------------
 
-BuildUp is a test object builder micro-framework for .Net. It provides a useful infrastructure for creating objects suitable for writing automated tests or setting up sample data.
+BuildUp provides an infrastructure for generating objects for unit / integration tests or sample data:
 
-BuildUp provides just enough code to help you:
-
-* Set up creation of objects with sensible default values using an intuitive concise API
+* Generate objects with sensible default values using an intuitive concise API
 * Use a range of built-in mechanisms for generating values (emails, dates, number sequences etc)
-* Extend and customise the objects you build to allow variations
+* Extend the objects you build to allow variations
 * First-class support for generating collections of objects - in BuildUp, everything is a sequence
-* Infrastructure for creating extremely concise (Test Data Builders)[http://www.natpryce.com/articles/000714.html]
-* Designed for generating real domain objects without setters and stuff, immutable value objects etc.
+* Infrastructure for creating extremely concise [Test Data Builders](http://www.natpryce.com/articles/000714.html)
+* Designed with "real" behavioural domain models in mind
 
 How it Works
 ------------
 
-You define sequences of values used to initialise properties using [Generators](wiki/buildup-generators) like this:
+You define sequences of values using [Generators](wiki/buildup-generators) like this:
 
     var codes = StringGenerator.Numbered("user-{0}"); // { "user-0", "user-1" ... } - use {1} for 1-based index of value
     var ids = GuidGenerator.Random(); // { random sequence of Guids } - use optional seed parameter for deterministic values
@@ -47,7 +45,7 @@ Then, you combine your generators in interesting ways to create more complex obj
     //   ...
     // }
 
-Generators can be customised in all sorts of ways, allowing you to extend default object setup with more specialised modifications. Note that generators are immutable and all extension mechanisms result in a new generator object, leaving the originals unmodified:
+Generators can be customised in all sorts of ways, allowing you to extend default object setup with more specialised modifications:
 
     // Create a new generator will set a property based on values from another generator
     var niceColours = Generator.Values("Pink", "Red", "Green", "Lilac").Loop(4);
@@ -58,6 +56,8 @@ Generators can be customised in all sorts of ways, allowing you to extend defaul
     //   {UserName: user-1, DateOfBirth: "2000-06-04", FavouriteColour: "Red" ... },
     //   ...
     // }
+
+Note that generators are immutable and all extension mechanisms create new generators, leaving the originals unmodified:
 
 You might favour writing your own extension methods to define reusable setup behaviours:
 
@@ -118,16 +118,21 @@ See [the wiki](wiki) for full details of BuildUp and its components.
 Upcoming Features?
 ------------------
 
+The TODO list includes:
+
+- BuildUp.TestData subproject with realistic demo data, per-locale names, addresses, phone numbers etc
+- Better support for building collection properties
+
 
 Can You Help?
 -------------
 
-This has been used successfully on a number of projects and I'm pleased with it so far. I often get the feeling that there are much smart peopler than me out there though. 
+BuildUp has been used in private on a number of projects and I'm pleased with it so far. 
 
 Feedback at this stage would be super-great, in particular:
 
-* Serious suggestions for API improvements, no matter how radical!
-* "Must-have" features that you'd need to use BuildUp on your own project
+* Suggestions for API improvements, no matter how radical!
+* Must-have features that you'd need to use BuildUp on your own project
 
-Add an issue or send me a message.
+Add an issue, PR or send me a message.
 
