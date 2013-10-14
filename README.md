@@ -6,9 +6,9 @@ Introduction
 
 BuildUp provides an infrastructure for generating objects for unit / integration tests or sample data:
 
-* Generate objects with sensible default values using an intuitive concise API
-* Use a range of built-in mechanisms for generating values (emails, dates, number sequences etc)
-* Extend the objects you build to allow variations
+* Generate objects with sensible default values using a concise declarative API
+* Use a range of built-in mechanisms for generating property values (date and number sequences etc.)
+* Extend object generators with custom set-up behaviours
 * First-class support for generating collections of objects - in BuildUp, everything is a sequence
 * Infrastructure for creating extremely concise [Test Data Builders](http://www.natpryce.com/articles/000714.html)
 * Designed with "real" behavioural domain models in mind
@@ -23,7 +23,7 @@ You define sequences of values using [Generators](wiki/buildup-generators) like 
     var ages1 = Generator.Constant(21); // { 21, 21, 21 ... }
     var ages2 = IntGenerator.Random(18, 60); // { random values between 18 and 60 }
 
-Then, you combine your generators in interesting ways to create more complex objects:
+Then, you combine simple generators to create more complex objects:
 
     var userGenerator = from code in StringGenerator.Numbered("user-{0}")
                 from dateOfBirth in DateGenerator.Random("1970-01-01", "2000-12-31")
@@ -37,13 +37,20 @@ Then, you combine your generators in interesting ways to create more complex obj
                     FavouriteColour = colour
                 };
 
-    var users = userGenerator.Take(3).ToList();
-    // Result:
+The `Build` method builds the objects:
+
+	var users = userGenerator.Build();
+    // Returns IEnumerable<User>:
     // { 
     //   {UserName: "user-0", DateOfBirth: 1999-06-06, FavouriteColour: "grey" ...}, 
     //   {UserName: user-1, DateOfBirth: "2000-06-04", FavouriteColour: "grey" ... },
     //   ...
     // }
+	
+Or you can use some other convenience methods:
+
+	var users = userGenerator.Take(3);
+	var user = userGenerator.First();
 
 Generators can be customised in all sorts of ways, allowing you to extend default object setup with more specialised modifications:
 
@@ -57,7 +64,7 @@ Generators can be customised in all sorts of ways, allowing you to extend defaul
     //   ...
     // }
 
-Note that generators are immutable and all extension mechanisms create new generators, leaving the originals unmodified:
+Note that generators are immutable - all extension mechanisms like the *Set* extension method above create new generators, leaving the originals unmodified.
 
 You might favour writing your own extension methods to define reusable setup behaviours:
 
@@ -76,7 +83,7 @@ You might favour writing your own extension methods to define reusable setup beh
     
 See [Generators](wiki/buildup-generators) for full background on generators.
 
-When managing a large or complex "hide your secrets, no setters" domain model, you can use BuildUp to create [Test Data Builders](http://c2.com/cgi/wiki?TestDataBuilder). Here's what you might come up with once you get the hang of it:
+When managing a large or complex "hide your secrets, no setters, don't mess" domain model, you can use BuildUp to create [Test Data Builders](http://c2.com/cgi/wiki?TestDataBuilder). Here's what you might come up with once you get the hang of it:
 
     public class BookingBuilder : BuilderBase<Booking, BookingBuilder>
     {
